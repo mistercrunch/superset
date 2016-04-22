@@ -26,10 +26,11 @@ logging.getLogger().setLevel(logging.DEBUG)
 
 app = Flask(__name__)
 app.config.from_object(CONFIG_MODULE)
+
 if not app.debug:
-  # In production mode, add log handler to sys.stderr.
-  app.logger.addHandler(logging.StreamHandler())
-  app.logger.setLevel(logging.INFO)
+    # In production mode, add log handler to sys.stderr.
+    app.logger.addHandler(logging.StreamHandler())
+    app.logger.setLevel(logging.INFO)
 
 db = SQLA(app)
 
@@ -52,4 +53,9 @@ appbuilder = AppBuilder(
 sm = appbuilder.sm
 
 get_session = appbuilder.get_session
+
 from caravel import config, views  # noqa
+
+from caravel import plugin_manager
+plugin_manager.load_plugins(app.config)
+plugins = plugin_manager.plugins

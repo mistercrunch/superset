@@ -122,5 +122,6 @@ function tableVis(slice) {
     resize: function () {}
   };
 }
-
+console.log('amaz');
+console.log(window.px);
 module.exports = tableVis;

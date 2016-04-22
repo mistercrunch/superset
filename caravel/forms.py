@@ -108,7 +108,7 @@ class FormFactory(object):
 
     def __init__(self, viz):
         self.viz = viz
-        from caravel.viz import viz_types
+        from caravel.viz import get_viz_types
         viz = self.viz
         datasource = viz.datasource
         if not datasource.metrics_combo:
@@ -123,7 +123,7 @@ class FormFactory(object):
             'viz_type': SelectField(
                 'Viz',
                 default='table',
-                choices=[(k, v.verbose_name) for k, v in viz_types.items()],
+                choices=[(k, v.verbose_name) for k, v in get_viz_types().items()],
                 description="The type of visualization to display"),
             'metrics': SelectMultipleSortableField(
                 'Metrics', choices=datasource.metrics_combo,

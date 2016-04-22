@@ -127,8 +127,11 @@ CACHE_CONFIG = {'CACHE_TYPE': 'null'}
 # For example: Blacklist pivot table and treemap:
 #  VIZ_TYPE_BLACKLIST = ['pivot_table', 'treemap']
 # ---------------------------------------------------
-
 VIZ_TYPE_BLACKLIST = []
+
+# List of Python paths to CaravelPlugins objects
+CARAVEL_PLUGINS = []
+CARAVEL_PLUGINS = ['caravel.example_plugins.example_plugin.HelloWorldPlugin']
 
 try:
     from caravel_config import *  # noqa

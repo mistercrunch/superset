@@ -1,6 +1,7 @@
 coveralls
 mock
 nose
+pipdeptree
 sphinx
 sphinx_bootstrap_theme
 sphinxcontrib.youtube

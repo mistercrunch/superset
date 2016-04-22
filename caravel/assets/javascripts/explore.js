@@ -338,15 +338,10 @@ function initExploreView() {
 
 $(document).ready(function () {
   initExploreView();
-
-  // Dynamically register this visualization
-  var visType = window.viz_type.value;
-  px.registerViz(visType);
-
   var data = $('.slice').data('slice');
+
   slice = px.Slice(data);
 
-  //
   $('.slice').data('slice', slice);
 
   // call vis render method, which issues ajax

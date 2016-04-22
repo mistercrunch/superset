@@ -35,7 +35,7 @@ from sqlalchemy.sql.elements import ColumnClause
 from sqlalchemy_utils import EncryptedType
 
 from caravel import app, db, get_session, utils
-from caravel.viz import viz_types
+from caravel.viz import get_viz_types
 from caravel.utils import flasher
 
 config = app.config
@@ -156,7 +156,7 @@ class Slice(Model, AuditMixinNullable):
     @utils.memoized
     def viz(self):
         d = json.loads(self.params)
-        viz_class = viz_types[self.viz_type]
+        viz_class = get_viz_types()[self.viz_type]
         return viz_class(self.datasource, form_data=d)
 
     @property

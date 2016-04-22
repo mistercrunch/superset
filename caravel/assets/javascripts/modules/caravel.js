@@ -2,33 +2,6 @@ var $ = require('jquery');
 var jQuery = $;
 var d3 = require('d3');
 
-// vis sources
-var sourceMap = {
-  area: 'nvd3_vis.js',
-  bar: 'nvd3_vis.js',
-  bubble: 'nvd3_vis.js',
-  big_number: 'big_number.js',
-  big_number_total: 'big_number.js',
-  compare: 'nvd3_vis.js',
-  dist_bar: 'nvd3_vis.js',
-  directed_force: 'directed_force.js',
-  filter_box: 'filter_box.js',
-  heatmap: 'heatmap.js',
-  iframe: 'iframe.js',
-  line: 'nvd3_vis.js',
-  markup: 'markup.js',
-  para: 'parallel_coordinates.js',
-  pie: 'nvd3_vis.js',
-  box_plot: 'nvd3_vis.js',
-  pivot_table: 'pivot_table.js',
-  sankey: 'sankey.js',
-  sunburst: 'sunburst.js',
-  table: 'table.js',
-  word_cloud: 'word_cloud.js',
-  world_map: 'world_map.js',
-  treemap: 'treemap.js'
-};
-
 var color = function () {
   // Color related utility functions go in this object
   var bnbColors = [
@@ -348,19 +321,22 @@ var px = (function () {
         }
       }
     };
-    var visType = data.form_data.viz_type;
-    px.registerViz(visType);
+    px.registerViz(data.form_data.viz_type, data.javascript);
     slice.viz = visualizations[data.form_data.viz_type](slice);
     return slice;
   };
 
-  function registerViz(name) {
-    var visSource = sourceMap[name];
-
-    if (visSource) {
-      var visFactory = require('../../visualizations/' + visSource);
+  function registerViz(vizType, jsFile) {
+    if (jsFile) {
+      if (!jsFile.startsWith('/')) {
+        var visFactory = require('../../visualizations/' + jsFile);
+      } else {
+        jsFile = '../hello.js'
+        var visFactory = require(jsFile);
+      }
+      console.log(visFactory);
       if (typeof visFactory === 'function') {
-        visualizations[name] = visFactory;
+        visualizations[vizType] = visFactory;
       }
     } else {
       throw new Error("require(" + name + ") failed.");
@@ -378,5 +354,6 @@ var px = (function () {
     initFavStars: initFavStars
   };
 })();
-
+console.log(px);
+window.px = px;
 module.exports = px;

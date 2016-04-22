@@ -23,9 +23,12 @@ from six import string_types
 from werkzeug.datastructures import ImmutableMultiDict
 from werkzeug.urls import Href
 
+import caravel
 from caravel import app, utils, cache
 from caravel.forms import FormFactory
 from caravel.utils import flasher
+
+JS_FOLDER = ''#'/static/assets/visualizations/'
 
 config = app.config
 
@@ -96,6 +99,10 @@ class BaseViz(object):
                 s = '<label for="{fieldname}">{s}</label>'.format(**locals())
                 s = Markup(s)
             return s
+
+    @property
+    def javascript(self):
+        return JS_FOLDER + self.viz_type + '.js'
 
     @classmethod
     def flat_form_fields(cls):
@@ -269,6 +276,7 @@ class BaseViz(object):
     def data(self):
         content = {
             'csv_endpoint': self.csv_endpoint,
+            'javascript': self.javascript,
             'form_data': self.form_data,
             'json_endpoint': self.json_endpoint,
             'standalone_endpoint': self.standalone_endpoint,
@@ -526,6 +534,7 @@ class NVD3Viz(BaseViz):
     viz_type = None
     verbose_name = "Base NVD3 Viz"
     is_timeseries = False
+    javascript = JS_FOLDER + 'nvd3_vis.js'
 
 
 class BoxPlotViz(NVD3Viz):
@@ -759,6 +768,7 @@ class BigNumberTotalViz(BaseViz):
 
     viz_type = "big_number_total"
     verbose_name = "Big Number"
+    javascript = JS_FOLDER + 'big_number.js'
     credits = 'a <a href="https://github.com/airbnb/caravel">Caravel</a> original'
     is_timeseries = False
     fieldsets = ({
@@ -1432,6 +1442,7 @@ class ParallelCoordinatesViz(BaseViz):
             ('show_datatable', None),
         )
     },)
+    javascript = JS_FOLDER + 'parallel_coordinates.js'
 
     def query_obj(self):
         d = super(ParallelCoordinatesViz, self).query_obj()
@@ -1514,31 +1525,38 @@ class HeatmapViz(BaseViz):
         return df.to_dict(orient="records")
 
 
-viz_types_list = [
-    TableViz,
-    PivotTableViz,
-    NVD3TimeSeriesViz,
-    NVD3CompareTimeSeriesViz,
-    NVD3TimeSeriesStackedViz,
-    NVD3TimeSeriesBarViz,
-    DistributionBarViz,
-    DistributionPieViz,
-    BubbleViz,
-    MarkupViz,
-    WordCloudViz,
-    BigNumberViz,
-    BigNumberTotalViz,
-    SunburstViz,
-    DirectedForceViz,
-    SankeyViz,
-    WorldMapViz,
-    FilterBoxViz,
-    IFrameViz,
-    ParallelCoordinatesViz,
-    HeatmapViz,
-    BoxPlotViz,
-    TreemapViz,
-]
+def get_viz_types():
 
-viz_types = OrderedDict([(v.viz_type, v) for v in viz_types_list
-                         if v.viz_type not in config.get('VIZ_TYPE_BLACKLIST')])
+    viz_types_list = [
+        TableViz,
+        PivotTableViz,
+        NVD3TimeSeriesViz,
+        NVD3CompareTimeSeriesViz,
+        NVD3TimeSeriesStackedViz,
+        NVD3TimeSeriesBarViz,
+        DistributionBarViz,
+        DistributionPieViz,
+        BubbleViz,
+        MarkupViz,
+        WordCloudViz,
+        BigNumberViz,
+        BigNumberTotalViz,
+        SunburstViz,
+        DirectedForceViz,
+        SankeyViz,
+        WorldMapViz,
+        FilterBoxViz,
+        IFrameViz,
+        ParallelCoordinatesViz,
+        HeatmapViz,
+        BoxPlotViz,
+        TreemapViz,
+    ]
+    for plugin in caravel.plugins:
+        print("-==-"*20)
+        viz_types_list.append(plugin.viz_class)
+
+    return OrderedDict([
+        (v.viz_type, v)
+        for v in viz_types_list
+        if v.viz_type not in config.get('VIZ_TYPE_BLACKLIST')])

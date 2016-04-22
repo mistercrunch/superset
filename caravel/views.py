@@ -497,7 +497,7 @@ class Caravel(BaseView):
         if not viz_type:
             viz_type = "table"
         try:
-            obj = viz.viz_types[viz_type](
+            obj = viz.get_viz_types()[viz_type](
                 datasource,
                 form_data=request.args,
                 slice_=slc)
