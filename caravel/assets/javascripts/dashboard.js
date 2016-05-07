@@ -10,10 +10,12 @@ require('brace/mode/css');
 require('brace/theme/crimson_editor');
 
 require('./caravel-select2.js');
-require('../node_modules/gridster/dist/jquery.gridster.min.css');
-require('../node_modules/gridster/dist/jquery.gridster.min.js');
 
 require('../stylesheets/dashboard.css');
+
+var ReactGridLayout = require('react-grid-layout');
+import React from 'react';
+import { render } from 'react-dom';
 
 var Dashboard = function (dashboardData) {
   var dashboard = $.extend(dashboardData, {
@@ -24,21 +26,8 @@ var Dashboard = function (dashboardData) {
       px.initFavStars();
       var sliceObjects = [],
         dash = this;
-      dashboard.slices.forEach(function (data) {
-        if (data.error) {
-          var html = '<div class="alert alert-danger">' + data.error + '</div>';
-          $("#slice_" + data.slice_id).find('.token').html(html);
-        } else {
-          var slice = px.Slice(data, dash);
-          $("#slice_" + data.slice_id).find('a.refresh').click(function () {
-            slice.render(true);
-          });
-          sliceObjects.push(slice);
-        }
-      });
-      this.slices = sliceObjects;
       this.refreshTimer = null;
-      this.startPeriodicRender(0);
+      //this.startPeriodicRender(0);
     },
     setFilter: function (slice_id, col, vals) {
       this.addFilter(slice_id, col, vals, false);
@@ -128,31 +117,32 @@ var Dashboard = function (dashboardData) {
       }
     },
     initDashboardView: function () {
-      dashboard = this;
-      var gridster = $(".gridster ul").gridster({
-        autogrow_cols: true,
-        widget_margins: [10, 10],
-        widget_base_dimensions: [95, 95],
-        draggable: {
-          handle: '.drag'
-        },
-        resize: {
-          enabled: true,
-          stop: function (e, ui, element) {
-            dashboard.getSlice($(element).attr('slice_id')).resize();
-          }
-        },
-        serialize_params: function (_w, wgd) {
-          return {
-            slice_id: $(_w).attr('slice_id'),
-            col: wgd.col,
-            row: wgd.row,
-            size_x: wgd.size_x,
-            size_y: wgd.size_y
-          };
-        }
-      }).data('gridster');
 
+      class App extends React.Component {
+        render () {
+          return (
+            <div>
+              <h1>Caravel</h1>
+              <p>Extensible visualization tool for exploring data from any database.</p>
+            </div>
+          );
+        }
+      }
+      $("#grid").css('visibility', 'visible');
+      dashboard = this;
+      var Grid = React.createClass({
+        render: function () {
+          return (
+            <ReactGridLayout className="layout" cols={12} rowHeight={30} width={1200}>
+              <div className="widget" key="a" _grid={{x: 0, y: 0, w: 3, h: 6}}>aaa</div>
+              <div className="widget" key="b" _grid={{x: 4, y: 0, w: 3, h: 6}}>bbb</div>
+              <div className="widget" key="c" _grid={{x: 8, y: 0, w: 3, h: 6}}>ccc</div>
+            </ReactGridLayout>
+          )
+        }
+      });
+      render(<Grid/>, document.getElementById('grid'));
+      /*
       // Displaying widget controls on hover
       $('.chart-header').hover(
         function () {
@@ -162,7 +152,6 @@ var Dashboard = function (dashboardData) {
           $(this).find('.chart-controls').fadeOut(300);
         }
       );
-      $("div.gridster").css('visibility', 'visible');
       $("#savedash").click(function () {
         var expanded_slices = {};
         $.each($(".slice_info"), function (i, d) {
@@ -286,6 +275,7 @@ var Dashboard = function (dashboardData) {
           style.innerHTML = css;
         }
       }
+      */
     }
   });
   dashboard.init();
@@ -294,5 +284,5 @@ var Dashboard = function (dashboardData) {
 
 $(document).ready(function () {
   Dashboard($('.dashboard').data('dashboard'));
-  $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
+  //$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
 });
