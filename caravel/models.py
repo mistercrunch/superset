@@ -1171,6 +1171,8 @@ class DruidDatasource(Model, AuditMixinNullable, Queryable):
                     cond = Dimension(col) == eq
                 if op == 'not in':
                     cond = ~cond
+            elif op == 'regex':
+                cond = eq
             if filters:
                 filters = Filter(type="and", fields=[
                     Filter.build_filter(cond),
