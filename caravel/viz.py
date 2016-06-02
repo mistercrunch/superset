@@ -256,6 +256,7 @@ class BaseViz(object):
             payload['cached_dttm'] = datetime.now().isoformat().split('.')[0]
             logging.info("Caching for the next {} seconds".format(
                 cache_timeout))
+            cache.delete(cache_key)
             cache.set(cache_key, payload, timeout=cache_timeout)
         payload['is_cached'] = is_cached
         return self.json_dumps(payload)
