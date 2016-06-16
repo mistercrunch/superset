@@ -1,10 +1,9 @@
-var px = window.px || require('../javascripts/modules/caravel.js');
+var px = window.px || require('../javascripts/caravel.js');
 var d3 = window.d3 || require('d3');
 var cloudLayout = require('d3-cloud');
 
 function wordCloudChart(slice) {
   var chart = d3.select(slice.selector);
-
   function refresh() {
     d3.json(slice.jsonEndpoint(), function (error, json) {
       if (error !== null) {

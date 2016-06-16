@@ -5,31 +5,31 @@ var Mustache = require('mustache');
 
 // vis sources
 var sourceMap = {
-  area: 'nvd3_vis.js',
-  bar: 'nvd3_vis.js',
-  bubble: 'nvd3_vis.js',
-  big_number: 'big_number.js',
-  big_number_total: 'big_number.js',
-  compare: 'nvd3_vis.js',
-  dist_bar: 'nvd3_vis.js',
-  directed_force: 'directed_force.js',
-  filter_box: 'filter_box.js',
-  heatmap: 'heatmap.js',
-  iframe: 'iframe.js',
-  line: 'nvd3_vis.js',
-  markup: 'markup.js',
-  para: 'parallel_coordinates.js',
-  pie: 'nvd3_vis.js',
-  box_plot: 'nvd3_vis.js',
-  pivot_table: 'pivot_table.js',
-  sankey: 'sankey.js',
-  sunburst: 'sunburst.js',
-  table: 'table.js',
-  word_cloud: 'word_cloud.js',
-  world_map: 'world_map.js',
-  treemap: 'treemap.js',
-  cal_heatmap: 'cal_heatmap.js',
-  horizon: 'horizon.js'
+  area: require('../visualizations/nvd3_vis.js'),
+  bar: require('../visualizations/nvd3_vis.js'),
+  bubble: require('../visualizations/nvd3_vis.js'),
+  big_number: require('../visualizations/big_number.js'),
+  big_number_total: require('../visualizations/big_number.js'),
+  compare: require('../visualizations/nvd3_vis.js'),
+  dist_bar: require('../visualizations/nvd3_vis.js'),
+  directed_force: require('../visualizations/directed_force.js'),
+  filter_box: require('../visualizations/filter_box.js'),
+  heatmap: require('../visualizations/heatmap.js'),
+  iframe: require('../visualizations/iframe.js'),
+  line: require('../visualizations/nvd3_vis.js'),
+  markup: require('../visualizations/markup.js'),
+  para: require('../visualizations/parallel_coordinates.js'),
+  pie: require('../visualizations/nvd3_vis.js'),
+  box_plot: require('../visualizations/nvd3_vis.js'),
+  pivot_table: require('../visualizations/pivot_table.js'),
+  sankey: require('../visualizations/sankey.js'),
+  sunburst: require('../visualizations/sunburst.js'),
+  table: require('../visualizations/table.js'),
+  word_cloud: require('../visualizations/word_cloud.js'),
+  world_map: require('../visualizations/world_map.js'),
+  treemap: require('../visualizations/treemap.js'),
+  cal_heatmap: require('../visualizations/cal_heatmap.js'),
+  horizon: require('../visualizations/horizon.js')
 };
 
 var color = function () {
@@ -367,9 +367,8 @@ var px = (function () {
     var visSource = sourceMap[name];
 
     if (visSource) {
-      var visFactory = require('../../visualizations/' + visSource);
-      if (typeof visFactory === 'function') {
-        visualizations[name] = visFactory;
+      if (typeof visSource === 'function') {
+        visualizations[name] = visSource;
       }
     } else {
       throw new Error("require(" + name + ") failed.");

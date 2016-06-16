@@ -1,6 +1,6 @@
 var $ = window.$ = require('jquery');
 var jQuery = window.jQuery = $;
-var showModal = require('./modules/utils.js').showModal;
+var showModal = require('./utils.js').showModal;
 
 require('./caravel-select2.js');
 

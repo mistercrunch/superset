@@ -1,8 +1,8 @@
 var $ = window.$ = require('jquery');
 var jQuery = window.jQuery = $;
-var px = require('./modules/caravel.js');
+var px = require('./caravel.js');
 var d3 = require('d3');
-var showModal = require('./modules/utils.js').showModal;
+var showModal = require('./utils.js').showModal;
 require('bootstrap');
 import React from 'react';
 import { render } from 'react-dom';

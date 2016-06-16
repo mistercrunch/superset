@@ -1,6 +1,6 @@
 var $ = window.$ = require('jquery');
 var jQuery = window.jQuery = $;
-var px = require('./modules/caravel.js');
+var px = require('./caravel.js');
 
 require('bootstrap');
 

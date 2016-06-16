@@ -1,6 +1,6 @@
 // JS
 var d3 = window.d3 || require('d3');
-var px = window.px || require('../javascripts/modules/caravel.js');
+var px = window.px || require('../javascripts/caravel.js');
 
 // CSS
 require('./treemap.css');

@@ -5,8 +5,8 @@
 // js
 var $ = window.$ = require('jquery');
 var jQuery = window.jQuery = $;
-var px = require('./modules/caravel.js');
-var showModal = require('./modules/utils.js').showModal;
+var px = require('./caravel.js');
+var showModal = require('./utils.js').showModal;
 
 require('jquery-ui');
 $.widget.bridge('uitooltip', $.ui.tooltip); // Shutting down jq-ui tooltips

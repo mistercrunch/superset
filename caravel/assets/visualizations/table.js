@@ -1,7 +1,7 @@
 var $ = window.$ = require('jquery');
 var jQuery = window.jQuery = $;
 var d3 = require('d3');
-var px = window.px || require('../javascripts/modules/caravel.js');
+var px = window.px || require('../javascripts/caravel.js');
 
 require('./table.css');
 require('datatables.net-bs');
