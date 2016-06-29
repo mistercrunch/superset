@@ -23,8 +23,7 @@ Video - Introduction to Caravel
 
 Screenshots
 ------------
-![img](http://i.imgur.com/x8t30YU.png)
-![img](http://i.imgur.com/DRCnbq6.png)
+<img class="overall-summary" src="http://i.imgur.com/x8t30YU.png">
 
 Caravel
 ---------
