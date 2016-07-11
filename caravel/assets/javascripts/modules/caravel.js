@@ -198,6 +198,7 @@ var px = (function () {
       clearInterval(timer);
       $('#timer').removeClass('btn-warning');
     };
+    var formatters = {};
     slice = {
       data: data,
       container: container,
@@ -215,6 +216,17 @@ var px = (function () {
           qrystr = '?' + $('#query').serialize();
         }
         return qrystr;
+      },
+      d3format: function (metric, number) {
+        // Formats a number based on the defined formatting in the CRUD
+        // memoizes formatters to be reused
+        var f = data.metrics_d3format[metric];
+        if (f && !f in formatters) {
+          formatters[f] = d3.format(f);
+        } else if (f) {
+          return formatters[f](number);
+        }
+        return number;
       },
       getWidgetHeader: function () {
         return this.container.parents("div.widget").find(".chart-header");
@@ -376,9 +388,8 @@ var px = (function () {
         }
       }
     };
-    var visType = data.form_data.viz_type;
-    px.registerViz(visType);
-    slice.viz = visualizations[data.form_data.viz_type](slice);
+    px.registerViz(data.viz_type);
+    slice.viz = visualizations[data.viz_type](slice);
     return slice;
   };
 

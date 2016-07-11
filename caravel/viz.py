@@ -86,6 +86,9 @@ class BaseViz(object):
         self.form_data['previous_viz_type'] = self.viz_type
         self.token = self.form_data.get(
             'token', 'token_' + uuid.uuid4().hex[:8])
+        print('-' * 80)
+        print('supertoken: ' + self.token + '|json: ' + self.form_data.get('json', ''))
+        print('-' * 80)
         self.metrics = self.form_data.get('metrics') or []
         self.groupby = self.form_data.get('groupby') or []
         self.reassignments()

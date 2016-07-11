@@ -212,7 +212,12 @@ class Slice(Model, AuditMixinNullable):
         d['description'] = self.description
         d['slice_url'] = self.slice_url
         d['edit_url'] = self.edit_url
+        d['viz_type'] = self.viz_type
         d['description_markeddown'] = self.description_markeddown
+        d['token'] = self.token
+        d['json_endpoint'] = self.slice_url
+        d['metrics_d3format'] = {
+            m.metric_name: m.d3format or '.3s' for m in self.datasource.metrics}
         return d
 
     @property
@@ -323,6 +328,9 @@ class Dashboard(Model, AuditMixinNullable):
             'slices': [slc.data for slc in self.slices],
             'position_json': json.loads(self.position_json) if self.position_json else [],
         }
+        print('-'*80)
+        print(d)
+        print('-'*80)
         return json.dumps(d)
 
 
@@ -865,6 +873,7 @@ class SqlMetric(Model, AuditMixinNullable):
     expression = Column(Text)
     description = Column(Text)
     is_restricted = Column(Boolean, default=False, nullable=True)
+    d3format = Column(String(128))
 
     @property
     def sqla_col(self):
@@ -1493,6 +1502,7 @@ class DruidMetric(Model, AuditMixinNullable):
     json = Column(Text)
     description = Column(Text)
     is_restricted = Column(Boolean, default=False, nullable=True)
+    d3format = Column(String(128))
 
     @property
     def json_obj(self):

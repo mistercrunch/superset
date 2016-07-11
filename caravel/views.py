@@ -278,7 +278,7 @@ class SqlMetricInlineView(CompactCRUDMixin, CaravelModelView):  # noqa
     list_columns = ['metric_name', 'verbose_name', 'metric_type']
     edit_columns = [
         'metric_name', 'description', 'verbose_name', 'metric_type',
-        'expression', 'table', 'is_restricted']
+        'expression', 'table', 'd3format', 'is_restricted']
     description_columns = {
         'expression': utils.markdown(
             "a valid SQL expression as supported by the underlying backend. "
@@ -313,7 +313,7 @@ class DruidMetricInlineView(CompactCRUDMixin, CaravelModelView):  # noqa
     list_columns = ['metric_name', 'verbose_name', 'metric_type']
     edit_columns = [
         'metric_name', 'description', 'verbose_name', 'metric_type', 'json',
-        'datasource', 'is_restricted']
+        'datasource', 'd3format', 'is_restricted']
     add_columns = edit_columns
     page_size = 500
     validators_columns = {
@@ -865,11 +865,17 @@ class Caravel(BaseCaravelView):
                 template = "caravel/standalone.html"
             else:
                 template = "caravel/explore.html"
+            print('before render')
             resp = self.render_template(
-                template, viz=obj, slice=slc, datasources=datasources,
-                can_add=slice_add_perm, can_edit=slice_edit_perm,
+                template,
+                viz=obj,
+                slice=slc,
+                datasources=datasources,
+                can_add=slice_add_perm,
+                can_edit=slice_edit_perm,
                 can_download=slice_download_perm,
                 userid=g.user.get_id() if g.user else '')
+            print('after render')
             try:
                 pass
             except Exception as e:

@@ -212,7 +212,7 @@
           <div
             id="{{ viz.token }}"
             class="widget viz slice {{ viz.viz_type }}"
-            data-slice="{{ viz.json_data }}"
+            data-slice="{{ slice.json_data }}"
             style="height: 700px;">
             <img src="{{ url_for("static", filename="assets/images/loading.gif") }}" class="loading" alt="loading">
             <div id="{{ viz.token }}_con" class="slice_container" style="height: 100%; width: 100%"></div>
