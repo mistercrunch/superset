@@ -822,6 +822,8 @@ class DashboardModelView(CaravelModelView, DeleteMixin):  # noqa
         if obj.slug:
             obj.slug = obj.slug.replace(" ", "-")
             obj.slug = re.sub(r'\W+', '', obj.slug)
+        utils.validate_json(obj.json_metadata)
+        utils.validate_json(obj.position_json)
 
     def pre_update(self, obj):
         check_ownership(obj)
@@ -1228,6 +1230,8 @@ class Caravel(BaseCaravelView):
         md = dash.metadata_dejson
         if 'filter_immune_slices' not in md:
             md['filter_immune_slices'] = []
+        if 'filter_immune_slice_fields' not in md:
+            md['filter_immune_slice_fields'] = {}
         md['expanded_slices'] = data['expanded_slices']
         dash.json_metadata = json.dumps(md, indent=4)
         dash.css = data['css']
