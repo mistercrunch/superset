@@ -284,6 +284,21 @@ class OracleEngineSpec(PostgresEngineSpec):
 class VerticaEngineSpec(PostgresEngineSpec):
     engine = 'vertica'
 
+
+class HiveEngineSpec(BaseEngineSpec):
+    engine = 'hive'
+
+    @classmethod
+    def handle_cursor(cls, cursor, query, session):
+        """Updates progress information"""
+        # Get a ttypes.TGetOperationStatusResp from the hive Thrift service
+        polled = cursor.poll()
+        while polled:
+            print(polled)
+            time.sleep(1)
+            polled = cursor.poll()
+
+
 engines = {
     o.engine: o for o in globals().values()
     if inspect.isclass(o) and issubclass(o, BaseEngineSpec)}
