@@ -46,8 +46,8 @@ export default class ModalTrigger extends React.Component {
       'btn btn-default btn-sm': this.props.isButton,
     });
     return (
-      <span className={classNames} onClick={this.open} style={{ cursor: 'pointer' }}>
-          {this.props.triggerNode}
+      <span className={classNames} onClick={this.open} role="button">
+        {this.props.triggerNode}
         <Modal
           show={this.state.showModal}
           onHide={this.close}

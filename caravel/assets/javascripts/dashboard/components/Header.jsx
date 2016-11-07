@@ -18,7 +18,7 @@ class Header extends React.PureComponent {
     console.log(this.props.dashboard);
     const dashboard = this.props.dashboard;
     return (
-      <div>
+      <div className="title">
         <div className="pull-left">
           <h1>{dashboard.dashboard_title}</h1>
         </div>

@@ -11,35 +11,10 @@ import SliceAdder from './components/SliceAdder';
 import GridLayout from './components/GridLayout';
 import Header from './components/Header';
 
-const ace = require('brace');
 require('bootstrap');
-require('brace/mode/css');
-require('brace/theme/crimson_editor');
 require('../../stylesheets/dashboard.css');
 require('../caravel-select2.js');
 
-// Injects the passed css string into a style sheet with the specified className
-// If a stylesheet doesn't exist with the passed className, one will be injected into <head>
-function injectCss(className, css) {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  let style = document.querySelector('.' + className);
-
-  if (!style) {
-    if (className.split(' ').length > 1) {
-      throw new Error('This method only supports selections with a single class name.');
-    }
-    style = document.createElement('style');
-    style.className = className;
-    style.type = 'text/css';
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.innerHTML = css;
-  }
-}
 
 function dashboardContainer(dashboardData) {
   let dashboard = Object.assign({}, utils.controllerInterface, dashboardData, {
@@ -281,42 +256,6 @@ function dashboardContainer(dashboardData) {
         },
       });
     },
-    saveDashboard() {
-      const expandedSlices = {};
-      $.each($('.slice_info'), function () {
-        const widget = $(this).parents('.widget');
-        const sliceDescription = widget.find('.slice_description');
-        if (sliceDescription.is(':visible')) {
-          expandedSlices[$(widget).attr('data-slice-id')] = true;
-        }
-      });
-      const positions = this.reactGridLayout.serialize();
-      const data = {
-        positions,
-        css: this.editor.getValue(),
-        expanded_slices: expandedSlices,
-      };
-      $.ajax({
-        type: 'POST',
-        url: '/caravel/save_dash/' + dashboard.id + '/',
-        data: {
-          data: JSON.stringify(data),
-        },
-        success() {
-          utils.showModal({
-            title: 'Success',
-            body: 'This dashboard was saved successfully.',
-          });
-        },
-        error(error) {
-          const errorMsg = this.getAjaxErrorMsg(error);
-          utils.showModal({
-            title: 'Error',
-            body: 'Sorry, there was an error saving this dashboard: </ br>' + errorMsg,
-          });
-        },
-      });
-    },
     initDashboardView() {
       this.posDict = {};
       this.position_json.forEach(function (position) {
@@ -346,30 +285,10 @@ function dashboardContainer(dashboardData) {
         }
       );
       $('div.grid-container').css('visibility', 'visible');
-      $('#savedash').click(this.saveDashboard.bind(this));
       $('#add-slice').click(this.showAddSlice.bind(this));
-
-      const editor = ace.edit('dash_css');
-      this.editor = editor;
-      editor.$blockScrolling = Infinity;
-
-      editor.setTheme('ace/theme/crimson_editor');
-      editor.setOptions({
-        minLines: 16,
-        maxLines: Infinity,
-        useWorker: false,
-      });
-      editor.getSession().setMode('ace/mode/css');
 
       $('.select2').select2({
         dropdownAutoWidth: true,
-      });
-      $('#css_template').on('change', function () {
-        const css = $(this).find('option:selected').data('css');
-        editor.setValue(css);
-
-        $('#dash_css').val(css);
-        injectCss('dashboard-template', css);
       });
       $('#filters').click(() => {
         utils.showModal({
@@ -381,11 +300,6 @@ function dashboardContainer(dashboardData) {
       $('#refresh_dash_interval').on('change', function () {
         const interval = $(this).find('option:selected').val() * 1000;
         dashboard.startPeriodicRender(interval);
-      });
-      $('#refresh_dash').click(() => {
-        dashboard.slices.forEach((slice) => {
-          slice.render(true);
-        });
       });
 
       $('div.widget').click(function (e) {
@@ -400,15 +314,6 @@ function dashboardContainer(dashboardData) {
           $this.find('.chart-controls').toggle();
         }
       });
-
-      editor.on('change', function () {
-        const css = editor.getValue();
-        $('#dash_css').val(css);
-        injectCss('dashboard-template', css);
-      });
-
-      const css = $('.dashboard').data('css');
-      injectCss('dashboard-template', css);
     },
   });
   dashboard.init();

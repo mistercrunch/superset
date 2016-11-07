@@ -2256,6 +2256,9 @@ class CssTemplateModelView(CaravelModelView, DeleteMixin):
     edit_columns = ['template_name', 'css']
     add_columns = edit_columns
 
+class CssTemplateAsyncModelView(CssTemplateModelView):
+    list_columns = ['template_name', 'css']
+
 appbuilder.add_separator("Sources")
 appbuilder.add_view(
     CssTemplateModelView,
@@ -2265,6 +2268,8 @@ appbuilder.add_view(
     category="Manage",
     category_label=__("Manage"),
     category_icon='')
+
+appbuilder.add_view_no_menu(CssTemplateAsyncModelView)
 
 appbuilder.add_link(
     'SQL Editor',
