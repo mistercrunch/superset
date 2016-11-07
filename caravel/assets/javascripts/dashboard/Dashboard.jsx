@@ -1,14 +1,15 @@
 const $ = window.$ = require('jquery');
 const jQuery = window.jQuery = require('jquery'); // eslint-disable-line
-const px = require('../modules/caravel.js');
+const px = require('../modules/caravel');
 const d3 = require('d3');
 const urlLib = require('url');
-const utils = require('../modules/utils.js');
+const utils = require('../modules/utils');
 
 import React from 'react';
 import { render } from 'react-dom';
-import SliceAdder from './components/SliceAdder.jsx';
-import GridLayout from './components/GridLayout.jsx';
+import SliceAdder from './components/SliceAdder';
+import GridLayout from './components/GridLayout';
+import Header from './components/Header';
 
 const ace = require('brace');
 require('bootstrap');
@@ -322,6 +323,10 @@ function dashboardContainer(dashboardData) {
         this.posDict[position.slice_id] = position;
       }, this);
 
+      render(
+        <Header dashboard={dashboard} />,
+        document.getElementById('dashboard-header')
+      );
       this.reactGridLayout = render(
         <GridLayout slices={this.slices} posDict={this.posDict} dashboard={dashboard} />,
         document.getElementById('grid-container')
