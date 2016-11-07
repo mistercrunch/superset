@@ -15,7 +15,6 @@ class Header extends React.PureComponent {
     };
   }
   render() {
-    console.log(this.props.dashboard);
     const dashboard = this.props.dashboard;
     return (
       <div className="title">

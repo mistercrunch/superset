@@ -12,33 +12,11 @@
 <div
   class="dashboard container-fluid"
   data-dashboard="{{ dashboard.json_data }}"
-  data-css="{{ dashboard.css }}"
-  data-user="{{ user_id }}"
+  data-context="{{ context }}"
 >
   {% include 'caravel/flash_wrapper.html' %}
 
-  <!-- Modal -->
-  {% if not standalone_mode %}
-    <div id="add-slice-container"></div>
-  {% endif %}
   <div id="dashboard-header"></div>
-
-  <div class="title">
-    <div class="row">
-      {% if not standalone_mode %}
-        <div class="col-md-4">
-          <div class="btn-group pull-right" role="group" >
-            <button type="button" id="add-slice" class="btn btn-default btn-sm {{ "disabled disabledButton" if not dash_save_perm }}" data-toggle="modal" data-target="#add_slice_modal">
-                <i class="fa fa-plus" data-toggle="tooltip" title="Add a new slice to the dashboard"></i>
-            </button>
-            <button type="button" id="refresh_dash_periodic" class="btn btn-default btn-sm" data-toggle="modal" data-target="#refresh_modal">
-                <i class="fa fa-clock-o" data-toggle="tooltip" title="Decide how frequent should the dashboard refresh"></i>
-            </button>
-          </div>
-        </div>
-      {% endif %}
-    </div>
-  </div>
 
   <!-- gridster class used for backwards compatibility -->
   <div id="grid-container" class="slice-grid gridster"></div>

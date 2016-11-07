@@ -38,7 +38,6 @@ class CssEditor extends React.PureComponent {
   }
   updateDom() {
     const css = this.state.css;
-    console.log(css);
     const className = 'CssEditor-css';
     const head = document.head || document.getElementsByTagName('head')[0];
     let style = document.querySelector('.' + className);
@@ -71,6 +70,7 @@ class CssEditor extends React.PureComponent {
         </div>
       );
     }
+    return null;
   }
   render() {
     return (

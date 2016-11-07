@@ -7,7 +7,6 @@ const utils = require('../modules/utils');
 
 import React from 'react';
 import { render } from 'react-dom';
-import SliceAdder from './components/SliceAdder';
 import GridLayout from './components/GridLayout';
 import Header from './components/Header';
 
@@ -16,8 +15,8 @@ require('../../stylesheets/dashboard.css');
 require('../caravel-select2.js');
 
 
-function dashboardContainer(dashboardData) {
-  let dashboard = Object.assign({}, utils.controllerInterface, dashboardData, {
+function dashboardContainer(dashboardData, context) {
+  let dashboard = Object.assign({ context }, utils.controllerInterface, dashboardData, {
     type: 'dashboard',
     filters: {},
     init() {
@@ -219,17 +218,6 @@ function dashboardContainer(dashboardData) {
       }
       return slice;
     },
-    showAddSlice() {
-      const slicesOnDashMap = {};
-      const layoutPositions = this.reactGridLayout.serialize();
-      layoutPositions.forEach((position) => {
-        slicesOnDashMap[position.slice_id] = true;
-      });
-      render(
-        <SliceAdder dashboard={dashboard} slicesOnDashMap={slicesOnDashMap} caravel={px} />,
-        document.getElementById('add-slice-container')
-      );
-    },
     getAjaxErrorMsg(error) {
       const respJSON = error.responseJSON;
       return (respJSON && respJSON.message) ? respJSON.message :
@@ -239,7 +227,7 @@ function dashboardContainer(dashboardData) {
       const getAjaxErrorMsg = this.getAjaxErrorMsg;
       $.ajax({
         type: 'POST',
-        url: '/caravel/add_slices/' + dashboard.id + '/',
+        url: `/caravel/add_slices/${dashboard.id}/`,
         data: {
           data: JSON.stringify({ slice_ids: sliceIds }),
         },
@@ -271,7 +259,7 @@ function dashboardContainer(dashboardData) {
         document.getElementById('grid-container')
       );
 
-      this.curUserId = $('.dashboard').data('user');
+      this.curUserId = this.context.user_id;
 
       dashboard = this;
 
@@ -285,7 +273,6 @@ function dashboardContainer(dashboardData) {
         }
       );
       $('div.grid-container').css('visibility', 'visible');
-      $('#add-slice').click(this.showAddSlice.bind(this));
 
       $('.select2').select2({
         dropdownAutoWidth: true,
@@ -321,6 +308,8 @@ function dashboardContainer(dashboardData) {
 }
 
 $(document).ready(() => {
-  dashboardContainer($('.dashboard').data('dashboard'));
+  dashboardContainer(
+    $('.dashboard').data('dashboard'),
+    $('.dashboard').data('context'));
   $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
 });

@@ -1709,12 +1709,16 @@ class Caravel(BaseCaravelView):
             dash_edit_perm and self.can_access('can_save_dash', 'Caravel')
         standalone = request.args.get("standalone") == "true"
         return self.render_template(
-            "caravel/dashboard.html", dashboard=dash,
-            user_id=g.user.get_id(),
-            templates=templates,
-            dash_save_perm=dash_save_perm,
-            dash_edit_perm=dash_edit_perm,
-            standalone_mode=standalone)
+            "caravel/dashboard.html",
+            dashboard=dash,
+            context=dict(
+                user_id=g.user.get_id(),
+                templates=templates,
+                dash_save_perm=dash_save_perm,
+                dash_edit_perm=dash_edit_perm,
+                standalone_mode=standalone,
+            ),
+        )
 
     @has_access
     @expose("/sync_druid/", methods=['POST'])
@@ -2305,9 +2309,4 @@ app.url_map.converters['regex'] = RegexConverter
 @app.route('/<regex("panoramix\/.*"):url>')
 def panoramix(url):  # noqa
     return redirect(request.full_path.replace('panoramix', 'caravel'))
-
-
-@app.route('/<regex("dashed\/.*"):url>')
-def dashed(url):  # noqa
-    return redirect(request.full_path.replace('dashed', 'caravel'))
 # ---------------------------------------------------------------------

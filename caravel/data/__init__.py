@@ -206,7 +206,7 @@ def load_world_bank_health_n_pop():
         "datasource_name": "birth_names",
         "datasource_type": "table",
         "limit": "25",
-        "granularity": "year",
+        "granularity_sqla": "year",
         "groupby": [],
         "metric": 'sum__SP_POP_TOTL',
         "metrics": ["sum__SP_POP_TOTL"],
@@ -601,7 +601,7 @@ def load_birth_names():
         "datasource_type": "table",
         "flt_op_1": "in",
         "limit": "25",
-        "granularity": "ds",
+        "granularity_sqla": "ds",
         "groupby": [],
         "metric": 'sum__num',
         "metrics": ["sum__num"],
@@ -643,7 +643,7 @@ def load_birth_names():
             datasource_id=tbl.id,
             params=get_slice_json(
                 defaults,
-                viz_type="big_number", granularity="ds",
+                viz_type="big_number", granularity_sqla="ds",
                 compare_lag="5", compare_suffix="over 5Y")),
         Slice(
             slice_name="Genders",
@@ -671,7 +671,7 @@ def load_birth_names():
             params=get_slice_json(
                 defaults,
                 viz_type="line", groupby=['name'],
-                granularity='ds', rich_tooltip='y', show_legend='y')),
+                granularity_sqla='ds', rich_tooltip='y', show_legend='y')),
         Slice(
             slice_name="Title",
             viz_type='markup',
@@ -716,7 +716,7 @@ def load_birth_names():
             datasource_id=tbl.id,
             params=get_slice_json(
                 defaults,
-                viz_type="big_number_total", granularity="ds",
+                viz_type="big_number_total", granularity_sqla="ds",
                 flt_col_1='gender', flt_eq_1='girl',
                 subheader='total female participants')),
     ]
@@ -846,7 +846,7 @@ def load_unicode_test_data():
         "datasource_name": "unicode_test",
         "datasource_type": "table",
         "flt_op_1": "in",
-        "granularity": "date",
+        "granularity_sqla": "date",
         "groupby": [],
         "metric": 'sum__value',
         "row_limit": config.get("ROW_LIMIT"),
@@ -924,7 +924,7 @@ def load_random_time_series_data():
         "datasource_id": "6",
         "datasource_name": "random_time_series",
         "datasource_type": "table",
-        "granularity": "day",
+        "granularity_sqla": "day",
         "row_limit": config.get("ROW_LIMIT"),
         "since": "1 year ago",
         "until": "now",
@@ -992,7 +992,7 @@ def load_long_lat_data():
         "datasource_id": "7",
         "datasource_name": "long_lat",
         "datasource_type": "table",
-        "granularity": "day",
+        "granularity_sqla": "day",
         "since": "2014-01-01",
         "until": "2016-12-12",
         "where": "",
@@ -1071,11 +1071,11 @@ def load_multiformat_time_series_data():
     print("Creating some slices")
     for i, col in enumerate(tbl.columns):
         slice_data = {
-            "granularity_sqla": col.column_name,
+            "granularity_sqla_sqla": col.column_name,
             "datasource_id": "8",
             "datasource_name": "multiformat_time_series",
             "datasource_type": "table",
-            "granularity": "day",
+            "granularity_sqla": "day",
             "row_limit": config.get("ROW_LIMIT"),
             "since": "1 year ago",
             "until": "now",

@@ -5,9 +5,13 @@ import Select from 'react-select';
 
 const propTypes = {
   triggerNode: React.PropTypes.node.isRequired,
+  initialRefreshFrequency: React.PropTypes.number,
+  onChange: React.PropTypes.func,
 };
 
 const defaultProps = {
+  initialRefreshFrequency: 0,
+  onChange: () => {},
 };
 
 const options = [
@@ -22,10 +26,10 @@ class RefreshIntervalModal extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      refreshFrequency: props.initialRefreshFrequency,
     };
   }
   render() {
-
     return (
       <ModalTrigger
         triggerNode={this.props.triggerNode}
@@ -35,6 +39,11 @@ class RefreshIntervalModal extends React.PureComponent {
             Choose the refresh frequency for this dashboard
             <Select
               options={options}
+              value={this.state.refreshFrequency}
+              onChange={(opt) => {
+                this.setState({ refreshFrequency: opt.value });
+                this.props.onChange(opt.value);
+              }}
             />
           </div>
         }
