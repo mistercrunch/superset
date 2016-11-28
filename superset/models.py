@@ -1099,12 +1099,10 @@ class SqlaTable(Model, Queryable, AuditMixinNullable, ImportMixin):
         if extras:
             where = extras.get('where')
             if where:
-                where_clause_and += [wrap_clause_in_parens(
-                    template_processor.process_template(where))]
+                where_clause_and += [wrap_clause_in_parens(where)]
             having = extras.get('having')
             if having:
-                having_clause_and += [wrap_clause_in_parens(
-                    template_processor.process_template(having))]
+                having_clause_and += [wrap_clause_in_parens(having)]
         if granularity:
             qry = qry.where(and_(*([time_filter] + where_clause_and)))
         else:
@@ -1150,6 +1148,7 @@ class SqlaTable(Model, Queryable, AuditMixinNullable, ImportMixin):
             qry.compile(
                 engine, compile_kwargs={"literal_binds": True},),
         )
+        sql = template_processor.process_template(sql)
         df = pd.read_sql_query(
             sql=sql,
             con=engine
