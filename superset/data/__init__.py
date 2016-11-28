@@ -77,6 +77,7 @@ def load_energy():
         viz_type='sankey',
         datasource_type='table',
         datasource_id=tbl.id,
+        # 0 == {{ '0' }} to test the use of templating in where clause
         params=textwrap.dedent("""\
         {
             "collapsed_fieldsets": "",
@@ -95,7 +96,7 @@ def load_energy():
             "row_limit": "5000",
             "slice_name": "Energy Sankey",
             "viz_type": "sankey",
-            "where": ""
+            "where": "0 == {{ '0' }}"
         }
         """)
     )
