@@ -10,10 +10,13 @@ import json
 import io
 import random
 import unittest
+import os
+import pdb
+import unicodecsv
 
 from flask import escape
 
-from superset import db, models, utils, appbuilder, sm, jinja_context, sql_lab
+from superset import db, models, utils, appbuilder, sm, jinja_context, sql_lab, app
 from superset.views import DatabaseView
 
 from .base_tests import SupersetTestCase
@@ -128,7 +131,8 @@ class CoreTests(SupersetTestCase):
         slice_id = self.get_slice(slice_name, db.session).id
         db.session.commit()
         tbl_id = self.table_ids.get('energy_usage')
-        table = db.session.query(models.SqlaTable).filter(models.SqlaTable.id == tbl_id)
+        table = db.session.query(models.SqlaTable).filter(
+            models.SqlaTable.id == tbl_id)
         table.filter_select_enabled = True
         url = (
             "/superset/filter/table/{}/target/?viz_type=sankey&groupby=source"
@@ -531,7 +535,38 @@ class CoreTests(SupersetTestCase):
         data = self.get_json_resp('/superset/fave_dashboards/{}/'.format(userid))
         self.assertNotIn('message', data)
 
+    def test_import_csv(self):
+        self.login(username='admin')
+        config = app.config
+
+        test_file = open('tests/testCSV.csv', 'w+')
+
+        writer = unicodecsv.writer(test_file, encoding='utf-8')
+        writer.writerow((u'Column 1', u'Column 2'))
+        writer.writerow((u'Column 3', u'Column 4'))
+        test_file.seek(0)
+
+        form_data = {'csv_file': test_file,
+                            'sep': ',',
+                            'name': 'TestName',
+                            'con': config['SQLALCHEMY_DATABASE_URI'],
+                            'if_exists': 'append',
+                            'index_label': 'test_label',
+                            'chunksize': 1}
+
+        url = '/databaseview/list/'
+        add_datasource_page = self.get_resp(url)
+        assert 'Add CSV Table to Database' in add_datasource_page
+
+        url = '/csvtodatabaseview/form'
+        form_get = self.get_resp(url)
+        assert 'CSV to Database configuration' in form_get
+
+        self.login(username='admin')
+        form_post = self.get_resp(url, data=form_data)
+        assert 'CSV file "tests_testCSV.csv" uploaded to table' in form_post
+        os.remove('tests/testCSV.csv')
+
 
 if __name__ == '__main__':
     unittest.main()
-
