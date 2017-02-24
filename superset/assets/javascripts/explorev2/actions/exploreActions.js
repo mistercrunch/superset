@@ -53,11 +53,6 @@ export function resetControls() {
   return { type: RESET_FIELDS };
 }
 
-export const TRIGGER_QUERY = 'TRIGGER_QUERY';
-export function triggerQuery() {
-  return { type: TRIGGER_QUERY };
-}
-
 export function fetchDatasourceMetadata(datasourceKey, alsoTriggerQuery = false) {
   return function (dispatch) {
     dispatch(fetchDatasourceStarted());
@@ -228,20 +223,6 @@ export function updateChartStatus(status) {
   return { type: UPDATE_CHART_STATUS, status };
 }
 
-export const RUN_QUERY = 'RUN_QUERY';
-export function runQuery(formData, force = false) {
-  return function (dispatch) {
-    const url = getExploreUrl(formData, 'json', force);
-    const queryRequest = $.getJSON(url, function (queryResponse) {
-      dispatch(chartUpdateSucceeded(queryResponse));
-    }).fail(function (err) {
-      if (err.statusText !== 'abort') {
-        dispatch(chartUpdateFailed(err.responseJSON));
-      }
-    });
-    dispatch(chartUpdateStarted(queryRequest));
-  };
-}
 
 export const RENDER_TRIGGERED = 'RENDER_TRIGGERED';
 export function renderTriggered() {

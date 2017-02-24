@@ -7,13 +7,10 @@ import { getExploreUrl } from '../exploreUtils';
 import shortid from 'shortid';
 
 const propTypes = {
-  actions: PropTypes.object.isRequired,
-  alert: PropTypes.string,
   chartStatus: PropTypes.string,
   datasource: PropTypes.object.isRequired,
   height: PropTypes.string.isRequired,
   formData: PropTypes.object,
-  triggerRender: PropTypes.bool,
 };
 
 class Chart extends React.PureComponent {
@@ -24,16 +21,13 @@ class Chart extends React.PureComponent {
       containerId,
       selector: `#${containerId}`,
       showStackTrace: false,
+      queryResponse: null,
     };
   }
   componentDidUpdate(prevProps) {
     if (
         (
-          prevProps.queryResponse !== this.props.queryResponse ||
-          prevProps.height !== this.props.height || (
-              !prevProps.triggerRender &&
-              this.props.triggerRender
-          )
+          prevProps.height !== this.props.height
         ) && !this.props.queryResponse.error
         && this.props.chartStatus !== 'failed'
         && this.props.chartStatus !== 'stopped'
@@ -42,16 +36,30 @@ class Chart extends React.PureComponent {
     }
   }
 
+  runQuery() {
+    const url = getExploreUrl(this.props.formData, 'json', force);
+    const queryRequest = $.getJSON(url, function (queryResponse) {
+      this.setState({ queryResponse }, this.renderViz);
+    }).fail(function (err) {
+      if (err.statusText !== 'abort') {
+        this.setState({ queryResponse: err.responseJSON });
+      }
+    });
+    dispatch(chartUpdateStarted(queryRequest));
+  };
+
   renderViz() {
     this.props.actions.renderTriggered();
     const mockSlice = this.getMockedSliceObject();
 
     this.setState({ mockSlice });
+    let renderFailure;
     try {
-      visMap[this.props.formData.viz_type](mockSlice, this.props.queryResponse);
+      visMap[this.props.formData.viz_type](mockSlice, this.state.queryResponse);
     } catch (e) {
-      this.props.actions.chartRenderingFailed(e);
+      renderFailure = e;
     }
+    this.setState({ renderFailure });
   }
 
   getMockedSliceObject() {
@@ -135,10 +143,10 @@ class Chart extends React.PureComponent {
         >
           {msg}
         </Alert>
-        {this.props.queryResponse && this.props.queryResponse.stacktrace &&
+        {this.state.queryResponse && this.state.queryResponse.stacktrace &&
           <Collapse in={this.state.showStackTrace}>
             <pre>
-              {this.props.queryResponse.stacktrace}
+              {this.state.queryResponse.stacktrace}
             </pre>
           </Collapse>
         }

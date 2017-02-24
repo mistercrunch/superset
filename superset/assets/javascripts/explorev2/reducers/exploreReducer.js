@@ -80,50 +80,6 @@ export const exploreReducer = function (state, action) {
         }
       );
     },
-    [actions.CHART_UPDATE_STARTED]() {
-      return Object.assign({}, state,
-        {
-          chartStatus: 'loading',
-          chartUpdateEndTime: null,
-          chartUpdateStartTime: now(),
-          triggerQuery: false,
-          queryRequest: action.queryRequest,
-          latestQueryFormData: getFormDataFromControls(state.controls),
-        });
-    },
-    [actions.CHART_UPDATE_STOPPED]() {
-      return Object.assign({}, state,
-        {
-          chartStatus: 'stopped',
-          chartAlert: 'Updating chart was stopped',
-        });
-    },
-    [actions.CHART_RENDERING_FAILED]() {
-      return Object.assign({}, state, {
-        chartStatus: 'failed',
-        chartAlert: 'An error occurred while rendering the visualization: ' + action.error,
-      });
-    },
-    [actions.TRIGGER_QUERY]() {
-      return Object.assign({}, state, {
-        triggerQuery: true,
-      });
-    },
-    [actions.CHART_UPDATE_FAILED]() {
-      return Object.assign({}, state, {
-        chartStatus: 'failed',
-        chartAlert: action.queryResponse ? action.queryResponse.error : 'Network error.',
-        chartUpdateEndTime: now(),
-        queryResponse: action.queryResponse,
-      });
-    },
-    [actions.UPDATE_CHART_STATUS]() {
-      const newState = Object.assign({}, state, { chartStatus: action.status });
-      if (action.status === 'success' || action.status === 'failed') {
-        newState.chartUpdateEndTime = now();
-      }
-      return newState;
-    },
     [actions.REMOVE_CHART_ALERT]() {
       if (state.chartAlert !== null) {
         return Object.assign({}, state, { chartAlert: null });
