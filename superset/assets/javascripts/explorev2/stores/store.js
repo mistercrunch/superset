@@ -43,6 +43,10 @@ export function getControlsState(state, form_data) {
       Object.assign(control, control.mapStateToProps(state));
       delete control.mapStateToProps;
     }
+    console.log(k);
+    if (k=='metrics') {
+      console.log(control);
+    }
 
     // If the value is not valid anymore based on choices, clear it
     if (control.type === 'SelectControl' && control.choices && k !== 'datasource' && formData[k]) {
