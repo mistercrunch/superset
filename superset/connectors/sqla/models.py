@@ -549,8 +549,8 @@ class SqlaTable(Model, BaseDatasource):
         try:
             df = self.database.get_df(sql, self.schema)
         except Exception as e:
-            status = QueryStatus.FAILED
             logging.exception(e)
+            status = QueryStatus.FAILED
             error_message = (
                 self.database.db_engine_spec.extract_error_message(e))
 
