@@ -1553,6 +1553,53 @@ class MapboxViz(BaseViz):
         }
 
 
+class AnomalyViz(NVD3TimeSeriesViz):
+
+    """View anomalies on a single time series"""
+
+    viz_type = "anomaly"
+    verbose_name = _("Anomaly Visualization")
+    is_timeseries = True
+
+    def query_obj(self):
+        d = super(AnomalyViz, self).query_obj()
+        d['metrics'] = [self.form_data.get('metric')]
+        return d
+
+    def get_data(self, df):
+        fd = self.form_data
+
+        # The anomaly_algo selected by the user is available here
+        print(fd.get('anomaly_algo'))
+
+        # Getting the algorythm configuration variables
+        algo_config = {}
+        try:
+            algo_config = json.loads(fd.get('json'))
+        except:
+            pass
+
+        # Squeezing extra series into the chart
+        # Note that this is where we would call the dataframe
+        # transformer that would add new columns into the mix
+        # So here we'd simply get the right class and call it
+        df['TOP'] = algo_config.get('top', 2100000)
+        df['BOTTOM'] = algo_config.get('bottom', 1300000)
+
+        # Hard coded annotations to show the mechanics
+        ANNOTATIONS = [
+            (datetime(2017, 1, 1), "This is an annotation!"),
+            (datetime(2017, 1, 2), "This is another annotation!"),
+        ]
+
+        data = super(AnomalyViz, self).get_data(df)
+        payload = {
+            'annotations': ANNOTATIONS,
+            'data': data,
+        }
+        return payload
+
+
 viz_types_list = [
     TableViz,
     PivotTableViz,
@@ -1585,6 +1632,7 @@ viz_types_list = [
     MapboxViz,
     HistogramViz,
     SeparatorViz,
+    AnomalyViz,
 ]
 
 viz_types = OrderedDict([(v.viz_type, v) for v in viz_types_list

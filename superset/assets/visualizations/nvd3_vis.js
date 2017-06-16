@@ -80,6 +80,14 @@ function nvd3Vis(slice, payload) {
   let chart;
   let colorKey = 'key';
   const isExplore = $('#explore-container').length === 1;
+  const fd = slice.formData;
+
+  // Hack to squeeze annotations into the payload
+  let annotations;
+  if (fd.viz_type === 'anomaly') {
+    annotations = payload.data.annotations;
+    payload.data = payload.data.data;
+  }
 
   slice.container.html('');
   slice.clearError();
@@ -100,7 +108,6 @@ function nvd3Vis(slice, payload) {
   }
 
   let width = slice.width();
-  const fd = slice.formData;
 
   const barchartWidth = function () {
     let bars;
@@ -144,6 +151,13 @@ function nvd3Vis(slice, payload) {
         chart.xAxis
         .showMaxMin(fd.x_axis_showminmax)
         .staggerLabels(false);
+        break;
+
+      case 'anomaly':
+        chart = nv.models.lineChart();
+        // Annotations are available here
+        // TODO: write code that renders them
+        console.log(annotations);
         break;
 
       case 'dual_line':

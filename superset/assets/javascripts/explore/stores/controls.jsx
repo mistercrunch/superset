@@ -1255,5 +1255,21 @@ export const controls = {
     hidden: true,
     description: 'The number of seconds before expiring the cache',
   },
+
+  json: {
+    type: 'TextAreaControl',
+    label: 'JSON configuration',
+    default: '{}',
+    description: 'JSON configuration',
+  },
+
+  anomaly_algo: {
+    type: 'SelectControl',
+    label: 'Algorithm to apply',
+    choices: ['Algo 1', 'Algo 2', 'Algo 3'].map(s => [s, s]),
+    default: 'table',
+    description: 'The algorithm applied to detect anomalies',
+  },
+
 };
 export default controls;

@@ -461,6 +461,20 @@ const visTypes = {
     },
   },
 
+  anomaly: {
+    label: 'Anomaly highlighting',
+    controlPanelSections: [
+      {
+        label: null,
+        controlSetRows: [
+          ['metric'],
+          ['anomaly_algo'],
+          ['json'],
+        ],
+      },
+    ],
+  },
+
   big_number_total: {
     label: 'Big Number',
     controlPanelSections: [
