@@ -149,7 +149,7 @@ More screenshots
 
 Resources
 -------------
-* [Superset Google Group](https://groups.google.com/forum/#!forum/airbnb_superset)
+* **Apache Mailing list**: send an email to `dev @ superset.incubator.apache.org` to register
 * [Gitter (live chat) Channel](https://gitter.im/airbnb/superset)
 * [Docker image](https://hub.docker.com/r/amancevice/superset/) (community contributed)
 * [Slides from Strata (March 2016)](https://drive.google.com/open?id=0B5PVE0gzO81oOVJkdF9aNkJMSmM)
@@ -159,7 +159,7 @@ Contributing
 ------------
 
 Interested in contributing? Casual hacking? Check out
-[Contributing.MD](https://github.com/airbnb/superset/blob/master/CONTRIBUTING.md)
+[Contributing.MD](https://github.com/apache/incubator-superset/blob/master/CONTRIBUTING.md)
 
 
 Who uses Apache Superset (incubating)?
