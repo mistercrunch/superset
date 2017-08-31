@@ -3,8 +3,7 @@ set -e
 cd "$(dirname "$0")"
 npm --version
 node --version
-npm install -g yarn
-yarn
+npm install
 npm run sync-backend
 npm run lint
 npm run test
