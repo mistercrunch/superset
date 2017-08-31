@@ -5,6 +5,7 @@ import { Table } from 'reactable';
 import { Label, FormControl, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import ControlHeader from '../ControlHeader';
+import DatasourceMetadata from '../DatasourceMetadata';
 
 const propTypes = {
   description: PropTypes.string,
@@ -152,6 +153,7 @@ export default class DatasourceControl extends React.PureComponent {
             }
           </Modal.Body>
         </Modal>
+        <DatasourceMetadata datasource={this.props.datasource} />
       </div>);
   }
 }
