@@ -14,7 +14,7 @@ import ExploreViewContainer from './components/ExploreViewContainer';
 import rootReducer from './reducers/index';
 
 import { appSetup } from '../common';
-import './main.css';
+import './main.less';
 import '../../stylesheets/reactable-pagination.css';
 
 appSetup();

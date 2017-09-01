@@ -12,6 +12,7 @@ import TextAreaControl from './controls/TextAreaControl';
 import TextControl from './controls/TextControl';
 import VizTypeControl from './controls/VizTypeControl';
 import ColorSchemeControl from './controls/ColorSchemeControl';
+import DropControl from './controls/DropControl';
 
 const controlMap = {
   BoundsControl,
@@ -25,6 +26,7 @@ const controlMap = {
   TextControl,
   VizTypeControl,
   ColorSchemeControl,
+  DropControl,
 };
 const controlTypes = Object.keys(controlMap);
 

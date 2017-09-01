@@ -16,6 +16,7 @@ export const sections = {
     expanded: true,
     controlSetRows: [
       ['datasource'],
+      ['metrics_drop'],
       ['viz_type'],
       ['slice_id', 'cache_timeout'],
     ],

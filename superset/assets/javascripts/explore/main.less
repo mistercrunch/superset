@@ -1,3 +1,5 @@
+@import "../../stylesheets/less/cosmo/variables.less";
+
 .scrollbar-container {
   position: relative;
   overflow: hidden;
@@ -99,4 +101,21 @@
   position: absolute;
   right: 0;
   top: 12px;
+}
+.Draggable:hover {
+  border-color: @brand-primary;
+}
+.Draggable {
+  border-style: solid;
+  border-width: 1px;
+  border-color: transparent;
+  margin: 5px 2px;
+  padding: 2px 4px;
+  border-radius: 3px
+}
+.DropZone {
+  border-color: #aaa;
+  border-style: dashed;
+  border-width: 2px;
+  padding: 4px 8px;
 }

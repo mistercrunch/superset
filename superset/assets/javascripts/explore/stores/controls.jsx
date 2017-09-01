@@ -77,6 +77,12 @@ export const controls = {
     description: 'The type of visualization to display',
   },
 
+  metrics_drop: {
+    type: 'DropControl',
+    label: 'Metrics Drop',
+    description: 'Drag metrics over here!',
+  },
+
   metrics: {
     type: 'SelectControl',
     multi: true,
@@ -91,6 +97,7 @@ export const controls = {
     }),
     description: 'One or many metrics to display',
   },
+
   y_axis_bounds: {
     type: 'BoundsControl',
     label: 'Y Axis Bounds',

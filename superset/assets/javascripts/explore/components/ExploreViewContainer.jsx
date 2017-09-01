@@ -3,6 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 import ChartContainer from './ChartContainer';
 import ControlPanelsContainer from './ControlPanelsContainer';
 import SaveModal from './SaveModal';
@@ -12,6 +15,7 @@ import { getFormDataFromControls } from '../stores/store';
 import * as exploreActions from '../actions/exploreActions';
 import * as saveModalActions from '../actions/saveModalActions';
 import * as chartActions from '../actions/chartActions';
+
 
 const propTypes = {
   actions: PropTypes.object.isRequired,
@@ -213,4 +217,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export { ExploreViewContainer };
-export default connect(mapStateToProps, mapDispatchToProps)(ExploreViewContainer);
+const comp = connect(mapStateToProps, mapDispatchToProps)(ExploreViewContainer);
+export default DragDropContext(HTML5Backend)(comp);

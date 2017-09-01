@@ -9,7 +9,7 @@ const propTypes = {
 
 export default function MetricOption({ metric }) {
   return (
-    <div>
+    <span>
       <span className="m-r-5 option-label">
         {metric.verbose_name || metric.metric_name}
       </span>
@@ -27,6 +27,6 @@ export default function MetricOption({ metric }) {
         tooltip={metric.expression}
         label={`expr-${metric.metric_name}`}
       />
-    </div>);
+    </span>);
 }
 MetricOption.propTypes = propTypes;
