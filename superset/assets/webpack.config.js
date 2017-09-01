@@ -37,10 +37,12 @@ const config = {
     alias: {
       webworkify: 'webworkify-webpack',
       'mapbox-gl$': path.join(__dirname, '/node_modules/mapbox-gl/dist/mapbox-gl.js'),
-      react: 'preact-compat-enzyme',
-      'react-dom': 'preact-compat-enzyme',
+      react: 'preact-compat',
+      'react-dom': 'preact-compat',
       'react-addons-test-utils': 'preact-test-utils',
       'react-addons-css-transition-group': 'preact-css-transition-group',
+      'react-addons-update': 'preact-compat',
+      'react-addons-shallow-compare': 'shallow-compare',
     },
 
   },
