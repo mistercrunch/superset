@@ -151,7 +151,6 @@ appbuilder.add_view_no_menu(SqlMetricInlineView)
 
 class TableModelView(DatasourceModelView, DeleteMixin):  # noqa
     datamodel = SQLAInterface(models.SqlaTable)
-        
     list_title = _('List Tables')
     show_title = _('Show Table')
     add_title = _('Add Table')
