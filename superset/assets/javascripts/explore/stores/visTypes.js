@@ -43,6 +43,12 @@ export const sections = {
     ],
     description: 'This section exposes ways to include snippets of SQL in your query',
   },
+  annotations: {
+    label: 'Annotations',
+    controlSetRows: [
+      ['annotation_layers'],
+    ],
+  },
   NVD3TimeSeries: [
     {
       label: 'Query',
@@ -175,6 +181,7 @@ export const visTypes = {
         ],
       },
       sections.NVD3TimeSeries[1],
+      sections.annotations,
     ],
     controlOverrides: {
       x_axis_format: {
