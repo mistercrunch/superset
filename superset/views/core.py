@@ -1965,8 +1965,9 @@ class Superset(BaseSupersetView):
         blob = results_backend.get(key)
         if not blob:
             return json_error_response(
-                "Data could not be retrieved. "
-                "You may want to re-run the query.",
+                "Unexpected error. Failed at retrieving key {} "
+                "from {} results backend."
+                "".format(key, results_backend.__class__.__name__),
                 status=410
             )
 

@@ -7,6 +7,7 @@ export const STATE_BSSTYLE_MAP = {
   running: 'warning',
   stopped: 'danger',
   success: 'success',
+  exporting: 'info',
 };
 
 export const STATUS_OPTIONS = [
@@ -14,6 +15,7 @@ export const STATUS_OPTIONS = [
   'failed',
   'running',
   'pending',
+  'exporting',
 ];
 
 export const TIME_OPTIONS = [

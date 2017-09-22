@@ -489,6 +489,7 @@ class QueryStatus(object):
     SCHEDULED = 'scheduled'
     SUCCESS = 'success'
     TIMED_OUT = 'timed_out'
+    EXPORTING = 'exporting'
 
 
 def notify_user_about_perm_udate(

@@ -18,7 +18,7 @@ const defaultProps = {
 export default function RunQueryActionButton(props) {
   const runBtnText = props.selectedText ? t('Run Selected Query') : t('Run Query');
   const btnStyle = props.selectedText ? 'warning' : 'primary';
-  const shouldShowStopBtn = ['running', 'pending'].indexOf(props.queryState) > -1;
+  const shouldShowStopBtn = ['running', 'pending', 'exporting'].indexOf(props.queryState) > -1;
   const asyncToolTip = t('Run query asynchronously');
 
   const commonBtnProps = {

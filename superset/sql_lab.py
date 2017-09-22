@@ -213,9 +213,6 @@ def execute_sql(
     cdf = dataframe.SupersetDataFrame(
         pd.DataFrame(list(data), columns=column_names))
 
-    query.rows = cdf.size
-    query.progress = 100
-    query.status = QueryStatus.SUCCESS
     if query.select_as_cta:
         query.select_sql = '{}'.format(
             database.select_star(
@@ -225,8 +222,8 @@ def execute_sql(
                 show_cols=False,
                 latest_partition=False, ))
     query.end_time = utils.now_as_float()
-    session.merge(query)
-    session.flush()
+    query.rows = cdf.size
+    query.progress = 100
 
     payload.update({
         'status': query.status,
@@ -236,11 +233,25 @@ def execute_sql(
     })
     if store_results:
         key = '{}'.format(uuid.uuid4())
+        query.results_key = key
+        query.state = QueryStatus.EXPORTING
+        session.merge(query)
+        session.flush()
         logging.info("Storing results in results backend, key: {}".format(key))
         json_payload = json.dumps(payload, default=utils.json_iso_dttm_ser)
-        results_backend.set(key, utils.zlib_compress(json_payload))
-        query.results_key = key
+        rb_state = results_backend.set(key, utils.zlib_compress(json_payload))
+        if not rb_state:
+            msg = (
+                "Unexpected error. Failed at saving key "
+                "{} in the {} results backend"
+            ).format(key, results_backend.__class__.__name__)
+            query.state = QueryStatus.FAILED
+            return handle_error(msg)
+        else:
+            query.state = QueryStatus.SUCCESS
         query.end_result_backend_time = utils.now_as_float()
+    else:
+        query.status = QueryStatus.SUCCESS
 
     session.merge(query)
     session.commit()
