@@ -1612,6 +1612,7 @@ class HeatmapViz(BaseViz):
         }
 
 
+
 class HorizonViz(NVD3TimeSeriesViz):
 
     """Horizon chart
@@ -1729,6 +1730,14 @@ class MapboxViz(BaseViz):
             "tooltip": fd.get("rich_tooltip"),
             "color": fd.get("mapbox_color"),
         }
+
+
+class DeckScatterViz(MapboxViz):
+
+    """Rich maps made with Mapbox"""
+
+    viz_type = "deck_scatter"
+    verbose_name = _("Deck.gl - Scatter plot")
 
 
 class EventFlowViz(BaseViz):

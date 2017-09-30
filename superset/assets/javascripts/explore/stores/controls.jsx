@@ -1244,6 +1244,7 @@ export const controls = {
   mapbox_style: {
     type: 'SelectControl',
     label: t('Map Style'),
+    renderTrigger: true,
     choices: [
       ['mapbox://styles/mapbox/streets-v9', 'Streets'],
       ['mapbox://styles/mapbox/dark-v9', 'Dark'],

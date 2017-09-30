@@ -186,9 +186,10 @@ class ChartContainer extends React.PureComponent {
     this.props.actions.renderTriggered();
     const mockSlice = this.getMockedSliceObject();
     this.setState({ mockSlice });
+    console.log(this.props.viz_type);
     const viz = visMap[this.props.viz_type];
-    try {
       viz(mockSlice, this.props.queryResponse, this.props.actions.setControlValue);
+    try {
     } catch (e) {
       this.props.actions.chartRenderingFailed(e);
     }
