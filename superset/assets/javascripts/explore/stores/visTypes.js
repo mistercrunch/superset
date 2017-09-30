@@ -294,6 +294,34 @@ export const visTypes = {
     },
   },
 
+  deck_scatter: {
+    label: t('Deck.gl - Scatter plot'),
+    requiresTime: true,
+    controlPanelSections: [
+      {
+        label: t('Query'),
+        expanded: true,
+        controlSetRows: [
+          ['all_columns_x', 'all_columns_y'],
+          ['groupby'],
+          ['row_limit'],
+        ],
+      },
+      {
+        label: t('Map '),
+        controlSetRows: [
+          ['mapbox_style'],
+        ],
+      },
+      {
+        label: t('Points'),
+        controlSetRows: [
+          ['point_radius', 'point_radius_unit'],
+        ],
+      },
+    ],
+  },
+
   area: {
     label: t('Time Series - Stacked'),
     requiresTime: true,
