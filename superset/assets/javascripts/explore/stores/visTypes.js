@@ -308,15 +308,28 @@ export const visTypes = {
         ],
       },
       {
-        label: t('Map '),
+        label: t('Map'),
         controlSetRows: [
           ['mapbox_style'],
         ],
       },
       {
-        label: t('Points'),
+        label: t('Point Size'),
         controlSetRows: [
-          ['point_radius', 'point_radius_unit'],
+          ['point_radius_fixed', 'point_radius', 'point_radius_unit'],
+        ],
+      },
+      {
+        label: t('Color'),
+        controlSetRows: [
+          ['color_picker', null],
+        ],
+      },
+      {
+        label: t('Viewport'),
+        controlSetRows: [
+          ['viewport_longitude', 'viewport_latitude'],
+          ['viewport_zoom', null],
         ],
       },
     ],
@@ -1089,9 +1102,8 @@ export const visTypes = {
       {
         label: t('Viewport'),
         controlSetRows: [
-          ['viewport_longitude'],
-          ['viewport_latitude'],
-          ['viewport_zoom'],
+          ['viewport_longitude', 'viewport_latitude'],
+          ['viewport_zoom', null],
         ],
       },
     ],

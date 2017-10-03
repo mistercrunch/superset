@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
+import { colorPrimary } from '../../modules/colors';
 import * as v from '../validators';
 import { ALL_COLOR_SCHEMES, spectrums } from '../../modules/colors';
 import MetricOption from '../../components/MetricOption';
@@ -120,6 +121,14 @@ export const controls = {
     mapStateToProps: state => ({
       choices: (state.datasource) ? state.datasource.order_by_choices : [],
     }),
+  },
+
+  color_picker: {
+    label: t('Fixed Color'),
+    description: t('Use this to define a static color for all circles'),
+    type: 'ColorPickerControl',
+    default: colorPrimary,
+    renderTrigger: true,
   },
 
   annotation_layers: {
@@ -1263,6 +1272,13 @@ export const controls = {
     description: t('The radius (in pixels) the algorithm uses to define a cluster. ' +
     'Choose 0 to turn off clustering, but beware that a large ' +
     'number of points (>1000) will cause lag.'),
+  },
+
+  point_radius_fixed: {
+    type: 'TextControl',
+    label: t('Fixed Size'),
+    isFloat: true,
+    description: t('Fixed point radius'),
   },
 
   point_radius: {
