@@ -294,6 +294,153 @@ export const visTypes = {
     },
   },
 
+  deck_hex: {
+    label: t('Deck.gl - Hexagons'),
+    requiresTime: true,
+    controlPanelSections: [
+      {
+        label: t('Query'),
+        expanded: true,
+        controlSetRows: [
+          ['all_columns_x', 'all_columns_y'],
+          ['groupby'],
+          ['row_limit'],
+        ],
+      },
+      {
+        label: t('Map'),
+        controlSetRows: [
+          ['mapbox_style', null],
+        ],
+      },
+      {
+        label: t('Grid'),
+        controlSetRows: [
+          ['grid_size', 'extruded'],
+        ],
+      },
+      {
+        label: t('Point Size'),
+        controlSetRows: [
+          ['point_radius_fixed', 'point_radius'],
+          ['point_radius_unit', null],
+        ],
+      },
+      {
+        label: t('Color'),
+        controlSetRows: [
+          ['color_picker', null],
+        ],
+      },
+      {
+        label: t('Viewport'),
+        controlSetRows: [
+          ['viewport_longitude', 'viewport_latitude'],
+          ['viewport_zoom', 'viewport_bearing'],
+          ['viewport_pitch', null],
+        ],
+      },
+    ],
+  },
+
+  deck_grid: {
+    label: t('Deck.gl - Grid'),
+    requiresTime: true,
+    controlPanelSections: [
+      {
+        label: t('Query'),
+        expanded: true,
+        controlSetRows: [
+          ['all_columns_x', 'all_columns_y'],
+          ['groupby'],
+          ['row_limit'],
+        ],
+      },
+      {
+        label: t('Map'),
+        controlSetRows: [
+          ['mapbox_style', null],
+        ],
+      },
+      {
+        label: t('Grid'),
+        controlSetRows: [
+          ['grid_size', 'extruded'],
+        ],
+      },
+      {
+        label: t('Point Size'),
+        controlSetRows: [
+          ['point_radius_fixed', 'point_radius'],
+          ['point_radius_unit', null],
+        ],
+      },
+      {
+        label: t('Color'),
+        controlSetRows: [
+          ['color_picker', null],
+        ],
+      },
+      {
+        label: t('Viewport'),
+        controlSetRows: [
+          ['viewport_longitude', 'viewport_latitude'],
+          ['viewport_zoom', 'viewport_bearing'],
+          ['viewport_pitch', null],
+        ],
+      },
+    ],
+  },
+
+  deck_screengrid: {
+    label: t('Deck.gl - Screen grid'),
+    requiresTime: true,
+    controlPanelSections: [
+      {
+        label: t('Query'),
+        expanded: true,
+        controlSetRows: [
+          ['all_columns_x', 'all_columns_y'],
+          ['groupby'],
+          ['row_limit'],
+        ],
+      },
+      {
+        label: t('Map'),
+        controlSetRows: [
+          ['mapbox_style', null],
+        ],
+      },
+      {
+        label: t('Grid'),
+        controlSetRows: [
+          ['grid_size', null],
+        ],
+      },
+      {
+        label: t('Point Size'),
+        controlSetRows: [
+          ['point_radius_fixed', 'point_radius'],
+          ['point_radius_unit', null],
+        ],
+      },
+      {
+        label: t('Color'),
+        controlSetRows: [
+          ['color_picker', null],
+        ],
+      },
+      {
+        label: t('Viewport'),
+        controlSetRows: [
+          ['viewport_longitude', 'viewport_latitude'],
+          ['viewport_zoom', 'viewport_bearing'],
+          ['viewport_pitch', null],
+        ],
+      },
+    ],
+  },
+
   deck_scatter: {
     label: t('Deck.gl - Scatter plot'),
     requiresTime: true,
@@ -316,7 +463,8 @@ export const visTypes = {
       {
         label: t('Point Size'),
         controlSetRows: [
-          ['point_radius_fixed', 'point_radius', 'point_radius_unit'],
+          ['point_radius_fixed', 'point_radius'],
+          ['point_radius_unit', null],
         ],
       },
       {

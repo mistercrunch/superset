@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ScatterplotLayer } from 'deck.gl';
 
-import DeckGLContainer from './deckgl/DeckGLContainer';
+import DeckGLContainer from './DeckGLContainer';
 
 const radiusScaleMultiplier = {
   Miles: 1609.34,
