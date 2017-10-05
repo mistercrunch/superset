@@ -3,6 +3,7 @@ import CheckboxControl from './CheckboxControl';
 import CollectionControl from './CollectionControl';
 import ColorPickerControl from './ColorPickerControl';
 import ColorSchemeControl from './ColorSchemeControl';
+import ColorPickerControl from './ColorPickerControl';
 import DatasourceControl from './DatasourceControl';
 import DateFilterControl from './DateFilterControl';
 import FilterControl from './FilterControl';

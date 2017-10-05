@@ -1,8 +1,7 @@
 import React from 'react';
 import { formatSelectOptionsForRange, formatSelectOptions } from '../../modules/utils';
-import { colorPrimary } from '../../modules/colors';
 import * as v from '../validators';
-import { ALL_COLOR_SCHEMES, spectrums } from '../../modules/colors';
+import { colorPrimary, ALL_COLOR_SCHEMES, spectrums } from '../../modules/colors';
 import MetricOption from '../../components/MetricOption';
 import ColumnOption from '../../components/ColumnOption';
 import OptionDescription from '../../components/OptionDescription';
@@ -1323,11 +1322,34 @@ export const controls = {
     'Between 0 and 1.'),
   },
 
+  viewport_pitch: {
+    type: 'TextControl',
+    label: t('Pitch'),
+    isFloat: true,
+    renderTrigger: true,
+    default: 11,
+    description: t('The pitch (tilt) for the map, measured in degrees'),
+    places: 8,
+  },
+
+  viewport_bearing: {
+    type: 'TextControl',
+    label: t('Bearing'),
+    isFloat: true,
+    default: 11,
+    renderTrigger: true,
+    description: t(
+      'The bearing (rotation), measured in degrees counter-clockwise ' +
+      'from north.'),
+    places: 8,
+  },
+
   viewport_zoom: {
     type: 'TextControl',
     label: t('Zoom'),
     isFloat: true,
     default: 11,
+    renderTrigger: true,
     description: t('Zoom level of the map'),
     places: 8,
   },
@@ -1336,6 +1358,7 @@ export const controls = {
     type: 'TextControl',
     label: t('Default latitude'),
     default: 37.772123,
+    renderTrigger: true,
     isFloat: true,
     description: t('Latitude of default viewport'),
     places: 8,
