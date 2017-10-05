@@ -1740,6 +1740,30 @@ class DeckScatterViz(MapboxViz):
     verbose_name = _("Deck.gl - Scatter plot")
 
 
+class DeckScreengrid(MapboxViz):
+
+    """Rich maps made with Mapbox"""
+
+    viz_type = "deck_screengrid"
+    verbose_name = _("Deck.gl - Screen Grid")
+
+
+class DeckGrid(MapboxViz):
+
+    """Rich maps made with Mapbox"""
+
+    viz_type = "deck_grid"
+    verbose_name = _("Deck.gl - 3D Grid")
+
+
+class DeckHex(MapboxViz):
+
+    """Rich maps made with Mapbox"""
+
+    viz_type = "deck_hex"
+    verbose_name = _("Deck.gl - 3D HEX")
+
+
 class EventFlowViz(BaseViz):
     """A visualization to explore patterns in event sequences"""
 
