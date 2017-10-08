@@ -4,10 +4,21 @@ import { ScatterplotLayer } from 'deck.gl';
 
 import DeckGLContainer from './DeckGLContainer';
 
-const radiusScaleMultiplier = {
-  Miles: 1609.34,
-  Kilometers: 1000,
-  Pixels: 5,
+const METER_TO_MILE = 1609.34;
+const unitToRadius = (unit, num) => {
+  if (unit === 'square_m') {
+    return Math.sqrt(num / Math.PI);
+  } else if (unit === 'radius_m') {
+    return num;
+  } else if (unit === 'radius_km') {
+    return num * 1000;
+  } else if (unit === 'radius_miles') {
+    return num * METER_TO_MILE;
+  } else if (unit === 'square_km') {
+    return Math.sqrt(num / Math.PI) * 1000;
+  } else if (unit === 'square_km') {
+    return Math.sqrt(num / Math.PI) * METER_TO_MILE;
+  }
 };
 
 function deckScatter(slice, payload, setControlValue) {
@@ -15,7 +26,7 @@ function deckScatter(slice, payload, setControlValue) {
   const c = fd.color_picker;
   const data = payload.data.geoJSON.features.map(d => ({
     position: d.geometry.coordinates,
-    radius: fd.point_radius_fixed || 1,
+    radius: unitToRadius(fd.point_unit, fd.point_radius_fixed) || 10,
     color: [c.r, c.g, c.b, 255 * c.a],
   }));
 
@@ -23,9 +34,9 @@ function deckScatter(slice, payload, setControlValue) {
     id: 'scatterplot-layer',
     data,
     pickable: true,
+    fp64: true,
     // onHover: info => console.log('Hovered:', info),
     outline: false,
-    radiusScale: radiusScaleMultiplier[fd.point_radius_unit],
   });
   const viewport = {
     width: slice.width(),

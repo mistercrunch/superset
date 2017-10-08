@@ -1317,6 +1317,22 @@ export const controls = {
     description: t('The unit of measure for the specified point radius'),
   },
 
+  point_unit: {
+    type: 'SelectControl',
+    label: t('Point Unit'),
+    default: 'square_m',
+    clearable: false,
+    choices: [
+      ['square_m', 'Square meters'],
+      ['square_km', 'Square kilometers'],
+      ['square_miles', 'Square miles'],
+      ['radius_m', 'Radius in meters'],
+      ['radius_km', 'Radius in kilometers'],
+      ['radius_miles', 'Radius in miles'],
+    ],
+    description: t('The unit of measure for the specified point radius'),
+  },
+
   global_opacity: {
     type: 'TextControl',
     label: t('Opacity'),
@@ -1330,7 +1346,6 @@ export const controls = {
     type: 'TextControl',
     label: t('Pitch'),
     isFloat: true,
-    renderTrigger: true,
     default: 11,
     description: t('The pitch (tilt) for the map, measured in degrees'),
     places: 8,
@@ -1341,7 +1356,6 @@ export const controls = {
     label: t('Bearing'),
     isFloat: true,
     default: 11,
-    renderTrigger: true,
     description: t(
       'The bearing (rotation), measured in degrees counter-clockwise ' +
       'from north.'),
@@ -1353,7 +1367,6 @@ export const controls = {
     label: t('Zoom'),
     isFloat: true,
     default: 11,
-    renderTrigger: true,
     description: t('Zoom level of the map'),
     places: 8,
   },
@@ -1362,7 +1375,6 @@ export const controls = {
     type: 'TextControl',
     label: t('Default latitude'),
     default: 37.772123,
-    renderTrigger: true,
     isFloat: true,
     description: t('Latitude of default viewport'),
     places: 8,

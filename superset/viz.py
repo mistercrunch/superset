@@ -1702,7 +1702,81 @@ class MapboxViz(BaseViz):
         }
 
 
-class DeckScatterViz(MapboxViz):
+class BaseDeckGLViz(BaseViz):
+
+    """Rich maps made with Mapbox"""
+
+    viz_type = "mapbox"
+    verbose_name = _("Mapbox")
+    is_timeseries = False
+    credits = '<a href="https://uber.github.io/deck.gl/">deck.gl</a>'
+
+    def query_obj(self):
+        d = super(BaseDeckGLViz, self).query_obj()
+        fd = self.form_data
+        d['groupby'] = [fd.get('all_columns_x'), fd.get('all_columns_y')]
+        d['metrics'] = [fd.get('size')]
+        return d
+
+    def get_data(self, df):
+        fd = self.form_data
+        label_col = fd.get('mapbox_label')
+        custom_metric = label_col and len(label_col) >= 1
+        metric_col = [None] * len(df.index)
+        if custom_metric:
+            if label_col[0] == fd.get('all_columns_x'):
+                metric_col = df[fd.get('all_columns_x')]
+            elif label_col[0] == fd.get('all_columns_y'):
+                metric_col = df[fd.get('all_columns_y')]
+            else:
+                metric_col = df[label_col[0]]
+        point_radius_col = (
+            [None] * len(df.index)
+            if fd.get("point_radius") == "Auto"
+            else df[fd.get("size")])
+
+        # using geoJSON formatting
+        geo_json = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "metric": metric,
+                        "radius": point_radius,
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [lon, lat],
+                    }
+                }
+                for lon, lat, metric, point_radius
+                in zip(
+                    df[fd.get('all_columns_x')],
+                    df[fd.get('all_columns_y')],
+                    metric_col, point_radius_col)
+            ]
+        }
+
+        return {
+            "geoJSON": geo_json,
+            "customMetric": custom_metric,
+            "mapboxApiKey": config.get('MAPBOX_API_KEY'),
+            "mapStyle": fd.get("mapbox_style"),
+            "aggregatorName": fd.get("pandas_aggfunc"),
+            "clusteringRadius": fd.get("clustering_radius"),
+            "pointRadiusUnit": fd.get("point_radius_unit"),
+            "globalOpacity": fd.get("global_opacity"),
+            "viewportLongitude": fd.get("viewport_longitude"),
+            "viewportLatitude": fd.get("viewport_latitude"),
+            "viewportZoom": fd.get("viewport_zoom"),
+            "renderWhileDragging": fd.get("render_while_dragging"),
+            "tooltip": fd.get("rich_tooltip"),
+            "color": fd.get("mapbox_color"),
+        }
+
+
+class DeckScatterViz(BaseDeckGLViz):
 
     """Rich maps made with Mapbox"""
 
@@ -1710,7 +1784,7 @@ class DeckScatterViz(MapboxViz):
     verbose_name = _("Deck.gl - Scatter plot")
 
 
-class DeckScreengrid(MapboxViz):
+class DeckScreengrid(BaseDeckGLViz):
 
     """Rich maps made with Mapbox"""
 
@@ -1718,7 +1792,7 @@ class DeckScreengrid(MapboxViz):
     verbose_name = _("Deck.gl - Screen Grid")
 
 
-class DeckGrid(MapboxViz):
+class DeckGrid(BaseDeckGLViz):
 
     """Rich maps made with Mapbox"""
 
@@ -1726,7 +1800,7 @@ class DeckGrid(MapboxViz):
     verbose_name = _("Deck.gl - 3D Grid")
 
 
-class DeckHex(MapboxViz):
+class DeckHex(BaseDeckGLViz):
 
     """Rich maps made with Mapbox"""
 

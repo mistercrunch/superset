@@ -9,9 +9,11 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
+  onViewportChange: PropTypes.func,
 };
 const defaultProps = {
   mapStyle: 'light',
+  onViewportChange: () => {},
 };
 
 export default class DeckGLContainer extends React.Component {
@@ -58,11 +60,20 @@ export default class DeckGLContainer extends React.Component {
     const vp = Object.assign({}, viewport);
     delete vp.width;
     delete vp.height;
+    const newVp = { ...this.state.viewport, ...vp };
 
     // TODO do on a timer this affects perf FPS as it's called a lot
     this.setState({
-      viewport: { ...this.state.viewport, ...vp },
+      viewport: newVp,
     });
+    this.props.onViewportChange(newVp);
+  }
+  layers() {
+    // Support for layer factory
+    if (this.props.layers.some(l => typeof l === 'function')) {
+      return this.props.layers.map(l => typeof l === 'function' ? l() : l);
+    }
+    return this.props.layers;
   }
 
   render() {
@@ -76,7 +87,7 @@ export default class DeckGLContainer extends React.Component {
       >
         <DeckGL
           {...viewport}
-          layers={this.props.layers}
+          layers={this.layers()}
         />
       </MapGL>
     );
