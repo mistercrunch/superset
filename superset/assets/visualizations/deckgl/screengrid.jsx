@@ -13,15 +13,6 @@ function deckScreenGridLayer(slice, payload, setControlValue) {
     color: [c.r, c.g, c.b, 255 * c.a],
   }));
 
-  const layer = new ScreenGridLayer({
-    id: 'screengrid-layer',
-    data,
-    pickable: true,
-    cellSizePixels: fd.grid_size,
-    minColor: [0, 0, 0, 0],
-    maxColor: [c.r, c.g, c.b, 255 * c.a],
-    outline: false,
-  });
   const viewport = {
     width: slice.width(),
     height: slice.height(),
@@ -30,6 +21,19 @@ function deckScreenGridLayer(slice, payload, setControlValue) {
     zoom: fd.viewport_zoom,
     pitch: fd.viewport_pitch,
     bearing: fd.viewport_bearing,
+  };
+  // Passing a layer creator function instead of a layer since the
+  // layer needs to be regenerated at each render
+  let layer = () => {
+    return new ScreenGridLayer({
+      id: 'screengrid-layer',
+      data,
+      pickable: true,
+      cellSizePixels: fd.grid_size,
+      minColor: [0, 0, 0, 0],
+      maxColor: [c.r, c.g, c.b, 255 * c.a],
+      outline: false,
+    });
   };
   ReactDOM.render(
     <DeckGLContainer

@@ -317,6 +317,7 @@ export const visTypes = {
         label: t('Grid'),
         controlSetRows: [
           ['grid_size', 'extruded'],
+          ['size', null],
         ],
       },
       {
@@ -366,6 +367,7 @@ export const visTypes = {
         label: t('Grid'),
         controlSetRows: [
           ['grid_size', 'extruded'],
+          ['size', null],
         ],
       },
       {
@@ -414,14 +416,14 @@ export const visTypes = {
       {
         label: t('Grid'),
         controlSetRows: [
-          ['grid_size', null],
+          ['grid_size', 'size'],
         ],
       },
       {
-        label: t('Point Size'),
+        label: t('Points'),
         controlSetRows: [
           ['point_radius_fixed', 'point_radius'],
-          ['point_radius_unit', null],
+          ['point_unit', null],
         ],
       },
       {
@@ -461,10 +463,10 @@ export const visTypes = {
         ],
       },
       {
-        label: t('Point Size'),
+        label: t('Points'),
         controlSetRows: [
-          ['point_radius_fixed', 'point_radius'],
-          ['point_radius_unit', null],
+          ['point_radius_fixed', 'point_unit'],
+          ['size', null],
         ],
       },
       {
@@ -482,6 +484,16 @@ export const visTypes = {
         ],
       },
     ],
+    controlOverrides: {
+      all_columns_x: {
+        label: t('Longitude Column'),
+        validators: [v.nonEmpty],
+      },
+      all_columns_y: {
+        label: t('Latitude Column'),
+        validators: [v.nonEmpty],
+      },
+    },
   },
 
   area: {
