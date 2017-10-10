@@ -3,15 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Mustache from 'mustache';
 import { connect } from 'react-redux';
-import { Table } from 'reactable';
-import {
-  Alert, Collapse, Panel, Label, OverlayTrigger, Popover,
-} from 'react-bootstrap';
-import equal from 'deep-equal';
+import { Alert, Collapse, Panel } from 'react-bootstrap';
 
 import visMap from '../../../visualizations/main';
 import { d3format } from '../../modules/utils';
 import ExploreActionButtons from './ExploreActionButtons';
+import AlteredLabel from './AlteredLabel';
 import EditableTitle from '../../components/EditableTitle';
 import FaveStar from '../../components/FaveStar';
 import TooltipWrapper from '../../components/TooltipWrapper';
@@ -40,6 +37,7 @@ const propTypes = {
   height: PropTypes.string.isRequired,
   width: PropTypes.string.isRequired,
   isStarred: PropTypes.bool.isRequired,
+  origFormData: PropTypes.object.isRequired,
   slice: PropTypes.object,
   table_name: PropTypes.string,
   viz_type: PropTypes.string.isRequired,
@@ -229,32 +227,6 @@ class ChartContainer extends React.PureComponent {
         }
       </div>);
   }
-  renderAltered() {
-    // Show an `altered` label when the slice has unsaved changes
-    const lhs = this.props.formData;
-    const rhs = this.props.origFormData;
-    console.log(rhs);
-
-    const diffs = Object.keys(lhs).filter(k => !equal(lhs[k], rhs[k]));
-
-    // filering out new undefined changes
-    if (diffs.length) {
-      const popover = (
-        <Popover title="Alterations" id="pop-alt">
-          <Table className="table table-condensed" data={diffs.map(k => ({
-            control: <strong>{k}</strong>,
-            slice: JSON.stringify(rhs[k]),
-            current: JSON.stringify(lhs[k]),
-          }))}/>
-        </Popover>);
-      return (
-        <OverlayTrigger overlay={popover} placement="bottom">
-          <Label bsStyle="warning" style={{ fontSize: '14px' }}>altered</Label>
-        </OverlayTrigger>
-      );
-    }
-    return null;
-  }
 
   renderChart() {
     if (this.props.alert) {
@@ -306,7 +278,10 @@ class ChartContainer extends React.PureComponent {
               />
               {this.props.slice &&
                 <span>
-                  {this.renderAltered()}
+                  <AlteredLabel
+                    sliceFormData={this.props.origFormData}
+                    currentFormData={this.props.formData}
+                  />
                   <FaveStar
                     sliceId={this.props.slice.slice_id}
                     actions={this.props.actions}

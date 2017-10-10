@@ -27,8 +27,6 @@ const origFormData = getFormDataFromControls(controls);
 delete bootstrapData.form_data;
 delete bootstrapData.common.locale;
 delete bootstrapData.common.language_pack;
-console.log(controls);
-console.log(origFormData);
 
 // Initial state
 const bootstrappedState = Object.assign(
