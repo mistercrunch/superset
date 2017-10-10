@@ -3,7 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Mustache from 'mustache';
 import { connect } from 'react-redux';
-import { Alert, Collapse, Panel } from 'react-bootstrap';
+import { Table } from 'reactable';
+import {
+  Alert, Collapse, Panel, Label, OverlayTrigger, Popover,
+} from 'react-bootstrap';
+import equal from 'deep-equal';
+
 import visMap from '../../../visualizations/main';
 import { d3format } from '../../modules/utils';
 import ExploreActionButtons from './ExploreActionButtons';
@@ -224,6 +229,32 @@ class ChartContainer extends React.PureComponent {
         }
       </div>);
   }
+  renderAltered() {
+    // Show an `altered` label when the slice has unsaved changes
+    const lhs = this.props.formData;
+    const rhs = this.props.origFormData;
+    console.log(rhs);
+
+    const diffs = Object.keys(lhs).filter(k => !equal(lhs[k], rhs[k]));
+
+    // filering out new undefined changes
+    if (diffs.length) {
+      const popover = (
+        <Popover title="Alterations" id="pop-alt">
+          <Table className="table table-condensed" data={diffs.map(k => ({
+            control: <strong>{k}</strong>,
+            slice: JSON.stringify(rhs[k]),
+            current: JSON.stringify(lhs[k]),
+          }))}/>
+        </Popover>);
+      return (
+        <OverlayTrigger overlay={popover} placement="bottom">
+          <Label bsStyle="warning" style={{ fontSize: '14px' }}>altered</Label>
+        </OverlayTrigger>
+      );
+    }
+    return null;
+  }
 
   renderChart() {
     if (this.props.alert) {
@@ -273,9 +304,9 @@ class ChartContainer extends React.PureComponent {
                 canEdit={!this.props.slice || this.props.can_overwrite}
                 onSaveTitle={this.updateChartTitleOrSaveSlice.bind(this)}
               />
-
               {this.props.slice &&
                 <span>
+                  {this.renderAltered()}
                   <FaveStar
                     sliceId={this.props.slice.slice_id}
                     actions={this.props.actions}
@@ -342,6 +373,7 @@ function mapStateToProps({ explore, chart }) {
     column_formats: explore.datasource ? explore.datasource.column_formats : null,
     containerId: explore.slice ? `slice-container-${explore.slice.slice_id}` : 'slice-container',
     formData,
+    origFormData: chart.origFormData,
     isStarred: explore.isStarred,
     slice: explore.slice,
     standalone: explore.standalone,
