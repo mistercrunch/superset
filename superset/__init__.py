@@ -53,8 +53,6 @@ def get_manifest_file(filename):
 
 
 parse_manifest_json()
-
-
 @app.context_processor
 def get_js_manifest():
     return dict(js_manifest=get_manifest_file)
