@@ -17,7 +17,6 @@ const defaultProps = {
 };
 
 export default class DeckGLContainer extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +28,6 @@ export default class DeckGLContainer extends React.Component {
     const timer = setInterval(this.tick, 1000);
     this.setState({ timer });
   }
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       viewport: {
@@ -37,7 +35,6 @@ export default class DeckGLContainer extends React.Component {
       },
     });
   }
-
   componentWillUnmount() {
     this.clearInterval(this.state.timer);
   }
@@ -46,16 +43,17 @@ export default class DeckGLContainer extends React.Component {
     if (this.state.previousViewport !== this.state.viewport) {
       const setCV = this.props.setControlValue;
       const vp = this.state.viewport;
-      setCV('viewport_longitude', vp.longitude);
-      setCV('viewport_latitude', vp.latitude);
-      setCV('viewport_zoom', vp.zoom);
-      setCV('viewport_pitch', vp.pitch);
-      setCV('viewport_bearing', vp.bearing);
+      if (setCV) {
+        setCV('viewport_longitude', vp.longitude);
+        setCV('viewport_latitude', vp.latitude);
+        setCV('viewport_zoom', vp.zoom);
+        setCV('viewport_pitch', vp.pitch);
+        setCV('viewport_bearing', vp.bearing);
+      }
 
       this.setState({ previousViewport: this.state.viewport });
     }
   }
-
   onViewportChange(viewport) {
     const vp = Object.assign({}, viewport);
     delete vp.width;
@@ -75,7 +73,6 @@ export default class DeckGLContainer extends React.Component {
     }
     return this.props.layers;
   }
-
   render() {
     const { viewport } = this.state;
     return (

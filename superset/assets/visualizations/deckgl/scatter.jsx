@@ -23,7 +23,7 @@ const unitToRadius = (unit, num) => {
 
 function deckScatter(slice, payload, setControlValue) {
   const fd = slice.formData;
-  const c = fd.color_picker;
+  const c = fd.color_picker || { r: 0, g: 0, b: 0, a: 1 };
   const data = payload.data.geoJSON.features.map(d => ({
     position: d.geometry.coordinates,
     radius: unitToRadius(fd.point_unit, fd.point_radius_fixed) || 10,

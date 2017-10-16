@@ -36,7 +36,6 @@ const vizMap = {
   event_flow: require('./EventFlow.jsx'),
   paired_ttest: require('./paired_ttest.jsx'),
   partition: require('./partition.js'),
-  deck_scatter: require('./deck_scatter.jsx'),
   deck_scatter: require('./deckgl/scatter.jsx'),
   deck_screengrid: require('./deckgl/screengrid.jsx'),
   deck_grid: require('./deckgl/grid.jsx'),
