@@ -24,8 +24,7 @@ function deckScreenGridLayer(slice, payload, setControlValue) {
   };
   // Passing a layer creator function instead of a layer since the
   // layer needs to be regenerated at each render
-  const layer = () => {
-    return new ScreenGridLayer({
+  const layer = () => new ScreenGridLayer({
       id: 'screengrid-layer',
       data,
       pickable: true,
@@ -33,8 +32,7 @@ function deckScreenGridLayer(slice, payload, setControlValue) {
       minColor: [0, 0, 0, 0],
       maxColor: [c.r, c.g, c.b, 255 * c.a],
       outline: false,
-    });
-  };
+  });
   ReactDOM.render(
     <DeckGLContainer
       mapboxApiAccessToken={payload.data.mapboxApiKey}
