@@ -19,6 +19,7 @@ const unitToRadius = (unit, num) => {
   } else if (unit === 'square_km') {
     return Math.sqrt(num / Math.PI) * METER_TO_MILE;
   }
+  return null;
 };
 
 function deckScatter(slice, payload, setControlValue) {

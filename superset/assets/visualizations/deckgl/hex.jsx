@@ -4,7 +4,7 @@ import { HexagonLayer } from 'deck.gl';
 
 import DeckGLContainer from './DeckGLContainer';
 
-function deckScreenGridLayer(slice, payload, setControlValue) {
+function deckHex(slice, payload, setControlValue) {
   const fd = slice.formData;
   const c = fd.color_picker;
   const data = payload.data.geoJSON.features.map(d => ({
@@ -43,4 +43,4 @@ function deckScreenGridLayer(slice, payload, setControlValue) {
     document.getElementById(slice.containerId),
   );
 }
-module.exports = deckScreenGridLayer;
+module.exports = deckHex;

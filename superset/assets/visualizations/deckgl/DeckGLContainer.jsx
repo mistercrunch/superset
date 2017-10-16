@@ -38,6 +38,17 @@ export default class DeckGLContainer extends React.Component {
   componentWillUnmount() {
     this.clearInterval(this.state.timer);
   }
+  onViewportChange(viewport) {
+    const vp = Object.assign({}, viewport);
+    delete vp.width;
+    delete vp.height;
+    const newVp = { ...this.state.viewport, ...vp };
+
+    this.setState({
+      viewport: newVp,
+    });
+    this.props.onViewportChange(newVp);
+  }
   tick() {
     // Limiting updating viewport controls through Redux at most 1*sec
     if (this.state.previousViewport !== this.state.viewport) {
@@ -53,18 +64,6 @@ export default class DeckGLContainer extends React.Component {
 
       this.setState({ previousViewport: this.state.viewport });
     }
-  }
-  onViewportChange(viewport) {
-    const vp = Object.assign({}, viewport);
-    delete vp.width;
-    delete vp.height;
-    const newVp = { ...this.state.viewport, ...vp };
-
-    // TODO do on a timer this affects perf FPS as it's called a lot
-    this.setState({
-      viewport: newVp,
-    });
-    this.props.onViewportChange(newVp);
   }
   layers() {
     // Support for layer factory
@@ -85,6 +84,7 @@ export default class DeckGLContainer extends React.Component {
         <DeckGL
           {...viewport}
           layers={this.layers()}
+          initWebGLParameters
         />
       </MapGL>
     );
