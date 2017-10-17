@@ -1456,11 +1456,23 @@ def load_deck_dash():
 def load_flights():
     """Loading random time series data from a zip file in the repo"""
     with gzip.open(os.path.join(DATA_FOLDER, 'fligth_data.csv.gz')) as f:
-        pdf = pd.read_json(f)
-    pdf.ds = pdf.YEAR + '-0' + pdf.MONTH + '-0' + pdf.DAY
-    pdf.ds = pd.to_datetime(pdf.ds, unit='s')
+        pdf = pd.read_csv(f)
+
+    # Loading airports info to join and get lat/long
+    with gzip.open(os.path.join(DATA_FOLDER, 'airports.csv.gz')) as f:
+        airports = pd.read_csv(f)
+    airports = airports.set_index('IATA_CODE')
+
+    pdf['ds'] = pdf.YEAR.map(str) + '-0' + pdf.MONTH.map(str) + '-0' + pdf.DAY.map(str)
+    pdf.ds = pd.to_datetime(pdf.ds)
+    del pdf['YEAR']
+    del pdf['MONTH']
+    del pdf['DAY']
+
+    pdf = pdf.join(airports, on='ORIGIN_AIRPORT', rsuffix='_ORIG')
+    pdf = pdf.join(airports, on='DESTINATION_AIRPORT', rsuffix='_DEST')
     pdf.to_sql(
-        'random_time_series',
+        'flights',
         db.engine,
         if_exists='replace',
         chunksize=500,
@@ -1469,37 +1481,13 @@ def load_flights():
         },
         index=False)
     print("Done loading table!")
-    print("-" * 80)
 
     print("Creating table [random_time_series] reference")
     obj = db.session.query(TBL).filter_by(table_name='random_time_series').first()
     if not obj:
-        obj = TBL(table_name='random_time_series')
+        obj = TBL(table_name='flights')
     obj.main_dttm_col = 'ds'
     obj.database = get_or_create_main_db()
     db.session.merge(obj)
     db.session.commit()
     obj.fetch_metadata()
-    tbl = obj
-
-    slice_data = {
-        "granularity": "day",
-        "row_limit": config.get("ROW_LIMIT"),
-        "since": "1 year ago",
-        "until": "now",
-        "metric": "count",
-        "where": "",
-        "viz_type": "cal_heatmap",
-        "domain_granularity": "month",
-        "subdomain_granularity": "day",
-    }
-
-    print("Creating a slice")
-    slc = Slice(
-        slice_name="Calendar Heatmap",
-        viz_type='cal_heatmap',
-        datasource_type='table',
-        datasource_id=tbl.id,
-        params=get_slice_json(slice_data),
-    )
-    merge_slice(slc)

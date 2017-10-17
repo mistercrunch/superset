@@ -105,6 +105,7 @@ def version(verbose):
 def load_examples(load_test_data):
     """Loads a set of Slices and Dashboards and a supporting dataset """
     from superset import data
+    '''
     print("Loading examples into {}".format(db))
 
     data.load_css_templates()
@@ -136,9 +137,13 @@ def load_examples(load_test_data):
     print("Loading DECK.gl demo")
     data.load_deck_dash()
 
+
     if load_test_data:
         print("Loading [Unicode test data]")
         data.load_unicode_test_data()
+    '''
+
+    data.load_flights()
 
 
 @manager.option(
