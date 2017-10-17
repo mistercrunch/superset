@@ -1229,6 +1229,230 @@ def load_misc_dashboard():
     db.session.commit()
 
 
+def load_deck_dash():
+    print("Loading deck.gl dashboard")
+    slices = []
+    tbl = db.session.query(TBL).filter_by(table_name='long_lat').first()
+    slice_data = {
+        "all_columns_x": "LON",
+        "all_columns_y": "LAT",
+        "color_picker": {
+            "r": 205,
+            "g": 0,
+            "b": 3,
+            "a": 0.82,
+        },
+        "datasource": "5__table",
+        "filters": [],
+        "granularity_sqla": "date",
+        "groupby": [],
+        "having": "",
+        "mapbox_style": "mapbox://styles/mapbox/light-v9",
+        "point_radius_fixed": 2000,
+        "point_unit": "square_m",
+        "row_limit": 5000,
+        "since": "2014-01-01",
+        "size": "count",
+        "time_grain_sqla": "Time Column",
+        "until": "now",
+        "viewport_bearing": -4.952916738791771,
+        "viewport_latitude": 37.78926922909199,
+        "viewport_longitude": -122.42613341901688,
+        "viewport_pitch": 4.750411100577438,
+        "viewport_zoom": 12.729132798697304,
+        "viz_type": "deck_scatter",
+        "where": "",
+    }
+
+    print("Creating Scatterplot slice")
+    slc = Slice(
+        slice_name="Scatterplot",
+        viz_type='deck_scatter',
+        datasource_type='table',
+        datasource_id=tbl.id,
+        params=get_slice_json(slice_data),
+    )
+    merge_slice(slc)
+    slices.append(slc)
+
+    slice_data = {
+        "point_unit": "square_m",
+        "filters": [],
+        "row_limit": 5000,
+        "all_columns_y": "LAT",
+        "all_columns_x": "LON",
+        "mapbox_style": "mapbox://styles/mapbox/dark-v9",
+        "granularity_sqla": "date",
+        "size": "count",
+        "viewport_bearing": -4.952916738791771,
+        "viz_type": "deck_screengrid",
+        "since": "2014-01-01",
+        "point_radius": "Auto",
+        "until": "now",
+        "viewport_longitude": -122.41827069521386,
+        "color_picker": {"a": 1,
+        "r": 14,
+        "b": 0,
+        "g": 255},
+        "grid_size": 20,
+        "viewport_zoom": 14.161641703941438,
+        "where": "",
+        "having": "",
+        "viewport_latitude": 37.76024135844065,
+        "viewport_pitch": 4.750411100577438,
+        "point_radius_fixed": 2000,
+        "datasource": "5__table",
+        "time_grain_sqla": "Time Column",
+        "groupby": [],
+    }
+    print("Creating Screen Grid slice")
+    slc = Slice(
+        slice_name="Screen grid",
+        viz_type='deck_screengrid',
+        datasource_type='table',
+        datasource_id=tbl.id,
+        params=get_slice_json(slice_data),
+    )
+    merge_slice(slc)
+    slices.append(slc)
+
+    slice_data = {
+        "filters": [],
+        "row_limit": 5000,
+        "all_columns_y": "LAT",
+        "all_columns_x": "LON",
+        "mapbox_style": "mapbox://styles/mapbox/streets-v9",
+        "granularity_sqla": "date",
+        "size": "count",
+        "viewport_bearing": -2.3984797349335167,
+        "viz_type": "deck_hex",
+        "since": "2014-01-01",
+        "point_radius_unit": "Pixels",
+        "point_radius": "Auto",
+        "until": "now",
+        "viewport_longitude": -122.40632230075536,
+        "color_picker": {
+            "a": 1,
+            "r": 14,
+            "b": 0,
+            "g": 255,
+        },
+        "grid_size": 40,
+        "viewport_zoom": 13.835465702403654,
+        "extruded": True,
+        "having": "",
+        "viewport_latitude": 37.789795085160335,
+        "viewport_pitch": 54.08961642447763,
+        "where": "",
+        "point_radius_fixed": 2000,
+        "datasource": "5__table",
+        "time_grain_sqla": "Time Column",
+        "groupby": [],
+    }
+    print("Creating Hex slice")
+    slc = Slice(
+        slice_name="Hexagons",
+        viz_type='deck_hex',
+        datasource_type='table',
+        datasource_id=tbl.id,
+        params=get_slice_json(slice_data),
+    )
+    merge_slice(slc)
+    slices.append(slc)
+
+    slice_data = {
+        "filters": [],
+        "row_limit": 5000,
+        "all_columns_y": "LAT",
+        "all_columns_x": "LON",
+        "mapbox_style": "mapbox://styles/mapbox/satellite-streets-v9",
+        "granularity_sqla": "date",
+        "size": "count",
+        "viewport_bearing": 155.80099696026355,
+        "viz_type": "deck_grid",
+        "since": "2014-01-01",
+        "point_radius_unit": "Pixels",
+        "point_radius": "Auto",
+        "until": "now",
+        "viewport_longitude": -122.42066918995666,
+        "color_picker": {
+            "a": 1,
+            "r": 14,
+            "b": 0,
+            "g": 255,
+        },
+        "grid_size": 120,
+        "viewport_zoom": 12.699690845482069,
+        "extruded": True,
+        "having": "",
+        "viewport_latitude": 37.7942314882596,
+        "viewport_pitch": 53.470800300695146,
+        "where": "",
+        "point_radius_fixed": 2000,
+        "datasource": "5__table",
+        "time_grain_sqla": "Time Column",
+        "groupby": [],
+    }
+    print("Creating Grid slice")
+    slc = Slice(
+        slice_name="Grid",
+        viz_type='deck_grid',
+        datasource_type='table',
+        datasource_id=tbl.id,
+        params=get_slice_json(slice_data),
+    )
+    merge_slice(slc)
+    slices.append(slc)
+
+    print("Creating a dashboard")
+    title = "deck.gl Demo"
+    dash = db.session.query(Dash).filter_by(dashboard_title=title).first()
+
+    if not dash:
+        dash = Dash()
+    js = textwrap.dedent("""\
+    [
+	{
+	    "col": 1,
+	    "row": 0,
+	    "size_x": 6,
+	    "size_y": 4,
+	    "slice_id": "37"
+	},
+	{
+	    "col": 7,
+	    "row": 0,
+	    "size_x": 6,
+	    "size_y": 4,
+	    "slice_id": "38"
+	},
+	{
+	    "col": 7,
+	    "row": 4,
+	    "size_x": 6,
+	    "size_y": 4,
+	    "slice_id": "39"
+	},
+	{
+	    "col": 1,
+	    "row": 4,
+	    "size_x": 6,
+	    "size_y": 4,
+	    "slice_id": "40"
+	}
+    ]
+    """)
+    l = json.loads(js)
+    for i, pos in enumerate(l):
+        pos['slice_id'] = str(slices[i].id)
+    dash.dashboard_title = title
+    dash.position_json = json.dumps(l, indent=4)
+    dash.slug = "deck"
+    dash.slices = slices
+    db.session.merge(dash)
+    db.session.commit()
+
+
 def load_flights():
     """Loading random time series data from a zip file in the repo"""
     with gzip.open(os.path.join(DATA_FOLDER, 'fligth_data.csv.gz')) as f:
