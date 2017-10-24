@@ -20,13 +20,28 @@ tests:
     type: startup
     group: superset.dev
 deploy:
+  - name: development
+    automatic: true
+    legacy: false
+    orca:
+      - region: iad
   - name: staging
     legacy: true
     automatic: true
+    orca:
+      - region: iad
   - name: canary
     legacy: true
-  - name: production
-    legacy: true
+    orca:
+      - region: iad
+  - - name: production-us-east-1a
+      legacy: true
+      availability_zone: us-east-1a
+    - name: production-us-east-1d
+      legacy: true
+      availability_zone: us-east-1d
+    - name: production
+      legacy: true
 python:
   mypy:
     python_versions:
