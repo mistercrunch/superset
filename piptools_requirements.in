@@ -1,0 +1,14 @@
+# A small Python module for determining appropriate platform-specific dirs, e.g. a "user data dir".
+# License: MIT
+# Upstream url: http://github.com/ActiveState/appdirs
+appdirs==1.4.3
+
+# Core utilities for Python packages
+# License: BSD
+# Upstream url: https://github.com/pypa/packaging
+packaging==16.8
+
+# Python 2 and 3 compatibility utilities
+# License: MIT
+# Upstream url: http://pypi.python.org/pypi/six/
+six==1.10.0

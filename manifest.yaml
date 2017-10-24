@@ -1,0 +1,59 @@
+name: superset
+description: internal visualization tool for interactively exploring lyft data (apache/incubator-superset)
+repository: git@github.com:lyft/superset.git
+image_type: service
+languages:
+  - python
+  - bash
+credentials: false # Confidant credentials require a development IAM role
+containers:
+  - name: legacy
+    command: /code/ops/base/entrypoint.sh
+    provision: /code/ops/base/starters/post_starters.sh
+    exports:
+      - name: api
+        port: 8080
+
+groups:
+  - name: dev
+    members:
+      - control.dev
+      # - TODO dev dependencies (can be dynamodb.server, redis.server, etc)
+      - superset.legacy
+
+tests:
+  - name: startup
+    type: startup
+    group: superset.dev
+
+deploy:
+  - name: development
+    automatic: true
+    legacy: false
+    orca:
+      - region: iad
+  - name: staging
+    legacy: true
+    automatic: true
+    orca:
+      - region: iad
+  - name: canary
+    legacy: true
+    orca:
+      - region: iad
+  - - name: production-us-east-1a
+      legacy: true
+      availability_zone: us-east-1a
+    - name: production-us-east-1d
+      legacy: true
+      availability_zone: us-east-1d
+    - name: production
+      legacy: true
+
+python:
+  mypy:
+    python_versions:
+      - '3.6'
+    exclude:
+      - 'ops'
+
