@@ -34,7 +34,7 @@ deploy:
     legacy: true
     orca:
       - region: iad
-  - - name: production-us-east-1a
+    - name: production-us-east-1a
       legacy: true
       availability_zone: us-east-1a
     - name: production-us-east-1d
