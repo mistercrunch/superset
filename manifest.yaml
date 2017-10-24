@@ -34,12 +34,6 @@ deploy:
     legacy: true
     orca:
       - region: iad
-deploy:
-  - name: staging
-    legacy: True
-  - name: canary
-    legacy: True
-  -
     - name: production-us-east-1a
       legacy: True
       availability_zone: us-east-1a
