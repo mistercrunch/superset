@@ -1,6 +1,6 @@
 name: superset
 description: internal visualization tool for interactively exploring lyft data (apache/incubator-superset)
-repository: git@github.com:lyft/superset.git
+repository: git@github.com:lyft/superset-private.git
 image_type: service
 languages:
   - python
@@ -18,7 +18,7 @@ groups:
   - name: dev
     members:
       - control.dev
-      # - TODO dev dependencies (can be dynamodb.server, redis.server, etc)
+      - redis.server
       - superset.legacy
 
 tests:
