@@ -40,8 +40,8 @@ deploy:
     - name: production-us-east-1d
       legacy: True
       availability_zone: us-east-1d
-    - name: production
-      legacy: True
+  - name: production
+    legacy: True
 python:
   mypy:
     python_versions:
