@@ -1,4 +1,4 @@
-FROM lyft/opsbase:43b3c026d5de6bff9a143654b063430359528cd5
+FROM lyft/opsbase:caeebb8308bdb84831261a75530a010fbee2478d
 ARG IAM_ROLE
 COPY ops /code/superset-private/ops
 COPY requirements.* piptools_requirements.* /code/superset-private/
