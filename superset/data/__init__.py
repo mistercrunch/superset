@@ -1456,11 +1456,11 @@ def load_deck_dash():
 def load_flights():
     """Loading random time series data from a zip file in the repo"""
     with gzip.open(os.path.join(DATA_FOLDER, 'fligth_data.csv.gz')) as f:
-        pdf = pd.read_csv(f)
+        pdf = pd.read_csv(f, encoding='latin-1')
 
     # Loading airports info to join and get lat/long
     with gzip.open(os.path.join(DATA_FOLDER, 'airports.csv.gz')) as f:
-        airports = pd.read_csv(f)
+        airports = pd.read_csv(f, encoding='latin-1')
     airports = airports.set_index('IATA_CODE')
 
     pdf['ds'] = pdf.YEAR.map(str) + '-0' + pdf.MONTH.map(str) + '-0' + pdf.DAY.map(str)
