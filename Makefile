@@ -65,3 +65,11 @@ release_production:
 .PHONY: test_highstate # test config management highstate syntax
 test_highstate:
 	sudo salt-call state.show_highstate
+
+.PHONY: init_examples # setup mock data examples for superset
+init_examples:
+	service_venv superset load_examples
+
+.PHONY: create_admin # create admin user
+create_admin:
+	service_venv fabmanager create-admin --app superset

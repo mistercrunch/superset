@@ -10,6 +10,15 @@
 #        - pkgs:
 #          - python-paver
 
+Ensure pip dependencies for superset are installed:
+  pkg.installed:
+    - pkgs:
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - libsasl2-dev
+      - libldap2-dev
+      - runit
 
 # Start python3.6 dependencies
 

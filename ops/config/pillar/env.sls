@@ -9,6 +9,8 @@ environment:
     DEBUG: true
     REDIS_URL: redis://local-development-iad-onebox.lyft.net:6379
     REDIS_KEY_PREFIX: '{{ grains.service_name }}-'
+    LC_ALL: C.UTF-8
+    LANG: C.UTF-8
   staging:
     PORT: 80
     APPLICATION_ENV: {{ grains.service_instance }}

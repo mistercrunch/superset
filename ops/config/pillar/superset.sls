@@ -9,7 +9,7 @@
 python_executable: python3.6
 
 workers:
-  web: gunicorn wsgi:app --workers={{ workers }} -k gevent -c /etc/gunicorn/gunicorn.conf {{ extra_args}}
+  web: gunicorn -w 2 --timeout 120 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app
 
 envoy_with_gunicorn: True
 

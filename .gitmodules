@@ -1,3 +1,0 @@
-[submodule "incubator-superset"]
-      path = incubator-superset
-      url = https://github.com/apache/incubator-superset

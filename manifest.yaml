@@ -8,12 +8,13 @@ containers:
     provision: /code/ops/base/starters/post_starters.sh
     exports:
       - name: api
-        port: 8080
+        port: 8088
 groups:
   - name: dev
     members:
       - control.dev
       - redis.server
+      - postgresql.dev
       - superset.legacy
 tests:
   - name: startup
