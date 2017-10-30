@@ -12,3 +12,5 @@ packaging==16.8
 # License: MIT
 # Upstream url: http://pypi.python.org/pypi/six/
 six==1.10.0
+
+cryptography==1.9

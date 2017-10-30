@@ -1,22 +1,22 @@
-# superset
+# Superset
 
-internal visualization tool for interactively exploring lyft data (apache/incubator-superset)
+Internal visualization tool for interactively exploring lyft data using [apache/incubator-superset](https://github.com/apache/incubator-superset)
 
-================== REMOVE THIS BLOCK ==================
-# INITIAL COMMIT INSTRUCTIONS
-These instructions are **only** meant for the person doing the initial commit to the repo.
-This section of the README should **not** be checked in.
-If you see this in GitHub create a PR to remove it #MakeItHappen
+## Running
 
-Congratulations on creating your Lyft service! Thank you for contributing to Lyft's codebase. Now that the infrastructure for your service has been set up there are a few more steps required in order to get your awesome new service deployed.
+To start the service, run `control start -g superset.dev` While in development, the service loads examples and creates an admin with credentials username and password equal to `admin`.
 
-1. As part of the script you ran to create this library it modified the [metaservice](https://github.com/lyft/metaservice/) repository to have a new definition for your new repository. Get someone in #provisioning to +1 your new repo using pull request
-https://github.com/lyft/metaservice/compare/add_superset_definition?expand=1
-1. After you get a +1 on that pull request, merge it, and deploy your repository should be available at https://github.com/lyft/superset.
-1. If you chose to add your service to the ops repo you can find a pull request to add
-your service here: https://github.com/lyft/ops/compare/add_superset_service?expand=1
-* after merging, wait for a base deploy (monitor #base-train), after which the Jenkins pipeline for the service should be available
-================== END REMOVE BLOCK ==================
+## Intialization
+
+Create a new admin user
+```bash
+make create_admin 
+```
+
+Load examples
+```bash
+make init_examples
+```
 
 ## Requirements
 * `requirements.txt` for Python dependencies: remember to update `lyft-stdlib` to the [latest version](https://github.com/lyft/python-lyft-stdlib/releases)
@@ -35,7 +35,6 @@ found [here](https://github.com/lyft/envoy-private/blob/master/docs/getting_star
 
 To include UI in your project, merge in the
 [feature-include-ui](https://github.com/lyft/python-service-template/tree/feature-include-ui) branch
-
 
 
 ### Develop and test superset in Devbox
