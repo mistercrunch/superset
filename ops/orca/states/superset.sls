@@ -60,6 +60,44 @@ Ensure {{ grains.cluster_name }} asg exists:
         propagate_at_launch: true
     - profile: orca_profile
 
+Ensure {{ grains.cluster_name }}-i elb exists:
+  boto_elb.present:
+    - name: {{ grains.cluster_name }}-i
+    - subnets: {{ pillar.vpc_unique_az_subnets }}
+    - scheme: internal
+    - security_groups:
+        - base
+        - elb-vpn-eng
+        - {{ grains.cluster_name }}
+    - listeners:
+        - elb_port: 443
+          instance_port: 80
+          elb_protocol: HTTPS
+          instance_protocol: HTTP
+          certificate: {{ pillar.acm_arn.star_lyft_com_computed }}
+        - elb_port: 80
+          instance_port: 80
+          elb_protocol: HTTP
+          instance_protocol: HTTP
+    - health_check:
+        target: 'HTTP:80/health'
+        timeout: 4
+        interval: 10
+        healthy_threshold: 2
+        unhealthy_threshold: 10
+    - attributes:
+        access_log:
+          enabled: true
+          s3_bucket_name: lyft-elb-logs
+          s3_bucket_prefix: {{ grains.service_name }}-{{ grains.service_instance }}-i
+          emit_interval: '5'
+    - cnames:
+        - name: {{ grains.service_name }}-{{ grains.service_instance }}-internal.lyft.net.
+          zone: lyft.net.
+        - name: {{ grains.service_name }}-{{ grains.service_instance }}.lyft.net.
+          zone: lyft.net.
+    - profile: orca_profile
+
 {% if grains.service_instance == 'production' %}
 Ensure {{ grains.cluster_name }}-canary asg exists:
   boto_asg.present:
