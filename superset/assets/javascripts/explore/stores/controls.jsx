@@ -432,6 +432,11 @@ export const controls = {
   },
 
   groupby: groupByControl,
+  dimension: Object.assign({}, groupByControl, {
+    label: t('Dimension'),
+    description: t('Select a dimension'),
+    multi: false,
+  }),
 
   columns: Object.assign({}, groupByControl, {
     label: t('Columns'),

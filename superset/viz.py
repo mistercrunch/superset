@@ -1745,7 +1745,12 @@ class BaseDeckGLViz(BaseViz):
         d = super(BaseDeckGLViz, self).query_obj()
         fd = self.form_data
         d['groupby'] = [fd.get('all_columns_x'), fd.get('all_columns_y')]
-        d['metrics'] = [fd.get('size')]
+
+        point_radius_fixed = fd.get('point_radius_fixed')
+        d['metrics'] = []
+        if point_radius_fixed.get('type') == 'metric':
+            self.metric = size.get('value')
+            d['metrics'] = [self.metric]
         return d
 
     def get_data(self, df):
@@ -1763,7 +1768,7 @@ class BaseDeckGLViz(BaseViz):
         point_radius_col = (
             [None] * len(df.index)
             if fd.get("point_radius") == "Auto"
-            else df[fd.get("size")])
+            else df[self.metric])
 
         # using geoJSON formatting
         geo_json = {

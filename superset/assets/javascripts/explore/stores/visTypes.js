@@ -466,13 +466,8 @@ export const visTypes = {
         label: t('Points'),
         controlSetRows: [
           ['point_radius_fixed', 'point_unit'],
-          ['size', null],
-        ],
-      },
-      {
-        label: t('Color'),
-        controlSetRows: [
           ['color_picker', null],
+          ['dimension', 'color_scheme'],
         ],
       },
       {
@@ -492,6 +487,10 @@ export const visTypes = {
       all_columns_y: {
         label: t('Latitude Column'),
         validators: [v.nonEmpty],
+      },
+      dimension: {
+        label: t('Categorical Color'),
+        description: t('Pick a dimension from which categorical colors are defined'),
       },
     },
   },

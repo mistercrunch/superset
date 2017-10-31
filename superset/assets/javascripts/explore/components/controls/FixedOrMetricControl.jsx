@@ -25,8 +25,8 @@ export default class FixedOrMetricControl extends React.Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
-    const type = props.value ? props.value.type : props.default.type;
-    const value = props.value ? props.value.value : props.default.value;
+    const type = props.value ? props.value.type : props.default.type || 'fix';
+    const value = props.value ? props.value.value : props.default.value || '100';
     this.state = {
       type,
       fixedValue: type === 'fix' ? value : '',
