@@ -10,6 +10,14 @@ include:
 
 {% include 'alarms.sls' %}
 
+Ensure {{ grains.cluster_name }} security group exists:
+  boto_secgroup.present:
+    - name: {{ grains.cluster_name }}
+    - description: {{ grains.cluster_name }}
+    - region: us-east-1
+    - vpc_name: production-iad
+    - profile: orca_profile
+
 Ensure {{ grains.cluster_name }} iam role exists:
   boto_iam_role.present:
     - name: {{ grains.cluster_name }}
