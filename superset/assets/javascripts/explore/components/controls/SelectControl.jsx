@@ -14,6 +14,7 @@ const propTypes = {
   multi: PropTypes.bool,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func,
+  onFocus: PropTypes.func,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array]),
   showHeader: PropTypes.bool,
   optionRenderer: PropTypes.func,
@@ -31,6 +32,7 @@ const defaultProps = {
   label: null,
   multi: false,
   onChange: () => {},
+  onFocus: () => {},
   showHeader: true,
   optionRenderer: opt => opt.label,
   valueRenderer: opt => opt.label,
@@ -161,6 +163,7 @@ export default class SelectControl extends React.PureComponent {
       clearable: this.props.clearable,
       isLoading: this.props.isLoading,
       onChange: this.onChange,
+      onFocus: this.props.onFocus,
       optionRenderer: this.props.optionRenderer,
       valueRenderer: this.props.valueRenderer,
     };

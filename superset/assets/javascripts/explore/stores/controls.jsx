@@ -1304,10 +1304,12 @@ export const controls = {
   },
 
   point_radius_fixed: {
-    type: 'TextControl',
-    label: t('Fixed Size'),
-    isFloat: true,
+    type: 'FixedOrMetricControl',
+    label: t('Point Size'),
     description: t('Fixed point radius'),
+    mapStateToProps: state => ({
+      datasource: state.datasource,
+    }),
   },
 
   point_radius: {

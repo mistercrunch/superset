@@ -6,6 +6,7 @@ import ColorSchemeControl from './ColorSchemeControl';
 import DatasourceControl from './DatasourceControl';
 import DateFilterControl from './DateFilterControl';
 import FilterControl from './FilterControl';
+import FixedOrMetricControl from './FixedOrMetricControl';
 import HiddenControl from './HiddenControl';
 import SelectAsyncControl from './SelectAsyncControl';
 import SelectControl from './SelectControl';
@@ -23,6 +24,7 @@ const controlMap = {
   DatasourceControl,
   DateFilterControl,
   FilterControl,
+  FixedOrMetricControl,
   HiddenControl,
   SelectAsyncControl,
   SelectControl,
