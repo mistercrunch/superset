@@ -49,6 +49,7 @@ Ensure {{ grains.cluster_name }} asg exists:
           scripts:
             salt: |
               #!/bin/bash
+              SERVICE_ELBS="{{ grains.cluster_name }}"
               {{ pillar.cloud_init_bootstrap_script_base | indent(15,true) }}
     - vpc_zone_identifier: {{ pillar.vpc_subnets }}
     - availability_zones: {{ pillar.availability_zones }}
