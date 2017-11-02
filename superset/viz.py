@@ -1749,8 +1749,10 @@ class BaseDeckGLViz(BaseViz):
         point_radius_fixed = fd.get('point_radius_fixed')
         d['metrics'] = []
         if point_radius_fixed.get('type') == 'metric':
-            self.metric = size.get('value')
-            d['metrics'] = [self.metric]
+            self.metric = point_radius_fixed.get('value')
+        else:
+            self.metric = 'count'
+        d['metrics'] = [self.metric]
         return d
 
     def get_data(self, df):
