@@ -10,7 +10,6 @@ else
 $(error Cannot find base.mk)
 endif
 
-BANDIT_ENFORCED=false
 
 SERVICE_NAME=superset
 
