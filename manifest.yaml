@@ -1,7 +1,7 @@
 name: superset
 description: internal visualization tool for interactively exploring lyft data (apache/incubator-superset)
 repository: git@github.com:lyft/superset-private.git
-credentials: false # Confidant credentials require a development IAM role
+credentials: true
 containers:
   - name: legacy
     command: /code/ops/base/entrypoint.sh
@@ -43,9 +43,3 @@ deploy:
       availability_zone: us-east-1d
     - name: production
       legacy: true
-python:
-  mypy:
-    python_versions:
-      - '3.6'
-    exclude:
-      - 'ops'

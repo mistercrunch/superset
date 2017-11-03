@@ -18,6 +18,7 @@ Ensure pip dependencies for superset are installed:
       - libsasl2-dev
       - libldap2-dev
       - runit
+      - libmysqlclient-dev
 
 # Start python3.6 dependencies
 
@@ -41,3 +42,18 @@ Ensure virtualenv is up to date:
     - name: virtualenv >= 15.1.0, <= 16.0.0
 
 # End python3.6 dependencies
+
+Ensure yarn is installed:
+ cmd.run:
+   - name: npm install -g yarn
+   - cwd: /code/superset-private/upstream/superset/assets
+
+Fetch npm dependencies:
+ cmd.run:
+   - name: yarn
+   - cwd: /code/superset-private/upstream/superset/assets
+
+Run javascript build:
+ cmd.run:
+   - name: yarn run build
+   - cwd: /code/superset-private/upstream/superset/assets

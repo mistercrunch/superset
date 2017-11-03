@@ -1,0 +1,3 @@
+[submodule "superset"]
+	path = upstream
+	url = https://github.com/lyft/incubator-superset

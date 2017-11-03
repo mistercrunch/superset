@@ -2,6 +2,7 @@ environment:
   common:
     LC_ALL: C.UTF-8
     LANG: C.UTF-8
+    BANDIT_ENFORCED: false
   development:
     PORT: 80
     APPLICATION_MONGODB_DBNAME: {{ grains.service_group }}

@@ -9,7 +9,7 @@
 python_executable: python3.6
 
 workers:
-  web: gunicorn superset:app --workers={{ workers }} --forwarded-allow-ips="*" -k gevent --timeout 120 --worker-connections=1000 -c /etc/gunicorn/gunicorn.conf
+  web: /usr/local/bin/service_venv gunicorn superset:app --workers={{ workers }} --forwarded-allow-ips="*" -k gevent --timeout 120 --worker-connections=1000 -c /etc/gunicorn/gunicorn.conf
 
 envoy_with_gunicorn: True
 
