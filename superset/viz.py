@@ -1639,57 +1639,16 @@ class MapboxViz(BaseViz):
 
     def query_obj(self):
         d = super(MapboxViz, self).query_obj()
-        fd = self.form_data
-        label_col = fd.get('mapbox_label')
-
-        if not fd.get('groupby'):
-            d['columns'] = [fd.get('all_columns_x'), fd.get('all_columns_y')]
-
-            if label_col and len(label_col) >= 1:
-                if label_col[0] == "count":
-                    raise Exception(_(
-                        "Must have a [Group By] column to have 'count' as the [Label]"))
-                d['columns'].append(label_col[0])
-
-            if fd.get('point_radius') != 'Auto':
-                d['columns'].append(fd.get('point_radius'))
-
-            d['columns'] = list(set(d['columns']))
-        else:
-            # Ensuring columns chosen are all in group by
-            if (label_col and len(label_col) >= 1 and
-                    label_col[0] != "count" and
-                    label_col[0] not in fd.get('groupby')):
-                raise Exception(_(
-                    "Choice of [Label] must be present in [Group By]"))
-
-            if (fd.get("point_radius") != "Auto" and
-                    fd.get("point_radius") not in fd.get('groupby')):
-                raise Exception(_(
-                    "Choice of [Point Radius] must be present in [Group By]"))
-
-            if (fd.get('all_columns_x') not in fd.get('groupby') or
-                    fd.get('all_columns_y') not in fd.get('groupby')):
-                raise Exception(_(
-                    "[Longitude] and [Latitude] columns must be present in [Group By]"))
         return d
 
     def get_data(self, df):
         fd = self.form_data
-        label_col = fd.get('mapbox_label')
-        custom_metric = label_col and len(label_col) >= 1
         metric_col = [None] * len(df.index)
-        if custom_metric:
-            if label_col[0] == fd.get('all_columns_x'):
-                metric_col = df[fd.get('all_columns_x')]
-            elif label_col[0] == fd.get('all_columns_y'):
-                metric_col = df[fd.get('all_columns_y')]
-            else:
-                metric_col = df[label_col[0]]
         point_radius_col = (
             [None] * len(df.index)
             if fd.get("point_radius") == "Auto"
             else df[fd.get("point_radius")])
+
 
         # using geoJSON formatting
         geo_json = {
@@ -1698,19 +1657,17 @@ class MapboxViz(BaseViz):
                 {
                     "type": "Feature",
                     "properties": {
-                        "metric": metric,
-                        "radius": point_radius,
+                        "radius": 50,
                     },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [lon, lat],
+                        "coordinates": [
+                            d.get('all_columns_x'),
+                            d.get('all_columns_y'),
+                        ],
                     }
                 }
-                for lon, lat, metric, point_radius
-                in zip(
-                    df[fd.get('all_columns_x')],
-                    df[fd.get('all_columns_y')],
-                    metric_col, point_radius_col)
+                for d in df.to_dict(orient='records')
             ]
         }
 
@@ -1745,11 +1702,14 @@ class BaseDeckGLViz(BaseViz):
         d = super(BaseDeckGLViz, self).query_obj()
         fd = self.form_data
         d['groupby'] = [fd.get('all_columns_x'), fd.get('all_columns_y')]
+        print(d['groupby'])
+        if fd.get('dimension'):
+            d['groupby'] += [fd.get('dimension')]
 
-        point_radius_fixed = fd.get('point_radius_fixed')
+        self.point_radius_fixed = fd.get('point_radius_fixed')
         d['metrics'] = []
-        if point_radius_fixed.get('type') == 'metric':
-            self.metric = point_radius_fixed.get('value')
+        if self.point_radius_fixed.get('type') == 'metric':
+            self.metric = self.point_radius_fixed.get('value')
         else:
             self.metric = 'count'
         d['metrics'] = [self.metric]
@@ -1757,47 +1717,38 @@ class BaseDeckGLViz(BaseViz):
 
     def get_data(self, df):
         fd = self.form_data
-        label_col = fd.get('mapbox_label')
-        custom_metric = label_col and len(label_col) >= 1
-        metric_col = [None] * len(df.index)
-        if custom_metric:
-            if label_col[0] == fd.get('all_columns_x'):
-                metric_col = df[fd.get('all_columns_x')]
-            elif label_col[0] == fd.get('all_columns_y'):
-                metric_col = df[fd.get('all_columns_y')]
-            else:
-                metric_col = df[label_col[0]]
-        point_radius_col = (
-            [None] * len(df.index)
-            if fd.get("point_radius") == "Auto"
-            else df[self.metric])
+        #print(df)
+        fixed_value = None
+        if self.point_radius_fixed.get('type') != 'metric':
+            fixed_value = self.point_radius_fixed.get('value')
 
         # using geoJSON formatting
+        dim = fd.get('dimension')
         geo_json = {
             "type": "FeatureCollection",
             "features": [
                 {
                     "type": "Feature",
                     "properties": {
-                        "metric": metric,
-                        "radius": point_radius,
+                        "radius": fixed_value
+                            if fixed_value else d.get(self.metric),
+                        "cat_color": d.get(dim) if dim else None,
                     },
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [lon, lat],
+                        "coordinates": [
+                            d.get(fd.get('all_columns_x')),
+                            d.get(fd.get('all_columns_y')),
+                        ],
                     }
                 }
-                for lon, lat, metric, point_radius
-                in zip(
-                    df[fd.get('all_columns_x')],
-                    df[fd.get('all_columns_y')],
-                    metric_col, point_radius_col)
+                for d in df.to_dict(orient='records')
             ]
         }
 
+
         return {
             "geoJSON": geo_json,
-            "customMetric": custom_metric,
             "mapboxApiKey": config.get('MAPBOX_API_KEY'),
             "mapStyle": fd.get("mapbox_style"),
             "aggregatorName": fd.get("pandas_aggfunc"),
@@ -1809,7 +1760,6 @@ class BaseDeckGLViz(BaseViz):
             "viewportZoom": fd.get("viewport_zoom"),
             "renderWhileDragging": fd.get("render_while_dragging"),
             "tooltip": fd.get("rich_tooltip"),
-            "color": fd.get("mapbox_color"),
         }
 
 

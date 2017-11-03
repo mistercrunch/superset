@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { ScatterplotLayer } from 'deck.gl';
 
 import DeckGLContainer from './DeckGLContainer';
+import { getColorFromScheme, hexToRGB } from '../../javascripts/modules/colors';
 
 const METER_TO_MILE = 1609.34;
 const unitToRadius = (unit, num) => {
@@ -25,11 +26,25 @@ const unitToRadius = (unit, num) => {
 function deckScatter(slice, payload, setControlValue) {
   const fd = slice.formData;
   const c = fd.color_picker || { r: 0, g: 0, b: 0, a: 1 };
-  const data = payload.data.geoJSON.features.map(d => ({
-    position: d.geometry.coordinates,
-    radius: unitToRadius(fd.point_unit, fd.point_radius_fixed) || 10,
-    color: [c.r, c.g, c.b, 255 * c.a],
-  }));
+  const fixedColor = [c.r, c.g, c.b, 255 * c.a];
+
+  const data = payload.data.geoJSON.features.map((d) => {
+    let radius = unitToRadius(fd.point_unit, d.properties.radius) || 10;
+    if (fd.multiplier) {
+      radius *= fd.multiplier;
+    }
+    let color;
+    if (fd.dimension) {
+      color = hexToRGB(getColorFromScheme(d.properties.cat_color, fd.color_scheme), c.a * 255);
+    } else {
+      color = fixedColor;
+    }
+    return {
+      radius,
+      color,
+      position: d.geometry.coordinates,
+    };
+  });
 
   const layer = new ScatterplotLayer({
     id: 'scatterplot-layer',

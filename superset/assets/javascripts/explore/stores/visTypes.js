@@ -463,9 +463,15 @@ export const visTypes = {
         ],
       },
       {
-        label: t('Points'),
+        label: t('Point Size'),
         controlSetRows: [
           ['point_radius_fixed', 'point_unit'],
+          ['multiplier', null],
+        ],
+      },
+      {
+        label: t('Point Color'),
+        controlSetRows: [
           ['color_picker', null],
           ['dimension', 'color_scheme'],
         ],

@@ -436,6 +436,7 @@ export const controls = {
     label: t('Dimension'),
     description: t('Select a dimension'),
     multi: false,
+    default: null,
   }),
 
   columns: Object.assign({}, groupByControl, {
@@ -730,6 +731,14 @@ export const controls = {
     choices: formatSelectOptions(['None', 'mean', 'sum', 'std', 'cumsum']),
     description: t('Defines a rolling window function to apply, works along ' +
     'with the [Periods] text box'),
+  },
+
+  multiplier: {
+    type: 'TextControl',
+    label: t('Multiplier'),
+    isFloat: true,
+    default: 1,
+    description: t('Factor to multiply the metric by'),
   },
 
   rolling_periods: {
