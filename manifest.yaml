@@ -43,3 +43,4 @@ deploy:
       availability_zone: us-east-1d
     - name: production
       legacy: true
+slack: '#superset'
