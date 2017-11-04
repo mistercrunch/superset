@@ -44,3 +44,4 @@ deploy:
     - name: production
       legacy: true
 slack: '#superset'
+pagerduty_escalation_policy: DE2
