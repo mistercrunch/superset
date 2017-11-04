@@ -69,6 +69,11 @@ test_highstate:
 init_examples:
 	service_venv superset load_examples
 
+.PHONY: init_submodule
+init_submodule:
+	git submodule init
+	git submodule update
+
 .PHONY: create_admin # create admin user
 create_admin:
 	service_venv fabmanager create-admin --app superset
