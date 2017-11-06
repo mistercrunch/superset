@@ -122,4 +122,7 @@ psycopg2 # Postgres driver
 sqlalchemy-redshift # Redshift driver
 pyhive # Presto driver
 
+# oauth
+flask-oauthlib
+
 -e upstream/
