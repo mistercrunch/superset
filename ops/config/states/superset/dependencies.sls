@@ -46,14 +46,14 @@ Ensure virtualenv is up to date:
 Ensure yarn is installed:
  cmd.run:
    - name: npm install -g yarn
-   - cwd: /code/superset-private/upstream/superset/assets
+   - cwd: /srv/service/current/upstream/superset/assets
 
 Fetch npm dependencies:
  cmd.run:
    - name: yarn
-   - cwd: /code/superset-private/upstream/superset/assets
+   - cwd: /srv/service/current/upstream/superset/assets
 
 Run javascript build:
  cmd.run:
    - name: yarn run build
-   - cwd: /code/superset-private/upstream/superset/assets
+   - cwd: /srv/service/current/upstream/superset/assets
