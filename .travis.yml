@@ -17,6 +17,7 @@ env:
     - TOX_ENV=pylint
     - TOX_ENV=py34-postgres
     - TOX_ENV=py34-sqlite
+    - TOX_ENV=py36-mysql
     - TOX_ENV=py27-mysql
     - TOX_ENV=py27-sqlite
 before_install:
