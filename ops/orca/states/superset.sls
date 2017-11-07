@@ -109,3 +109,70 @@ Ensure {{ grains.cluster_name }}-canary asg exists:
         propagate_at_launch: true
     - profile: orca_profile
 {% endif %}
+
+Ensure {{ grains.cluster_name }} iam role exists:
+  boto_iam_role.present:
+    - name: {{ grains.cluster_name }}
+    - policies_from_pillars:
+        - orca_iam_policies
+    - profile: orca_profile
+    - policies:
+        'superset-s3-read-write':
+          Version: '2012-10-17'
+          Statement:
+            - Sid: 'SupersetServiceFullObjectPermissions'
+              Action:
+                - 's3:AbortMultipartUpload'
+                - 's3:Get*'
+                - 's3:Put*'
+                - 's3:Delete*'
+                - 's3:List*'
+              Effect: 'Allow'
+              Resource:
+                - 'arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad'
+                - 'arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad/*'
+            - Sid: 'SupersetServiceListPermissions'
+              Action:
+                - 's3:List*'
+              Effect: 'Allow'
+              Resource:
+                - 'arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad'
+              Condition:
+                - 's3:prefix':
+                  - 'arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad'
+                  - 'arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad/*'
+
+Ensure lyft-superset-{{grains.service_instance}}-iad bucket exists:
+  boto_s3_bucket.present:
+    - Bucket: lyft-superset-{{grains.service_instance}}-iad
+    - ACL:
+        ACL: private
+    - Versioning:
+        Status: "Enabled"
+    - region: us-east-1
+    - Policy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "DenyIncorrectEncryptionHeader"
+            Effect: "Deny"
+            Principal:
+              AWS: "*"
+            Action:
+              - "s3:PutObject"
+            Resource:
+              - "arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad/*"
+            Condition:
+              StringNotEquals:
+                "s3:x-amz-server-side-encryption": "AES256"
+          - Sid: "DenyUnEncryptedObjectUploads"
+            Effect: "Deny"
+            Principal:
+              AWS: "*"
+            Action:
+              - "s3:PutObject"
+            Resource:
+              - "arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad/*"
+            Condition:
+              "Null":
+                "s3:x-amz-server-side-encryption": "true"
+
