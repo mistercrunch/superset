@@ -14,6 +14,11 @@ Ensure manage.py script is available globally:
         cd /srv/service/current
         service_venv python manage.py "$@"
 
+Install superset submodule:
+ cmd.run:
+   - name: /usr/local/bin/service_venv pip install -e upstream/
+   - cwd: /srv/service/current
+
 Ensure database is upgraded:
  cmd.run:
    - name: /usr/local/bin/service_venv superset db upgrade
