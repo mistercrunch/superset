@@ -95,6 +95,12 @@ Ensure {{ grains.cluster_name }} asg exists:
     - profile: orca_profile
 
 {% if grains.service_instance == 'production' %}
+
+Ensure {{ grains.cluster_name }}-i elb is deleted:
+  boto_elb.absent:
+    - name: {{ grains.cluster_name }}-i
+    - profile: orca_profile
+      
 Ensure {{ grains.cluster_name }}-canary asg exists:
   boto_asg.present:
     - name: {{ grains.cluster_name }}-canary
