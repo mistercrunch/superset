@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv("CREDENTIALS_SUPERSET_SECRET_KEY") or "NOSECRET!"
 # superset metadata (slices, connections, tables, dashboards, ...).
 # Note that the connection information to connect to the datasources
 # you want to explore are managed directly in the web UI
-if os.getenv("APPLICATION_ENV") == 'production':
+if os.getenv("APPLICATION_ENV") in ('production', 'staging'):
     SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}:5432/{database}'.format(
         user=os.getenv("CREDENTIALS_SUPERSET_USERNAME"),
         password=os.getenv("CREDENTIALS_SUPERSET_PASSWORD"),
