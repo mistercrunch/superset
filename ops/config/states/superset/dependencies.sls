@@ -32,13 +32,11 @@ Ensure pip dependencies for superset are installed:
 Ensure openssl is installed:
   pkg.installed:
     - name: openssl
-    - version: 1.0.1f-1ubuntu2.22
     - refresh: True
 
 Ensure libssl-dev is installed:
   pkg.installed:
     - name: libssl-dev
-    - version: 1.0.2h-1+deb.sury.org~trusty+1
 
 Ensure Python 3.6 is installed:
   pkg.installed:
