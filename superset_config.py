@@ -1,7 +1,12 @@
 """Config file for Superset"""
 import os
+
 from flask_appbuilder.security.manager import AUTH_OAUTH
 from flask_appbuilder.security.sqla.manager import SecurityManager
+
+from superset import StatsDLogger
+
+ENV = os.getenv("APPLICATION_ENV")
 
 ROW_LIMIT = 5000
 SUPERSET_WORKERS = 4
@@ -14,12 +19,15 @@ SECRET_KEY = os.getenv("CREDENTIALS_SUPERSET_SECRET_KEY") or "NOSECRET!"
 # superset metadata (slices, connections, tables, dashboards, ...).
 # Note that the connection information to connect to the datasources
 # you want to explore are managed directly in the web UI
-if os.getenv("APPLICATION_ENV") in ('production', 'staging'):
+if ENV in ('production', 'staging'):
     SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}:5432/{database}'.format(
         user=os.getenv("CREDENTIALS_SUPERSET_USERNAME"),
         password=os.getenv("CREDENTIALS_SUPERSET_PASSWORD"),
         host=os.getenv("CREDENTIALS_INCENTIVES_HOST"),
         database=os.getenv("CREDENTIALS_SUPERSET_DATABASE"))
+
+STATS_LOGGER = StatsdStatsLogger(
+    host='localhost', port=8125, prefix='superset_' + ENV)
 
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True
