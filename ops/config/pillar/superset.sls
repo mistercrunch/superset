@@ -15,6 +15,12 @@ envoy_with_gunicorn: True
 
 enable_envoy_custom_config: True
 
+envoy_custom_config:
+  redis:
+    supersetmultiredis:
+      port: 6379
+      op_timeout_ms: 400
+
 frozen_venv: True
 
 # Uncomment this section to override local_service defaults and/or to add hosts to communicate with

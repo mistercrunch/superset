@@ -75,3 +75,11 @@ class LyftSecurityManager(SecurityManager):
         }
 
 CUSTOM_SECURITY_MANAGER = LyftSecurityManager
+
+if os.getenv("APPLICATION_ENV") not in ('production', 'staging'):
+    CACHE_CONFIG = {
+        'CACHE_TYPE': 'redis',
+        'CACHE_REDIS_HOST': 'redis-server.devbox.lyft.net',
+        'CACHE_REDIS_PORT': 6379,
+        'CACHE_KEY_PREFIX': '/superset-cache'
+    }

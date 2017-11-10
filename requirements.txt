@@ -97,6 +97,7 @@ python3-openid==3.1.0     # via flask-openid
 pytz==2017.3              # via babel, celery, flower, pandas
 pyyaml==3.12
 rainbow-saddle==0.4.0
+redis==2.10.6
 requests-oauthlib==0.8.0  # via flask-oauthlib
 requests==2.17.3          # via lyft-requests, requests-oauthlib
 s3transfer==0.1.11        # via boto3

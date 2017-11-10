@@ -121,6 +121,7 @@ anyjson==0.3.3
 psycopg2 # Postgres driver
 sqlalchemy-redshift # Redshift driver
 pyhive # Presto driver
+redis
 
 # oauth
 flask-oauthlib

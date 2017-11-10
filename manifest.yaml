@@ -13,8 +13,7 @@ groups:
   - name: dev
     members:
       - control.dev
-      - redis.server
-      - postgresql.dev
+      - redis.dev
       - superset.legacy
 tests:
   - name: startup
