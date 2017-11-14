@@ -101,7 +101,6 @@ Ensure {{ grains.cluster_name }} asg exists:
           scripts:
             salt: |
               #!/bin/bash
-              SERVICE_ELBS="{{ grains.cluster_name }}-i"
               {{ pillar.cloud_init_bootstrap_script_base | indent(15,true) }}
     - vpc_zone_identifier: {{ pillar.vpc_subnets }}
     - availability_zones: {{ pillar.availability_zones }}
@@ -122,11 +121,6 @@ Ensure {{ grains.cluster_name }} asg exists:
     - profile: orca_profile
 
 {% if grains.service_instance == 'production' %}
-
-Ensure {{ grains.cluster_name }}-i elb is deleted:
-  boto_elb.absent:
-    - name: {{ grains.cluster_name }}-i
-    - profile: orca_profile
 
 Ensure {{ grains.cluster_name }}-canary asg exists:
   boto_asg.present:
