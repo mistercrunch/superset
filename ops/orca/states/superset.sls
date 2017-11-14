@@ -84,7 +84,12 @@ Ensure {{ grains.cluster_name }} asg exists:
       # The instance profile name used here should match the instance profile
       # created above.
       - instance_profile_name: {{ grains.cluster_name }}
+      - instance_type: c4.4xlarge
+      {% if grains.service_instance == 'production' %}
+      - instance_type: c4.4xlarge
+      {% else %}
       - instance_type: c4.large
+      {% endif %}
       - block_device_mappings:
         - "/dev/sda1":
             size: 40
@@ -101,11 +106,11 @@ Ensure {{ grains.cluster_name }} asg exists:
     - vpc_zone_identifier: {{ pillar.vpc_subnets }}
     - availability_zones: {{ pillar.availability_zones }}
     {% if grains.service_instance == 'production' %}
-    - min_size: {{ pillar.availability_zones|length }}
-    - max_size: {{ pillar.availability_zones|length }}
+    - min_size: 2
+    - max_size: 2
     {% else %}
-    - min_size: 1
-    - max_size: 1
+    - min_size: 2
+    - max_size: 2
     {% endif %}
     - tags:
       - key: 'Name'
