@@ -3,28 +3,37 @@ import os
 
 from flask_appbuilder.security.manager import AUTH_OAUTH
 from flask_appbuilder.security.sqla.manager import SecurityManager
+from werkzeug.contrib.cache import FileSystemCache
 
-from superset import StatsDLogger
+from superset.stats_logger import StatsdStatsLogger
+
 
 ENV = os.getenv("APPLICATION_ENV")
 
 ROW_LIMIT = 5000
 SUPERSET_WORKERS = 4
 
-# Your App secret key
-SECRET_KEY = os.getenv("CREDENTIALS_SUPERSET_SECRET_KEY") or "NOSECRET!"
+SECRET_KEY = os.getenv("CREDENTIALS_SUPERSET_SECRET_KEY") or 'NOSECRET!'
 
-# The SQLAlchemy connection string to your database backend
-# This connection defines the path to the database that stores your
-# superset metadata (slices, connections, tables, dashboards, ...).
-# Note that the connection information to connect to the datasources
-# you want to explore are managed directly in the web UI
 if ENV in ('production', 'staging'):
     SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}:5432/{database}'.format(
         user=os.getenv("CREDENTIALS_SUPERSET_USERNAME"),
         password=os.getenv("CREDENTIALS_SUPERSET_PASSWORD"),
         host=os.getenv("CREDENTIALS_INCENTIVES_HOST"),
         database=os.getenv("CREDENTIALS_SUPERSET_DATABASE"))
+    REDIS_URL = 'redis://localhost:6380/0'
+    CELERY_BROKER_URL = 'sqs://@localhost:9203'
+    CELERY_BROKER_TRANSPORT_OPTIONS = {
+        'queue_name_prefix': 'superset-',
+        'port': '9203',
+        'region': 'eu-west-1',
+    }
+    RESULTS_BACKEND = FileSystemCache('/tmp')
+else:
+    REDIS_URL = 'redis://redis-server.devbox.lyft.net:6379/0'
+    CELERY_BROKER_URL = 'sqla+sqlite:////tmp/celery_results.sqlite'
+    CELERY_BROKER_TRANSPORT_OPTIONS = {}
+    RESULTS_BACKEND = FileSystemCache('/tmp')
 
 STATS_LOGGER = StatsdStatsLogger(
     host='localhost', port=8125, prefix='superset_' + ENV)
@@ -43,8 +52,8 @@ AUTH_USER_REGISTRATION_ROLE = "Alpha"
 OAUTH_PROVIDERS = [{
     'name':'google', 'icon':'fa-google', 'token_key':'access_token',
     'remote_app': {
-        'consumer_key': os.getenv('CREDENTIALS_SUPERSET_OAUTH_CONSUMER_KEY'),
-        'consumer_secret': os.getenv("CREDENTIALS_SUPERSET_OAUTH_SECRET"),
+        'consumer_key': os.getenv('CREDENTIALS_SUPERSET_OAUTH_CONSUMER_KEY', 'foobar'),
+        'consumer_secret': os.getenv("CREDENTIALS_SUPERSET_OAUTH_SECRET", 'foobar'),
         'base_url':'https://www.googleapis.com/oauth2/v2/',
         'request_token_params': {
             'scope': 'email profile',
@@ -74,12 +83,46 @@ class LyftSecurityManager(SecurityManager):
             'email': user.data.get('email', '')
         }
 
+
 CUSTOM_SECURITY_MANAGER = LyftSecurityManager
 
-if os.getenv("APPLICATION_ENV") not in ('production', 'staging'):
-    CACHE_CONFIG = {
-        'CACHE_TYPE': 'redis',
-        'CACHE_REDIS_HOST': 'redis-server.devbox.lyft.net',
-        'CACHE_REDIS_PORT': 6379,
-        'CACHE_KEY_PREFIX': '/superset-cache'
-    }
+# Caching configuration
+CACHE_CONFIG = {
+    'CACHE_TYPE': 'redis',
+    'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24,
+    'CACHE_KEY_PREFIX': 'superset_',
+    'CACHE_REDIS_URL': REDIS_URL,
+}
+
+"""
+## SQS related links & references
+
+### Mock server source reference.
+It appears the mock doesn't support self.sqs.list_queues
+making it unusable with Celery
+https://github.com/lyft/containers/tree/master/sqs
+
+### Jobscheduler uses SQS, here's a link to how it's configured
+https://github.com/lyft/jobscheduler/blob/b3291e298693cc8fcf9ca7562ef11bcfe866d377/jobscheduler/settings.py#L43
+
+### Celery docs about SQS
+http://docs.celeryproject.org/en/latest/getting-started/brokers/sqs.html
+
+### Kombu source for SQS details more option than documented in the Celery docs
+https://github.com/celery/kombu/blob/master/kombu/transport/SQS.py
+"""
+
+
+class CeleryConfig(object):
+    BROKER_URL = CELERY_BROKER_URL
+    CELERY_IMPORTS = ('superset.sql_lab', )
+    CELERY_ANNOTATIONS = {'tasks.add': {'rate_limit': '10/s'}}
+    CELERY_IMPORTS = ('superset.sql_lab', )
+    CELERY_ANNOTATIONS = {'tasks.add': {'rate_limit': '10/s'}}
+    CELERYD_LOG_LEVEL = 'DEBUG'
+    CELERYD_PREFETCH_MULTIPLIER = 1
+    CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_ACKS_LATE = True
+    BROKER_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
+
+CELERY_CONFIG = CeleryConfig

@@ -13,7 +13,7 @@ groups:
   - name: dev
     members:
       - control.dev
-      - redis.dev
+      - redis.server
       - superset.legacy
 tests:
   - name: startup

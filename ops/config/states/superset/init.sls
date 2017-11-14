@@ -2,7 +2,6 @@ include:
   - base
   - .dependencies
   - lyft-python
-  - .mysql
 
 Ensure manage.py script is available globally:
   file.managed:
@@ -16,7 +15,7 @@ Ensure manage.py script is available globally:
 
 Install superset submodule:
  cmd.run:
-   - name: /usr/local/bin/service_venv pip install -e upstream/
+   - name: sudo /usr/local/bin/service_venv pip install -e upstream/
    - cwd: /srv/service/current
 
 Ensure database is upgraded:

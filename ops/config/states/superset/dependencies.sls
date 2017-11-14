@@ -26,6 +26,7 @@ Ensure pip dependencies for superset are installed:
       - libldap2-dev
       - runit
       - libmysqlclient-dev
+      - libcurl4-openssl-dev
 
 # Start python3.6 dependencies
 
@@ -50,7 +51,7 @@ Ensure virtualenv is up to date:
 
 Ensure yarn is installed:
  cmd.run:
-   - name: npm install -g yarn
+   - name: sudo npm install -g yarn
    - cwd: /srv/service/{{assets_ptr}}/upstream/superset/assets
 
 Fetch npm dependencies:

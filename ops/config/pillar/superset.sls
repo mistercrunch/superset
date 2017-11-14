@@ -1,15 +1,20 @@
 {% if grains.service_instance == 'development' %}
-{% set workers = 1 %}
-{% set extra_args = '--reload' %}
+  {% set conf = {
+    'web_workers': 2,
+    'celery_workers': 2,
+  }%}
 {% else %}
-{% set workers = grains.num_cpus %}
-{% set extra_args = '' %}
+  {% set conf = {
+    'web_workers': 8,
+    'celery_workers': 32,
+  }%}
 {% endif %}
 
 python_executable: python3.6
 
 workers:
-  web: /usr/local/bin/service_venv gunicorn superset:app --workers={{ workers }} --forwarded-allow-ips="*" -k gevent --timeout 120 --worker-connections=1000 -c /etc/gunicorn/gunicorn.conf
+  web: /usr/local/bin/service_venv gunicorn superset:app --workers={{ conf.web_workers }} --forwarded-allow-ips="*" -k gevent --timeout 120 --worker-connections=1000 -c /etc/gunicorn/gunicorn.conf
+  celery: /usr/local/bin/service_venv superset worker -w {{ conf.celery_workers  }}
 
 envoy_with_gunicorn: True
 
@@ -18,23 +23,7 @@ enable_envoy_custom_config: True
 envoy_custom_config:
   redis:
     supersetmultiredis:
-      port: 6379
+      port: 6380
       op_timeout_ms: 400
 
 frozen_venv: True
-
-# Uncomment this section to override local_service defaults and/or to add hosts to communicate with
-# See https://github.com/lyft/envoy-private/blob/master/docs/config.md for more information.
-# envoy_custom_config:
-#   local_service:
-#       circuit_breakers:
-#           default:
-#               max_connections: 100
-#       hosts_url: 'tcp://127.0.0.1:8080'
-#       ingress_ports: [9211, 80]
-#   internal_hosts:
-#       host_name1:
-#   external_hosts:
-#       host_name1:
-#   mongos:
-#       host_name1:

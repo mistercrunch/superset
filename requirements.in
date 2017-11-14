@@ -122,8 +122,10 @@ psycopg2 # Postgres driver
 sqlalchemy-redshift # Redshift driver
 pyhive # Presto driver
 redis
+celery[sqs]
 
 # oauth
 flask-oauthlib
 
+# The superset repo as a submodule in editable mode
 -e upstream/
