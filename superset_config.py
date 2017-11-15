@@ -22,11 +22,9 @@ if ENV in ('production', 'staging'):
         host=os.getenv("CREDENTIALS_INCENTIVES_HOST"),
         database=os.getenv("CREDENTIALS_SUPERSET_DATABASE"))
     REDIS_URL = 'redis://localhost:6380/0'
-    CELERY_BROKER_URL = 'sqs://@localhost:9203'
+    CELERY_BROKER_URL = 'sqs://@'
     CELERY_BROKER_TRANSPORT_OPTIONS = {
-        'queue_name_prefix': 'superset-',
-        'port': '9203',
-        'region': 'eu-west-1',
+        'queue_name_prefix': 'superset-{}-'.format(ENV),
     }
     RESULTS_BACKEND = FileSystemCache('/tmp')
 else:

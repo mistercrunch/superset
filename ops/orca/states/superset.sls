@@ -25,38 +25,26 @@ Ensure {{ grains.cluster_name }} security group exists:
     - vpc_id: vpc-4ec8112b
     - profile: orca_profile
 
-Ensure {{ grains.service_name }}-{{ grains.service_instance }}-iad role exists:
+Ensure superset-{{ grains.service_instance }}-iad iam role exists:
   boto_iam_role.present:
-    - name: {{ grains.service_name }}web-{{ grains.service_instance }}-iad
+    - name: superset-{{ grains.service_instance }}-iad
     - policies_from_pillars:
-      - orca_iam_policies
+        - orca_iam_policies
     - profile: orca_profile
     - policies:
-      'superset-s3-read-write':
-         Version: '2012-10-17'
-         Statement:
-           - Sid: 'SupersetServiceFullObjectPermissions'
-             Action:
-               - 's3:AbortMultipartUpload'
-               - 's3:Get*'
-               - 's3:Put*'
-               - 's3:Delete*'
-               - 's3:List*'
-             Effect: 'Allow'
-             Resource:
-               - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad'
-               - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad/*'
-           - Sid: 'SupersetServiceListPermissions'
-             Action:
-               - 's3:List*'
-             Effect: 'Allow'
-             Resource:
-               - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad'
-             Condition:
-               - 's3:prefix':
-                 - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad'
-                 - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad/*'
-      'superset-sqs':
+        's3-superset-{{ grains.service_instance }}-read-write':
+          Version: '2012-10-17'  # do not modify
+          Statement:
+            - Action:
+                - 's3:GetObject'
+                - 's3:GetObjectVersion*'
+                - 's3:ListBucket'
+                - 's3:PutObject'
+              Effect: 'Allow'
+              Resource:
+                - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad'
+                - 'arn:aws:s3:::lyft-superset-{{ grains.service_instance }}-iad/*'
+        'superset-sqs':
           Version: '2012-10-17'
           Statement:
             - Action:
@@ -65,11 +53,13 @@ Ensure {{ grains.service_name }}-{{ grains.service_instance }}-iad role exists:
                 - 'sqs:DeleteMessage'
                 - 'sqs:GetQueueUrl'
                 - 'sqs:GetQueueAttributes'
+                - 'sqs:SetQueueAttributes'
                 - 'sqs:ListQueues'
                 - 'sqs:CreateQueue'
                 - 'sqs:DeleteQueue'
-              Effect: Allow
-              Resource: "arn:aws:sqs:*:*:superset-{{grains.service_instance}}-*"
+              Effect: 'Allow'
+              Resource:
+                - 'arn:aws:sqs:*:*:superset-{{grains.service_instance}}-*'
 
 Ensure {{ grains.cluster_name }} asg exists:
   boto_asg.present:
