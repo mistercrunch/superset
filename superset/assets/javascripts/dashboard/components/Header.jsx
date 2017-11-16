@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Label } from 'react-bootstrap';
 
 import Controls from './Controls';
 import EditableTitle from '../../components/EditableTitle';
+import Button from '../../components/Button';
 import FaveStar from '../../components/FaveStar';
 
 const propTypes = {
@@ -19,30 +21,51 @@ const propTypes = {
   serialize: PropTypes.func,
   startPeriodicRender: PropTypes.func,
   updateDashboardTitle: PropTypes.func,
+  editMode: PropTypes.bool.isRequired,
+  setEditMode: PropTypes.func.isRequired,
 };
 
 class Header extends React.PureComponent {
   constructor(props) {
     super(props);
-
+    this.state = { hover: false };
     this.handleSaveTitle = this.handleSaveTitle.bind(this);
+    this.setHover = this.setHover.bind(this);
+    this.toggleEditMode = this.toggleEditMode.bind(this);
+  }
+  setHover(hover) {
+    this.setState({ hover });
   }
   handleSaveTitle(title) {
     this.props.updateDashboardTitle(title);
   }
+  toggleEditMode() {
+    this.props.setEditMode(!this.props.editMode);
+  }
+  renderEditButton() {
+    if (!this.state.hover) {
+      return;
+    }
+    const btnText = this.props.editMode ? 'Switch to View Mode' : 'Switch to Edit Mode';
+    return <Button bsStyle="warning" onClick={this.toggleEditMode}>{btnText}</Button>
+  }
   render() {
     const dashboard = this.props.dashboard;
     return (
-      <div className="title">
+      <div
+        className="title"
+        onMouseEnter={() => { this.setHover(true); }}
+        onMouseLeave={() => { this.setHover(false); }}
+      >
         <div className="pull-left">
-          <h1 className="outer-container">
+          <h1 className="outer-container pull-left">
             <EditableTitle
               title={dashboard.dashboard_title}
-              canEdit={dashboard.dash_save_perm}
+              canEdit={dashboard.dash_save_perm && this.props.editMode}
               onSaveTitle={this.handleSaveTitle}
               noPermitTooltip={'You don\'t have the rights to alter this dashboard.'}
             />
-            <span className="favstar">
+            <span className="favstar m-r-5">
               <FaveStar
                 itemId={dashboard.id}
                 fetchFaveStar={this.props.fetchFaveStar}
@@ -50,10 +73,14 @@ class Header extends React.PureComponent {
                 isStarred={this.props.isStarred}
               />
             </span>
+            {this.props.editMode &&
+              <Button bsStyle="danger" className="m-r-5" style="cursor: default;">Editing...</Button>
+            }
+            {this.renderEditButton()}
           </h1>
         </div>
         <div className="pull-right" style={{ marginTop: '35px' }}>
-          {!this.props.dashboard.standalone_mode &&
+          {this.props.editMode &&
           <Controls
             dashboard={dashboard}
             userId={this.props.userId}
