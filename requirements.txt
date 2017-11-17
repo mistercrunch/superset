@@ -17,7 +17,7 @@ babel==2.5.1              # via flask-babel, flower
 backports.functools-lru-cache==1.4
 billiard==3.3.0.23        # via celery
 blinker==1.4
-boto3==1.4.4
+boto3==1.4.4              # via s3werkzeugcache
 boto==2.47.0
 botocore==1.5.95          # via boto3, s3transfer
 celery[sqs]==3.1.25
@@ -36,7 +36,7 @@ flake8-tidy-imports==1.0.6
 flake8==3.3.0
 flask-appbuilder==1.9.4
 flask-babel==0.11.1       # via flask-appbuilder
-flask-cache==0.13.1
+flask-cache==0.13.1       # via s3werkzeugcache
 flask-login==0.2.11       # via flask-appbuilder
 flask-migrate==2.0.3
 flask-oauthlib==0.9.4
@@ -101,6 +101,7 @@ redis==2.10.6
 requests-oauthlib==0.8.0  # via flask-oauthlib
 requests==2.17.3          # via lyft-requests, requests-oauthlib
 s3transfer==0.1.11        # via boto3
+s3werkzeugcache==0.1.0.1
 sasl==0.2.1               # via thrift-sasl
 simplejson==3.10.0
 six==1.10.0
@@ -116,7 +117,7 @@ typing==3.6.1
 ujson==1.35               # via lyft-stdlib
 urllib3==1.21.1           # via requests
 watchdog==0.8.3           # via lyft-stdlib
-werkzeug==0.12.2          # via flask
+werkzeug==0.12.2          # via flask, s3werkzeugcache
 wrapt==1.10.11            # via astroid
 wtforms==2.1
 

@@ -102,8 +102,8 @@ Ensure {{ grains.cluster_name }} asg exists:
     - min_size: 2
     - max_size: 2
     {% else %}
-    - min_size: 2
-    - max_size: 2
+    - min_size: 1
+    - max_size: 1
     {% endif %}
     - tags:
       - key: 'Name'
@@ -165,31 +165,6 @@ Ensure lyft-superset-{{grains.service_instance}}-iad bucket exists:
     - Versioning:
         Status: "Enabled"
     - region: us-east-1
-    - Policy:
-        Version: "2012-10-17"
-        Statement:
-          - Sid: "DenyIncorrectEncryptionHeader"
-            Effect: "Deny"
-            Principal:
-              AWS: "*"
-            Action:
-              - "s3:PutObject"
-            Resource:
-              - "arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad/*"
-            Condition:
-              StringNotEquals:
-                "s3:x-amz-server-side-encryption": "AES256"
-          - Sid: "DenyUnEncryptedObjectUploads"
-            Effect: "Deny"
-            Principal:
-              AWS: "*"
-            Action:
-              - "s3:PutObject"
-            Resource:
-              - "arn:aws:s3:::lyft-superset-{{grains.service_instance}}-iad/*"
-            Condition:
-              "Null":
-                "s3:x-amz-server-side-encryption": "true"
 
 
 Ensure {{ grains.service_name }}multiredis-{{ grains.service_instance }}-{{ grains.region }} asg exists:

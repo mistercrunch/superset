@@ -6,7 +6,7 @@ from flask_appbuilder.security.sqla.manager import SecurityManager
 from werkzeug.contrib.cache import FileSystemCache
 
 from superset.stats_logger import StatsdStatsLogger
-
+from s3cache.s3cache import S3Cache
 
 ENV = os.getenv("APPLICATION_ENV")
 
@@ -27,6 +27,9 @@ if ENV in ('production', 'staging'):
         'queue_name_prefix': 'superset-{}-'.format(ENV),
     }
     RESULTS_BACKEND = FileSystemCache('/tmp')
+    S3_CACHE_BUCKET = 'lyft-superset-{}-iad'.format(ENV)
+    S3_CACHE_KEY_PREFIX = 'sql_lab_result'
+    RESULTS_BACKEND = S3Cache(S3_CACHE_BUCKET, S3_CACHE_KEY_PREFIX)
 else:
     REDIS_URL = 'redis://redis-server.devbox.lyft.net:6379/0'
     CELERY_BROKER_URL = 'sqla+sqlite:////tmp/celery_results.sqlite'
@@ -119,9 +122,13 @@ class CeleryConfig(object):
     CELERY_ANNOTATIONS = {'tasks.add': {'rate_limit': '10/s'}}
     CELERY_IMPORTS = ('superset.sql_lab', )
     CELERY_ANNOTATIONS = {'tasks.add': {'rate_limit': '10/s'}}
-    CELERYD_LOG_LEVEL = 'DEBUG'
+    CELERYD_LOG_LEVEL = 'INFO'
     CELERYD_PREFETCH_MULTIPLIER = 1
     CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_EVENT_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TASK_SERIALIZER = 'json'
+
     CELERY_ACKS_LATE = True
     BROKER_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
 

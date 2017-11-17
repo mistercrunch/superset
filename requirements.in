@@ -124,6 +124,9 @@ pyhive # Presto driver
 redis
 celery[sqs]
 
+# for s3 results backend
+s3werkzeugcache
+
 # oauth
 flask-oauthlib
 
