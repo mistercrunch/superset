@@ -54,12 +54,16 @@ Ensure superset-{{ grains.service_instance }}-iad iam role exists:
                 - 'sqs:GetQueueUrl'
                 - 'sqs:GetQueueAttributes'
                 - 'sqs:SetQueueAttributes'
-                - 'sqs:ListQueues'
                 - 'sqs:CreateQueue'
                 - 'sqs:DeleteQueue'
               Effect: 'Allow'
               Resource:
                 - 'arn:aws:sqs:*:*:superset-{{grains.service_instance}}-*'
+            - Action:
+                - 'sqs:ListQueues'
+              Effect: 'Allow'
+              Resource:
+                - 'arn:aws:sqs:*'
 
 Ensure {{ grains.cluster_name }} asg exists:
   boto_asg.present:
