@@ -84,6 +84,8 @@ class LyftSecurityManager(SecurityManager):
 
 CUSTOM_SECURITY_MANAGER = LyftSecurityManager
 
+SUPERSET_WEBSERVER_TIMEOUT = 120
+
 # Caching configuration
 CACHE_CONFIG = {
     'CACHE_TYPE': 'redis',
