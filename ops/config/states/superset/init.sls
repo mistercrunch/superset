@@ -16,17 +16,17 @@ Ensure manage.py script is available globally:
 Install superset submodule:
  cmd.run:
    - name: sudo /usr/local/bin/service_venv pip install -e upstream/
-   - cwd: /srv/service/current
+   - cwd: /srv/service/next
 
 Ensure database is upgraded:
  cmd.run:
    - name: /usr/local/bin/service_venv superset db upgrade
-   - cwd: /srv/service/current
+   - cwd: /srv/service/next
 
 Ensure basic roles and permissions are defined:
  cmd.run:
    - name: /usr/local/bin/service_venv superset init
-   - cwd: /srv/service/current
+   - cwd: /srv/service/next
 
 {% if grains.service_instance == 'development' %}
 
@@ -42,6 +42,6 @@ Ensure load mock admin user:
 Ensure superset examples are loaded:
  cmd.run:
    - name: /usr/local/bin/service_venv superset load_examples
-   - cwd: /srv/service/current
+   - cwd: /srv/service/next
 
 {% endif %}
