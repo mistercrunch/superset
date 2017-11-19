@@ -20,11 +20,6 @@ tests:
     type: startup
     group: superset.dev
 deploy:
-  - name: development
-    automatic: true
-    legacy: false
-    orca:
-      - region: iad
   - name: staging
     legacy: true
     automatic: true

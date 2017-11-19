@@ -78,11 +78,10 @@ Ensure {{ grains.cluster_name }} asg exists:
       # The instance profile name used here should match the instance profile
       # created above.
       - instance_profile_name: {{ grains.cluster_name }}
-      - instance_type: c4.4xlarge
       {% if grains.service_instance == 'production' %}
       - instance_type: c4.4xlarge
       {% else %}
-      - instance_type: c4.large
+      - instance_type: c4.4xlarge
       {% endif %}
       - block_device_mappings:
         - "/dev/sda1":
