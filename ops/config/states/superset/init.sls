@@ -13,9 +13,24 @@ Ensure manage.py script is available globally:
         cd /srv/service/current
         service_venv python manage.py "$@"
 
+Ensure yarn is installed:
+ cmd.run:
+   - name: sudo npm install -g yarn
+   - cwd: /srv/service/next/upstream/superset/assets
+
+Fetch npm dependencies:
+ cmd.run:
+   - name: yarn
+   - cwd: /srv/service/next/upstream/superset/assets
+
+Run javascript build:
+ cmd.run:
+   - name: yarn run build
+   - cwd: /srv/service/next/upstream/superset/assets
+
 Install superset submodule:
  cmd.run:
-   - name: sudo /usr/local/bin/service_venv pip install -e upstream/
+   - name: sudo /usr/local/bin/service_venv pip install --use-wheel -e upstream/
    - cwd: /srv/service/next
 
 Ensure database is upgraded:

@@ -10,13 +10,6 @@
 #        - pkgs:
 #          - python-paver
 
-# Set path properly jor js app
-{% if salt['file.directory_exists']("/srv/service/next/upstream/superset/assets") %}
-{% set assets_ptr = "next" %}
-{% else %}
-{% set assets_ptr = "current" %}
-{% endif %}
-
 Ensure pip dependencies for superset are installed:
   pkg.installed:
     - pkgs:
@@ -49,17 +42,3 @@ Ensure virtualenv is up to date:
 
 # End python3.6 dependencies
 
-Ensure yarn is installed:
- cmd.run:
-   - name: sudo npm install -g yarn
-   - cwd: /srv/service/{{assets_ptr}}/upstream/superset/assets
-
-Fetch npm dependencies:
- cmd.run:
-   - name: yarn
-   - cwd: /srv/service/{{assets_ptr}}/upstream/superset/assets
-
-Run javascript build:
- cmd.run:
-   - name: yarn run build
-   - cwd: /srv/service/{{assets_ptr}}/upstream/superset/assets

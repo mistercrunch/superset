@@ -123,12 +123,10 @@ sqlalchemy-redshift # Redshift driver
 pyhive # Presto driver
 redis
 celery[sqs]
+pycurl
 
 # for s3 results backend
 s3werkzeugcache
 
 # oauth
 flask-oauthlib
-
-# The superset repo as a submodule in editable mode
--e upstream/
