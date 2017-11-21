@@ -30,7 +30,7 @@ Run javascript build:
 
 Install superset submodule:
  cmd.run:
-   - name: sudo /usr/local/bin/service_venv pip install --use-wheel -e upstream/
+   - name: sudo /usr/local/bin/service_venv pip install --use-wheel upstream/
    - cwd: /srv/service/next
 
 Ensure database is upgraded:
