@@ -124,8 +124,9 @@ Ensure {{ grains.cluster_name }}-canary asg exists:
       - key_name: boot
       - security_groups:
         - base
+        - {{ grains.cluster_name }}
       - instance_profile_name: {{ grains.cluster_name }}
-      - instance_type: c4.large
+      - instance_type: c4.4xlarge
       - block_device_mappings:
         - "/dev/sda1":
             size: 40
