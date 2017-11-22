@@ -14,7 +14,7 @@ python_executable: python3.6
 
 workers:
   web: >
-    /usr/local/bin/service_venv gunicorn
+    gunicorn
     superset:app
     --workers={{ conf.web_workers }}
     --forwarded-allow-ips="*"
@@ -22,7 +22,7 @@ workers:
     --timeout 120
     --worker-connections=1000
     -c /etc/gunicorn/gunicorn.conf
-  celery: /usr/local/bin/service_venv superset worker -w {{ conf.celery_workers  }}
+  celery: superset worker -w {{ conf.celery_workers  }}
 
 envoy_with_gunicorn: True
 
