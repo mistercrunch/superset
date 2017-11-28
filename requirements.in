@@ -130,3 +130,6 @@ s3werkzeugcache
 
 # oauth
 flask-oauthlib
+
+# s3werkzeugcache with support for encryption
+s3werkzeugcache==0.1.1

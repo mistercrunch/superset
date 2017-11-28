@@ -4,6 +4,8 @@ environment:
     LANG: C.UTF-8
     BANDIT_ENFORCED: false
     PYTHONPATH: /srv/service/current/
+    S3_BUCKET_NAME: lyft-{{ grains.cluster_name }}
+    S3_CACHE_KEY_PREFIX: results-cache/
 
   development:
     PORT: 80

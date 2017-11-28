@@ -4,7 +4,7 @@ import os
 from flask_appbuilder.security.manager import AUTH_OAUTH
 from flask_appbuilder.security.sqla.manager import SecurityManager
 from werkzeug.contrib.cache import FileSystemCache
-
+from s3cache.s3cache import S3Cache
 from superset.stats_logger import StatsdStatsLogger
 from s3cache.s3cache import S3Cache
 
@@ -26,10 +26,10 @@ if ENV in ('production', 'staging'):
     CELERY_BROKER_TRANSPORT_OPTIONS = {
         'queue_name_prefix': 'superset-{}-'.format(ENV),
     }
-    RESULTS_BACKEND = FileSystemCache('/tmp')
-    S3_CACHE_BUCKET = 'lyft-superset-{}-iad'.format(ENV)
-    S3_CACHE_KEY_PREFIX = 'sql_lab_result'
-    RESULTS_BACKEND = S3Cache(S3_CACHE_BUCKET, S3_CACHE_KEY_PREFIX)
+    S3_CACHE_BUCKET = os.getenv("S3_BUCKET_NAME")
+    S3_CACHE_KEY_PREFIX = os.getenv("S3_CACHE_KEY_PREFIX")
+    put_extra_args = {'ServerSideEncryption': 'AES256'}
+    RESULTS_BACKEND = S3Cache(S3_CACHE_BUCKET, S3_CACHE_KEY_PREFIX, put_extra_args=put_extra_args)
 else:
     REDIS_URL = 'redis://redis-server.devbox.lyft.net:6379/0'
     CELERY_BROKER_URL = 'sqla+sqlite:////tmp/celery_results.sqlite'
