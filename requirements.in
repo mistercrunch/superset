@@ -125,11 +125,8 @@ redis
 celery[sqs]
 pycurl
 
-# for s3 results backend
-s3werkzeugcache
+# s3werkzeugcache with support for encryption
+s3werkzeugcache==0.1.1
 
 # oauth
 flask-oauthlib
-
-# s3werkzeugcache with support for encryption
-s3werkzeugcache==0.1.1
