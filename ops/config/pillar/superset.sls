@@ -17,6 +17,7 @@ workers:
     gunicorn
     superset:app
     --workers={{ conf.web_workers }}
+    --keep-alive 30
     --forwarded-allow-ips="*"
     -k gevent
     --timeout 120

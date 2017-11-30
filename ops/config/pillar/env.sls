@@ -6,6 +6,7 @@ environment:
     PYTHONPATH: /srv/service/current/
     S3_BUCKET_NAME: lyft-{{ grains.cluster_name }}
     S3_CACHE_KEY_PREFIX: results-cache/
+    GEVENT_REQUEST_TIMEOUT_MS: 120000
 
   development:
     PORT: 80
