@@ -79,7 +79,7 @@ redis==2.10.6
 requests-oauthlib==0.8.0  # via flask-oauthlib
 requests==2.17.3          # via lyft-requests, requests-oauthlib
 s3transfer==0.1.11        # via boto3
-s3werkzeugcache==0.1.0.1
+s3werkzeugcache==0.1.1
 six==1.10.0
 sqlalchemy-redshift==0.7.0
 sqlalchemy==1.1.9         # via sqlalchemy-redshift

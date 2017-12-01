@@ -2,11 +2,13 @@
   {% set conf = {
     'web_workers': 2,
     'celery_workers': 2,
+    'timeout_sec': 120,
   }%}
 {% else %}
   {% set conf = {
     'web_workers': 8,
     'celery_workers': 32,
+    'timeout_sec': 120,
   }%}
 {% endif %}
 
@@ -17,10 +19,10 @@ workers:
     gunicorn
     superset:app
     --workers={{ conf.web_workers }}
-    --keep-alive 30
+    --keep-alive {{ conf.timeout_sec }}
     --forwarded-allow-ips="*"
     -k gevent
-    --timeout 120
+    --timeout {{ conf.timeout_sec }}
     --worker-connections=1000
     -c /etc/gunicorn/gunicorn.conf
   celery: superset worker -w {{ conf.celery_workers  }}
