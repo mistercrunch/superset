@@ -203,9 +203,9 @@ Ensure {{ grains.service_name }}multiredis-{{ grains.service_instance }}-{{ grai
       - us-east-1d
       - us-east-1e
     {% if grains.service_instance == 'production' %}
-    - min_size: 1
-    - max_size: 1
-    - desired_capacity: 1
+    - min_size: 3
+    - max_size: 3
+    - desired_capacity: 3
     {% else %}
     - min_size: 1
     - max_size: 1
