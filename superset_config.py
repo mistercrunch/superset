@@ -1,5 +1,6 @@
 """Config file for Superset"""
 import os
+from six.moves.urllib.parse import quote
 
 from flask_appbuilder.security.manager import AUTH_OAUTH
 from flask_appbuilder.security.sqla.manager import SecurityManager
@@ -14,6 +15,11 @@ ROW_LIMIT = 5000
 SUPERSET_WORKERS = 4
 
 SECRET_KEY = os.getenv("CREDENTIALS_SUPERSET_SECRET_KEY") or 'NOSECRET!'
+
+# Using Qubole's proxy for Hive log access
+def qubole_url(url):
+    return 'https://api.qubole.com/cluster-proxy?encodedUrl=' + quote(url)
+TRACKING_URL_TRANSFORMER = qubole_url
 
 if ENV in ('production', 'staging'):
     SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}:5432/{database}'.format(
