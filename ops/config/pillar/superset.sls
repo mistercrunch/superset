@@ -6,10 +6,10 @@
   }%}
 {% else %}
   {% set conf = {
-    'web_workers': 8,
-    'celery_workers': 32,
+    'web_workers': grains.num_cpus,
+    'celery_workers': grains.num_cpus * 4,
     'timeout_sec': 120,
-  }%}
+  } %}
 {% endif %}
 
 python_executable: python3.6
