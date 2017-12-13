@@ -4,6 +4,7 @@
 #
 #    control run piptools.compile superset-private
 #
+-e git+https://github.com/mistercrunch/pydruid.git@0.3.2beta#egg=pydruid-0.3.2beta
 -e git+git://github.com/lyft/pylint@lyft_pylint#egg=pylint
 amqp==1.4.9
 anyjson==0.3.3

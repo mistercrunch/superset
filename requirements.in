@@ -130,3 +130,6 @@ s3werkzeugcache==0.1.1
 
 # oauth
 flask-oauthlib
+
+# pydruid
+-e git+https://github.com/mistercrunch/pydruid.git@0.3.2beta#egg=pydruid-0.3.2beta
