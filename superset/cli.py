@@ -112,6 +112,7 @@ def load_examples(load_test_data):
 
     data.load_css_templates()
 
+    '''
     print('Loading energy related dataset')
     data.load_energy()
 
@@ -145,6 +146,8 @@ def load_examples(load_test_data):
 
     print('Loading flights data')
     data.load_flights()
+    '''
+    data.load_bart_lines()
 
 
 @manager.option(
