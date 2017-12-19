@@ -4,7 +4,6 @@
 #
 #    control run piptools.compile superset-private
 #
--e git+https://github.com/mistercrunch/pydruid.git@0.3.2beta#egg=pydruid-0.3.2beta
 -e git+git://github.com/lyft/pylint@lyft_pylint#egg=pylint
 amqp==1.4.9
 anyjson==0.3.3
@@ -27,6 +26,7 @@ configparser==3.5.0       # via flake8
 coverage==4.4.1           # via pytest-cov
 cryptography==1.9
 docutils==0.14            # via botocore
+druiddb==0.1.9
 enum34==1.1.6
 flake8-tidy-imports==1.0.6
 flake8==3.3.0
@@ -35,6 +35,7 @@ flask-oauthlib==0.9.4
 flask-script==2.0.5
 flask==0.12.2             # via flask-cache, flask-oauthlib, flask-script
 funcsigs==1.0.2           # via mock
+future-fstrings==0.4.1    # via druiddb
 future==0.16.0            # via pyhive
 futures==3.1.1            # via s3transfer
 gevent==1.2.1
@@ -82,13 +83,14 @@ pyyaml==3.12
 rainbow-saddle==0.4.0
 redis==2.10.6
 requests-oauthlib==0.8.0  # via flask-oauthlib
-requests==2.17.3          # via lyft-requests, requests-oauthlib
+requests==2.17.3          # via druiddb, lyft-requests, requests-oauthlib
 s3transfer==0.1.11        # via boto3
 s3werkzeugcache==0.1.1
 six==1.10.0
 sqlalchemy-redshift==0.7.0
 sqlalchemy==1.1.9         # via sqlalchemy-redshift
 statsd==3.2.1
+tokenize-rt==2.0.1        # via future-fstrings
 typing==3.6.1
 ujson==1.35               # via lyft-stdlib
 urllib3==1.21.1           # via requests

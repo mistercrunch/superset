@@ -33,6 +33,11 @@ Install superset submodule:
    - name: sudo /usr/local/bin/service_venv pip install --use-wheel upstream/
    - cwd: /srv/service/next
 
+Install future pydruid:
+ cmd.run:
+   - name: sudo /usr/local/bin/service_venv pip install http://github.com/mistercrunch/pydruid/tarball/master
+   - cwd: /srv/service/next
+
 Ensure database is upgraded:
  cmd.run:
    - name: /usr/local/bin/service_venv superset db upgrade
