@@ -39,3 +39,4 @@ deploy:
       legacy: true
 slack: '#superset'
 pagerduty_escalation_policy: DE2
+image_type: library
