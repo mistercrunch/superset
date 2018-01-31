@@ -132,7 +132,5 @@ s3werkzeugcache==0.1.1
 flask-oauthlib
 
 # pydruid
--e git+https://github.com/mistercrunch/pydruid.git@0.3.2beta#egg=pydruid-0.3.2beta
+pydruid==0.4.0
 
-# druiddb, a SQLAlchemy interface to Druid
-druiddb
