@@ -1,7 +1,9 @@
 """Config file for Superset"""
 import os
+import logging
 from six.moves.urllib.parse import quote
 
+from flask import request
 from flask_appbuilder.security.manager import AUTH_OAUTH
 from flask_appbuilder.security.sqla.manager import SecurityManager
 from werkzeug.contrib.cache import FileSystemCache
@@ -90,6 +92,16 @@ class LyftSecurityManager(SecurityManager):
             'email': user.data.get('email', '')
         }
 
+    def has_access(self, permission_name, view_name):
+        tom_request_key = request.headers.get('TOM_ACCESS_KEY')
+        if tom_request_key:
+            if tom_request_key == SECRET_KEY:
+                logging.info('TOM request is authorized')
+                return True
+            logging.warning('TOM request is unauthorized')
+
+        return super(LyftSecurityManager, self).has_access(permission_name,
+                                                           view_name)
 
 CUSTOM_SECURITY_MANAGER = LyftSecurityManager
 
