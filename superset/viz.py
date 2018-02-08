@@ -2097,6 +2097,38 @@ class DeckPathViz(BaseDeckGLViz):
         }
 
 
+class DeckAnimatedPathViz(BaseDeckGLViz):
+
+    """deck.gl's PathLayer"""
+
+    viz_type = 'deck_animated_path'
+    verbose_name = _('Deck.gl - Animated Paths')
+    deck_viz_key = 'animated_path'
+    deser_map = {
+        'json': json.loads,
+        'polyline': polyline.decode,
+    }
+
+    def query_obj(self):
+        d = super(DeckAnimatedPathViz, self).query_obj()
+        line_col = self.form_data.get('line_column')
+        if d['metrics']:
+            d['groupby'].append(line_col)
+        else:
+            d['columns'].append(line_col)
+        return d
+
+    def get_properties(self, d):
+        fd = self.form_data
+        deser = self.deser_map[fd.get('line_type')]
+        path = deser(d[fd.get('line_column')])
+        if fd.get('reverse_long_lat'):
+            path = (path[1], path[0])
+        return {
+            self.deck_viz_key: path,
+        }
+
+
 class DeckPolygon(DeckPathViz):
 
     """deck.gl's Polygon Layer"""
