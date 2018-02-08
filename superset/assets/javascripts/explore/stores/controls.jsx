@@ -511,6 +511,18 @@ export const controls = {
     }),
   },
 
+  subject: {
+    type: 'SelectControl',
+    multi: false,
+    label: t('Subject'),
+    default: [],
+    description: t('The column identifying your subject or entity'),
+    mapStateToProps: state => ({
+      choices: (state.datasource) ? state.datasource.all_cols : [],
+    }),
+    validators: [v.nonEmpty],
+  },
+
   spatial: {
     type: 'SpatialControl',
     label: t('Longitude & Latitude'),

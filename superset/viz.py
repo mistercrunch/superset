@@ -1045,6 +1045,7 @@ class NVD3TimeSeriesViz(NVD3Viz):
         df = df.fillna(0)
         if fd.get('granularity') == 'all':
             raise Exception(_('Pick a time granularity for your time series'))
+        print(df)
 
         if not aggregate:
             df = df.pivot_table(
@@ -1896,10 +1897,8 @@ class DeckGLMultiLayer(BaseViz):
         from superset import db
         slice_ids = fd.get('deck_slices')
         slices = db.session.query(Slice).filter(Slice.id.in_(slice_ids)).all()
-        return {
-            'mapboxApiKey': config.get('MAPBOX_API_KEY'),
-            'slices': [slc.data for slc in slices],
-        }
+        return self.insert_mapbox_api_key(
+            dict(slices=[slc.data for slc in slices]))
 
 
 class BaseDeckGLViz(BaseViz):
@@ -1988,13 +1987,14 @@ class BaseDeckGLViz(BaseViz):
                 feature['extraProps'] = extra_props
             features.append(feature)
 
-        return {
-            'features': features,
-            'mapboxApiKey': config.get('MAPBOX_API_KEY'),
-        }
+        return self.insert_mapbox_api_key(dict(features=features))
 
     def get_properties(self, d):
         raise NotImplementedError()
+
+    def insert_mapbox_api_key(self, d):
+        d['mapboxApiKey'] = config.get('MAPBOX_API_KEY')
+        return d
 
 
 class DeckScatterViz(BaseDeckGLViz):
@@ -2097,36 +2097,62 @@ class DeckPathViz(BaseDeckGLViz):
         }
 
 
-class DeckAnimatedPathViz(BaseDeckGLViz):
+class DeckLineViz(BaseDeckGLViz):
 
     """deck.gl's PathLayer"""
 
-    viz_type = 'deck_animated_path'
-    verbose_name = _('Deck.gl - Animated Paths')
-    deck_viz_key = 'animated_path'
-    deser_map = {
-        'json': json.loads,
-        'polyline': polyline.decode,
-    }
+    viz_type = 'deck_line'
+    verbose_name = _('Deck.gl - Line')
+    deck_viz_key = 'line'
+    spatial_control_keys = ['spatial']
 
     def query_obj(self):
-        d = super(DeckAnimatedPathViz, self).query_obj()
-        line_col = self.form_data.get('line_column')
-        if d['metrics']:
-            d['groupby'].append(line_col)
-        else:
-            d['columns'].append(line_col)
+        d = super(DeckLineViz, self).query_obj()
+        fd = self.form_data
+
+        d['metrics'] = []
+        d['groupby'] = []
+        d['columns'] += [fd.get('subject'), d.get('granularity')]
+        self.granularity = d.get('granularity')
         return d
 
-    def get_properties(self, d):
+    def get_data(self, df):
         fd = self.form_data
-        deser = self.deser_map[fd.get('line_type')]
-        path = deser(d[fd.get('line_column')])
-        if fd.get('reverse_long_lat'):
-            path = (path[1], path[0])
-        return {
-            self.deck_viz_key: path,
-        }
+        subject = fd.get('subject')
+        features = []
+
+        def process_subject(xdf):
+            xdf = xdf.sort_values(self.granularity)
+            del xdf[fd.get('subject')]
+            recs = xdf.to_records(index=False)
+            if len(recs) > 1:
+                points = []
+                for i in range(len(recs) - 1):
+                    source = tuple(recs[i])[:2]
+                    target = tuple(recs[i + 1])[:2]
+                    from geopy.distance import vincenty
+                    distance = vincenty(source, target).meters
+                    breakline = False
+                    if distance > 500:
+                        breakline = True
+                    if (
+                            source[0] != target[0] and source[1] != target[1] and
+                            not breakline
+                    ):
+                        points.append([
+                            recs[i][2],  # dttm
+                            source,
+                            target,
+                        ])
+
+                    if (i == len(recs) - 2 or breakline) and len(points) > 10:  # TODO 10 is bad
+                        features.append({
+                            'subject': df[subject][0],
+                            'points': points,
+                        })
+                        points = []
+        df.groupby(subject).apply(process_subject)
+        return self.insert_mapbox_api_key(dict(features=features))
 
 
 class DeckPolygon(DeckPathViz):
@@ -2189,11 +2215,7 @@ class DeckArc(BaseDeckGLViz):
     def get_data(self, df):
         d = super(DeckArc, self).get_data(df)
         arcs = d['features']
-
-        return {
-            'arcs': arcs,
-            'mapboxApiKey': config.get('MAPBOX_API_KEY'),
-        }
+        return self.insert_mapbox_api_key(dict(arcs=arcs))
 
 
 class EventFlowViz(BaseViz):

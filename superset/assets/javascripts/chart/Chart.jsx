@@ -173,13 +173,13 @@ class Chart extends React.PureComponent {
     const fd = this.props.formData;
     const qr = this.props.queryResponse;
     const renderStart = Logger.getTimestamp();
-    try {
-      // Executing user-defined data mutator function
       if (fd.js_data) {
         qr.data = sandboxedEval(fd.js_data)(qr.data);
       }
-      // [re]rendering the visualization
+    try {
       viz(this, qr, this.props.setControlValue);
+      // Executing user-defined data mutator function
+      // [re]rendering the visualization
       Logger.append(LOG_ACTIONS_RENDER_EVENT, {
         label: this.props.chartKey,
         vis_type: this.props.vizType,
@@ -188,6 +188,7 @@ class Chart extends React.PureComponent {
       });
       this.props.actions.chartRenderingSucceeded(this.props.chartKey);
     } catch (e) {
+      console.error(e);
       this.props.actions.chartRenderingFailed(e, this.props.chartKey);
     }
   }

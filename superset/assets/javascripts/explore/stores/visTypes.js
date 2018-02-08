@@ -463,15 +463,15 @@ export const visTypes = {
     ],
   },
 
-  deck_animated_path: {
-    label: t('Deck.gl - Animated Paths'),
+  deck_line: {
+    label: t('Deck.gl - Lines'),
     requiresTime: true,
     controlPanelSections: [
       {
         label: t('Query'),
         expanded: true,
         controlSetRows: [
-          ['line_column', 'line_type'],
+          ['subject', 'spatial'],
           ['row_limit', null],
         ],
       },
@@ -481,7 +481,7 @@ export const visTypes = {
         controlSetRows: [
           ['mapbox_style', 'viewport'],
           ['color_picker', 'line_width'],
-          ['reverse_long_lat', null],
+          ['reverse_long_lat', 'stroke_width'],
         ],
       },
       {
