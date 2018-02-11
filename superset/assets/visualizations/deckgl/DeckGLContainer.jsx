@@ -12,10 +12,12 @@ const propTypes = {
   mapboxApiAccessToken: PropTypes.string.isRequired,
   onViewportChange: PropTypes.func,
   renderFrequency: PropTypes.number,
+  overlayContent: PropTypes.func,
 };
 const defaultProps = {
   mapStyle: 'light',
   onViewportChange: () => {},
+  overlayContent: () => {},
 };
 
 export default class DeckGLContainer extends React.Component {
@@ -94,18 +96,29 @@ export default class DeckGLContainer extends React.Component {
     const { viewport } = this.state;
 
     return (
-      <MapGL
-        {...viewport}
-        mapStyle={this.props.mapStyle}
-        onViewportChange={this.onViewportChange}
-        mapboxApiAccessToken={this.props.mapboxApiAccessToken}
-      >
-        <DeckGL
+      <div>
+        <div style={{
+          position: 'absolute',
+          top: 5,
+          padding: 5,
+          left: 15,
+          zIndex: 1000,
+          fontSize: '12px',
+          backgroundColor: 'rgba(255, 255, 255, 0.75)',
+        }}>{this.props.overlayContent()}</div>
+        <MapGL
           {...viewport}
-          layers={this.layers()}
-          initWebGLParameters
-        />
-      </MapGL>
+          mapStyle={this.props.mapStyle}
+          onViewportChange={this.onViewportChange}
+          mapboxApiAccessToken={this.props.mapboxApiAccessToken}
+        >
+          <DeckGL
+            {...viewport}
+            layers={this.layers()}
+            initWebGLParameters
+          />
+        </MapGL>
+      </div>
     );
   }
 }

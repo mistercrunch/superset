@@ -8,26 +8,42 @@ import DeckGLContainer from './../DeckGLContainer';
 import * as common from './common';
 import sandboxedEval from '../../../javascripts/modules/sandbox';
 
-let DURATION = 30000;
 let startDttm;
 let timeExt;
-const tailLength = 6;
+let curTime = Date.now();
+const tailLength = 0.01;
+const colorMap = {
+  'idle': [255, 0, 0, 255],
+  'dropping_off': [0, 255, 0, 255],
+  'picking_up_another': [0, 255, 0, 255],
+  'picking_up': [100, 100, 255, 255],
+};
+function getColor(status) {
+  const col = colorMap[status];
+  if (!col) {
+    return [50, 50, 255, 255]
+  }
+  return col.slice();
+}
 
 function getLayer(formData, payload, slice) {
-  const perc = ((Date.now() - startDttm) % DURATION) / DURATION;
   const fd = formData;
+  const perc = ((Date.now() - startDttm) % (fd.sequence_duration * 1000)) / (fd.sequence_duration * 1000);
+
+  curTime = (perc * (timeExt[1] - timeExt[0])) + timeExt[0];
+  const timeWidth = fd.tail_length * 1000;
+  const opacityTimeScaler = d3.scale.linear().domain([curTime-timeWidth, curTime]).range([0, 255]);
+
   const c = fd.color_picker;
   const fixedColor = [c.r, c.g, c.b, 255 * c.a];
   let data = [];
   payload.data.features.forEach(line => {
     const len = line.points.length;
-    const frame = parseInt(perc * len);
     line.points.forEach((p, i) => {
-      if(i >= frame - tailLength  && i <= frame) {
-
-        const color = fixedColor.slice();
-        color[3] = ((tailLength - (frame - i)) * 255) / tailLength;
-        data.push([p[1], p[2], color]);
+      if(p.dttm >= curTime - timeWidth  && p.dttm <= curTime) {
+        let color = getColor(p.route_status);
+        color[3] = opacityTimeScaler(p.dttm);
+        data.push([p.source, p.target, color]);
       }
     });
   });
@@ -50,7 +66,15 @@ function getLayer(formData, payload, slice) {
 
 function deckLine(slice, payload, setControlValue) {
   startDttm = Date.now();
-  console.log(payload.data.features);
+
+  const times = [];
+  payload.data.features.forEach(line => {
+    line.points.forEach((p, i) => {
+      times.push(p.dttm);
+    });
+  });
+  timeExt = d3.extent(times);
+
   const layerGenerator = () => {
     return getLayer(slice.formData, payload, slice);
   };
@@ -60,14 +84,25 @@ function deckLine(slice, payload, setControlValue) {
     height: slice.height(),
   };
   ReactDOM.render(
-    <DeckGLContainer
-      mapboxApiAccessToken={payload.data.mapboxApiKey}
-      viewport={viewport}
-      layers={[layerGenerator]}
-      mapStyle={slice.formData.mapbox_style}
-      setControlValue={setControlValue}
-      renderFrequency={30}
-    />,
+      <DeckGLContainer
+        mapboxApiAccessToken={payload.data.mapboxApiKey}
+        viewport={viewport}
+        layers={[layerGenerator]}
+        mapStyle={slice.formData.mapbox_style}
+        setControlValue={setControlValue}
+        renderFrequency={30}
+        overlayContent={() => {
+          return (
+            <div style={{ fontWeight: 'bold' }}>
+              <div>
+                {(new Date(curTime)).toISOString().substring(0, 19)}
+              </div>
+              <div style={{ color: 'green'}}>loaded</div>
+              <div style={{ color: 'blue'}}>picking up</div>
+              <div style={{ color: 'red'}}>idle</div>
+            </div>);
+        }}
+      />,
     document.getElementById(slice.containerId),
   );
 }

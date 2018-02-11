@@ -288,9 +288,8 @@ class BaseViz(object):
         payload = self.get_df_payload(query_obj)
 
         df = payload.get('df')
-        if df is not None and len(df.index) == 0:
-            raise Exception('No data')
-        payload['data'] = self.get_data(df)
+        if df is not None and len(df.index) != 0:
+            payload['data'] = self.get_data(df)
 
         del payload['df']
         return payload
@@ -1045,7 +1044,6 @@ class NVD3TimeSeriesViz(NVD3Viz):
         df = df.fillna(0)
         if fd.get('granularity') == 'all':
             raise Exception(_('Pick a time granularity for your time series'))
-        print(df)
 
         if not aggregate:
             df = df.pivot_table(
@@ -1946,7 +1944,6 @@ class BaseDeckGLViz(BaseViz):
             df[key] = list(zip(latlong.apply(lambda x: x[0]),
                                latlong.apply(lambda x: x[1])))
             del df[spatial.get('geohashCol')]
-
         return df
 
     def query_obj(self):
@@ -2117,19 +2114,21 @@ class DeckLineViz(BaseDeckGLViz):
         return d
 
     def get_data(self, df):
+        df = self.process_spatial_data_obj('spatial', df)
+        df['dttm'] = pd.to_datetime(df[self.granularity])
         fd = self.form_data
         subject = fd.get('subject')
         features = []
 
         def process_subject(xdf):
-            xdf = xdf.sort_values(self.granularity)
+            xdf = xdf.sort_values('dttm')
             del xdf[fd.get('subject')]
-            recs = xdf.to_records(index=False)
-            if len(recs) > 1:
+            recs = xdf.to_dict(orient='records')
+            if len(recs) > 10:
                 points = []
                 for i in range(len(recs) - 1):
-                    source = tuple(recs[i])[:2]
-                    target = tuple(recs[i + 1])[:2]
+                    source = recs[i].get('spatial')
+                    target = recs[i + 1].get('spatial')
                     from geopy.distance import vincenty
                     distance = vincenty(source, target).meters
                     breakline = False
@@ -2139,17 +2138,20 @@ class DeckLineViz(BaseDeckGLViz):
                             source[0] != target[0] and source[1] != target[1] and
                             not breakline
                     ):
-                        points.append([
-                            recs[i][2],  # dttm
-                            source,
-                            target,
-                        ])
-
-                    if (i == len(recs) - 2 or breakline) and len(points) > 10:  # TODO 10 is bad
-                        features.append({
-                            'subject': df[subject][0],
-                            'points': points,
-                        })
+                        d = {
+                            'dttm': recs[i].get('dttm'),
+                            'source': source,
+                            'target': target,
+                        }
+                        for col in fd.get('js_columns', []):
+                            d[col] = recs[i][col]
+                        points.append(d)
+                    if (i == len(recs) - 2 or breakline):
+                        if len(points) > 10:
+                            features.append({
+                                'subject': df[subject][0],
+                                'points': points,
+                            })
                         points = []
         df.groupby(subject).apply(process_subject)
         return self.insert_mapbox_api_key(dict(features=features))

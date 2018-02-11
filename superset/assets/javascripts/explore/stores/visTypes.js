@@ -481,7 +481,14 @@ export const visTypes = {
         controlSetRows: [
           ['mapbox_style', 'viewport'],
           ['color_picker', 'line_width'],
-          ['reverse_long_lat', 'stroke_width'],
+          ['reverse_long_lat', null],
+        ],
+      },
+      {
+        label: t('Animation'),
+        expanded: true,
+        controlSetRows: [
+          ['tail_length', 'sequence_duration'],
         ],
       },
       {

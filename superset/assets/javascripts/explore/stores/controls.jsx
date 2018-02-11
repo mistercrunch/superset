@@ -1951,5 +1951,19 @@ export const controls = {
     description: t('Whether to fill the objects'),
     default: false,
   },
+  tail_length: {
+    type: 'TextControl',
+    label: t('Tail Length'),
+    isInt: true,
+    default: 120,
+    description: t('Length of the tail, in seconds'),
+  },
+  sequence_duration: {
+    type: 'TextControl',
+    label: t('Sequence Duration'),
+    isInt: true,
+    default: 60,
+    description: t('Duration of the loop, in seconds'),
+  },
 };
 export default controls;
