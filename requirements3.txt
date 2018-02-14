@@ -18,7 +18,7 @@ boto3==1.4.4              # via s3werkzeugcache
 boto==2.47.0
 botocore==1.5.95          # via boto3, s3transfer
 celery[sqs]==3.1.25
-certifi==2017.7.27.1
+certifi==2017.7.27.1      # via requests
 cffi==1.9.1
 chardet==3.0.4            # via requests
 click==6.7                # via flask
@@ -52,7 +52,6 @@ lyftsettings==0.1.0       # via lyft-requests
 markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via flake8
 mysqlclient==1.3.12
-ndg-httpsclient==0.4.2
 oauthlib==2.0.6           # via flask-oauthlib, requests-oauthlib
 packaging==16.8
 pathtools==0.1.2          # via watchdog
@@ -60,13 +59,11 @@ protobuf==3.2.0           # via lyft-requests
 psutil==5.4.0             # via rainbow-saddle
 psycopg2==2.7.3.2
 py==1.4.34                # via pytest
-pyasn1==0.2.2
 pycodestyle==2.3.1        # via flake8
 pycparser==2.17
 pycurl==7.43.0
 pyflakes==1.5.0           # via flake8
 pyhive==0.5.0
-pyopenssl==16.2.0
 pyparsing==2.1.10
 pytest-cov==2.5.1
 pytest-mock==1.1

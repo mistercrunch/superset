@@ -97,11 +97,12 @@ class LyftSecurityManager(SecurityManager):
         if tom_request_key:
             if tom_request_key == SECRET_KEY:
                 logging.info('TOM request is authorized')
-                return True
+                return tom_request_key == SECRET_KEY
             logging.warning('TOM request is unauthorized')
 
         return super(LyftSecurityManager, self).has_access(permission_name,
                                                            view_name)
+
 
 CUSTOM_SECURITY_MANAGER = LyftSecurityManager
 
