@@ -40,4 +40,4 @@ deploy:
 slack: '#superset'
 pagerduty_escalation_policy: Superset
 team_email: de2-eng@lyft.com
-image_type: library
+image_type: service
