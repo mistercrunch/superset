@@ -37,7 +37,7 @@ deploy:
       availability_zone: us-east-1d
     - name: production
       legacy: true
-slack: '#superset'
+slack: '#superset-dev'
 pagerduty_escalation_policy: Superset
 team_email: de2-eng@lyft.com
 image_type: service
