@@ -105,7 +105,7 @@ class LyftSecurityManager(SecurityManager):
 
 
 CUSTOM_SECURITY_MANAGER = LyftSecurityManager
-
+ENABLE_JAVASCRIPT_CONTROLS = True
 SUPERSET_WEBSERVER_TIMEOUT = 120
 
 # Caching configuration
