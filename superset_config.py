@@ -111,7 +111,7 @@ SUPERSET_WEBSERVER_TIMEOUT = 120
 # Caching configuration
 CACHE_CONFIG = {
     'CACHE_TYPE': 'redis',
-    'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24,
+    'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24 * 3, 
     'CACHE_KEY_PREFIX': 'superset_',
     'CACHE_REDIS_URL': REDIS_URL,
 }
