@@ -1,4 +1,4 @@
-FROM lyft/opsbase:cff17fab1b151de471f6af8a860a0b1a2ffbabe5
+FROM lyft/opsbase:3b98203d19193b3598ead28d38d1f4e54faa0699
 ARG IAM_ROLE
 COPY . /code/superset-private
 RUN cd /code/superset-private && make init_submodule
