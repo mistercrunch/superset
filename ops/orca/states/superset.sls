@@ -98,8 +98,8 @@ Ensure {{ grains.cluster_name }} asg exists:
     - vpc_zone_identifier: {{ pillar.vpc_subnets }}
     - availability_zones: {{ pillar.availability_zones }}
     {% if grains.service_instance == 'production' %}
-    - min_size: 2
-    - max_size: 2
+    - min_size: 3
+    - max_size: 3
     {% else %}
     - min_size: 1
     - max_size: 1
