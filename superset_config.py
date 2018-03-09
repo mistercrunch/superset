@@ -48,7 +48,8 @@ STATS_LOGGER = StatsdStatsLogger(
     host='localhost', port=8125, prefix='superset_' + ENV)
 
 # Flask-WTF flag for CSRF
-CSRF_ENABLED = True
+WTF_CSRF_ENABLED = True
+WTF_CSRF_TIME_LIMIT = 24 * 3600 # valid for the whole day
 
 # Set this API key to enable Mapbox visualizations
 MAPBOX_API_KEY = os.getenv("CREDENTIALS_MAPBOX_API_KEY")
