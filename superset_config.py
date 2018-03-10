@@ -1,7 +1,9 @@
 """Config file for Superset"""
-import os
+from datetime import datetime
 import logging
+import os
 from six.moves.urllib.parse import quote
+import socket
 
 from flask import request
 from flask_appbuilder.security.manager import AUTH_OAUTH
@@ -164,3 +166,39 @@ class CeleryConfig(object):
     BROKER_TRANSPORT_OPTIONS = CELERY_BROKER_TRANSPORT_OPTIONS
 
 CELERY_CONFIG = CeleryConfig
+
+cached_user_emails = {}
+
+
+def get_user_email_cached(username, security_manager):
+    """to avoid doing multiple round trips"""
+    if username not in cached_user_emails:
+        user = security_manager.find_user(username=username)
+        if user and user.email:
+            cached_user_emails[username] = user.email
+    return cached_user_emails.get(username)
+
+
+def DB_CONNECTION_MUTATOR(uri, params, username, sm):
+    email = get_user_email_cached(username, sm)
+    if email:
+        uri.username = email
+    return uri, params
+
+
+SQL_WITH_COMMENTS = """
+/* [SQL Lab]
+   - issued by: {email}
+   - host: {host}
+   - fired: {dttm}
+   - backend: {backend}
+*/
+{sql}"""
+
+
+def SQL_QUERY_MUTATOR(sql, username, security_manager, database):
+    email = get_user_email_cached(username, security_manager)
+    host = socket.gethostname()
+    dttm = datetime.now().isoformat()
+    backend = database.backend
+    return SQL_WITH_COMMENTS.format(**locals())
