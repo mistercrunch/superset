@@ -173,7 +173,13 @@ cached_user_emails = {}
 def get_user_email_cached(username, security_manager):
     """to avoid doing multiple round trips"""
     if username not in cached_user_emails:
-        user = security_manager.find_user(username=username)
+        user = None
+        try:
+            user = security_manager.find_user(username=username)
+        except Exception as e:
+            # Pessimistic to avoid 'MySQL has gone away'
+            logging.error("Couldn't fetch user info")
+            logging.exception(e)
         if user and user.email:
             cached_user_emails[username] = user.email
     return cached_user_emails.get(username)
