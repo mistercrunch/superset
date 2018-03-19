@@ -179,7 +179,7 @@ Ensure {{ grains.service_name }}multiredis-{{ grains.service_instance }}-{{ grai
         - {{ grains.cluster_name }}
       - instance_profile_name: multiredis-{{ grains.service_instance }}-{{ grains.region }}
       {% if grains.service_instance == 'production' %}
-      - instance_type: c4.large
+      - instance_type: c5.large
       {% else %}
       - instance_type: t2.medium
       {% endif %}
