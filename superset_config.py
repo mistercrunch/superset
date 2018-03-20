@@ -95,15 +95,10 @@ class LyftSecurityManager(SecurityManager):
             'email': user.data.get('email', '')
         }
 
-    def add_user(self, username, first_name, last_name, email, role, password='', hashed_password=''):
-        user = super(LyftSecurityManager, self).add_user(username=username,
-                                                         first_name=first_name,
-                                                         last_name=last_name,
-                                                         email=email,
-                                                         role=role,
-                                                         password=password,
-                                                         hashed_password=hashed_password)
-        user.roles.append(self.find_role('sql_lab'))
+    def add_user(self, *args, **kwargs):
+        user = super(LyftSecurityManager, self).add_user(*args, **kwargs)
+        if user:
+            user.roles.append(self.find_role('sql_lab'))
         return user
 
     def has_access(self, permission_name, view_name):
