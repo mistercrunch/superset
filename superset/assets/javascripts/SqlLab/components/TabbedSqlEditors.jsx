@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownButton, MenuItem, Tab, Tabs } from 'react-bootstrap';
+import { Tab, Tabs } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import URI from 'urijs';
 
 import * as Actions from '../actions';
 import SqlEditor from './SqlEditor';
-import CopyQueryTabUrl from './CopyQueryTabUrl';
+import TabTitle from './TabTitle';
 import { areArraysShallowEqual } from '../../reduxUtils';
 import { t } from '../../locales';
 
@@ -26,7 +26,6 @@ const defaultProps = {
 };
 
 let queryCount = 1;
-
 class TabbedSqlEditors extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -37,6 +36,7 @@ class TabbedSqlEditors extends React.PureComponent {
       dataPreviewQueries: [],
       hideLeftBar: false,
     };
+    this.toggleLeftBar = this.toggleLeftBar.bind(this);
   }
   componentDidMount() {
     const query = URI(window.location).search(true);
@@ -138,16 +138,13 @@ class TabbedSqlEditors extends React.PureComponent {
       this.props.actions.setActiveQueryEditor({ id: key });
     }
   }
-  removeQueryEditor(qe) {
-    this.props.actions.removeQueryEditor(qe);
-  }
   toggleLeftBar() {
     this.setState({ hideLeftBar: !this.state.hideLeftBar });
   }
   render() {
-    const editors = this.props.queryEditors.map((qe, i) => {
+    const activeTabKey = this.props.tabHistory[this.props.tabHistory.length - 1];
+    const editors = this.props.queryEditors.map((qe) => {
       const isSelected = (qe.id === this.activeQueryEditor().id);
-
       let latestQuery;
       if (qe.latestQueryId) {
         latestQuery = this.props.queries[qe.latestQueryId];
@@ -156,37 +153,18 @@ class TabbedSqlEditors extends React.PureComponent {
       if (qe.dbId) {
         database = this.props.databases[qe.dbId];
       }
-      const state = (latestQuery) ? latestQuery.state : '';
-
-      const tabTitle = (
-        <div>
-          <div className={'circle ' + state} /> {qe.title} {' '}
-          <DropdownButton
-            bsSize="small"
-            id={'ddbtn-tab-' + i}
-            title=""
-          >
-            <MenuItem eventKey="1" onClick={this.removeQueryEditor.bind(this, qe)}>
-              <i className="fa fa-close" /> {t('close tab')}
-            </MenuItem>
-            <MenuItem eventKey="2" onClick={this.renameTab.bind(this, qe)}>
-              <i className="fa fa-i-cursor" /> {t('rename tab')}
-            </MenuItem>
-            {qe &&
-              <CopyQueryTabUrl queryEditor={qe} />
-            }
-            <MenuItem eventKey="4" onClick={this.toggleLeftBar.bind(this)}>
-              <i className="fa fa-cogs" />
-              &nbsp;
-              {this.state.hideLeftBar ? t('expand tool bar') : t('hide tool bar')}
-            </MenuItem>
-          </DropdownButton>
-        </div>
-      );
       return (
         <Tab
           key={qe.id}
-          title={tabTitle}
+          title={
+            <TabTitle
+              queryEditor={qe}
+              latestQueryState={latestQuery ? latestQuery.state : ''}
+              toggleLeftBar={this.toggleLeftBar}
+              removeQueryEditor={() => this.props.actions.removeQueryEditor(qe)}
+              renameTab={() => this.renameTab(qe)}
+              selected={activeTabKey == qe.id}
+            />}
           eventKey={qe.id}
         >
           <div className="panel panel-default">
@@ -211,7 +189,7 @@ class TabbedSqlEditors extends React.PureComponent {
     return (
       <Tabs
         bsStyle="tabs"
-        activeKey={this.props.tabHistory[this.props.tabHistory.length - 1]}
+        activeKey={activeTabKey}
         onSelect={this.handleSelect.bind(this)}
         id="a11y-query-editor-tabs"
       >

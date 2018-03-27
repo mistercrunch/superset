@@ -129,14 +129,6 @@ describe('TabbedSqlEditors', () => {
 
     delete global.prompt;
   });
-  it('should removeQueryEditor', () => {
-    wrapper = getWrapper();
-    sinon.stub(wrapper.instance().props.actions, 'removeQueryEditor');
-
-    wrapper.instance().removeQueryEditor(queryEditors[0]);
-    expect(wrapper.instance().props.actions.removeQueryEditor.getCall(0).args[0])
-      .to.equal(queryEditors[0]);
-  });
   it('should add new query editor', () => {
     wrapper = getWrapper();
     sinon.stub(wrapper.instance().props.actions, 'addQueryEditor');
