@@ -1720,9 +1720,9 @@ class WorldMapViz(BaseViz):
 
     def query_obj(self):
         qry = super(WorldMapViz, self).query_obj()
-        qry['metrics'] = [
-            self.form_data['metric'], self.form_data['secondary_metric']]
-        qry['groupby'] = [self.form_data['entity']]
+        fd = self.form_data
+        qry['metrics'] = [fd['metric'], fd['secondary_metric']]
+        qry['groupby'] = [fd['entity']]
         return qry
 
     def get_data(self, df):
