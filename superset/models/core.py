@@ -240,7 +240,7 @@ class Slice(Model, AuditMixinNullable, ImportMixin):
 
     @property
     def edit_url(self):
-        return '/slicemodelview/edit/{}'.format(self.id)
+        return '/chart/edit/{}'.format(self.id)
 
     @property
     def slice_link(self):
@@ -644,6 +644,10 @@ class Database(Model, AuditMixinNullable, ImportMixin):
     @property
     def unique_name(self):
         return self.database_name
+
+    @property
+    def url_object(self):
+        return make_url(self.sqlalchemy_uri_decrypted)
 
     @property
     def backend(self):
