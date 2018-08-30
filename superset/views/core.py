@@ -302,6 +302,7 @@ appbuilder.add_view_no_menu(DatabaseAsync)
 
 class CsvToDatabaseView(SimpleFormView):
     form = CsvToDatabaseForm
+    form_template = 'superset/TEST.html'
     form_title = _('CSV to Database configuration')
     add_columns = ['database', 'schema', 'table_name']
 
