@@ -1,12 +1,11 @@
-from flask_appbuilder import Model
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
 from superset import security_manager
-from superset.models.helpers import AuditMixinNullable
+from superset.models.helpers import AuditMixinNullable, SupersetModel
 
 
-class UserAttribute(Model, AuditMixinNullable):
+class UserAttribute(SupersetModel, AuditMixinNullable):
 
     """
     Custom attributes attached to the user.

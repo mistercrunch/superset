@@ -6,6 +6,7 @@ import logging
 import re
 
 from flask import escape, Markup
+from flask_appbuilder import Model
 from flask_appbuilder.models.decorators import renders
 from flask_appbuilder.models.mixins import AuditMixin
 import humanize
@@ -27,7 +28,7 @@ def json_to_dict(json_str):
         return {}
 
 
-class ImportMixin(object):
+class ImportMixin:
     export_parent = None
     # The name of the attribute
     # with the SQL Alchemy back reference
@@ -278,7 +279,7 @@ class AuditMixinNullable(AuditMixin):
         return Markup(f'<span class="no-wrap">{time_str}</span>')
 
 
-class QueryResult(object):
+class QueryResult:
 
     """Object returned by the query interface"""
 
@@ -314,3 +315,7 @@ class ExtraJSONMixin:
         extra = self.extra
         extra[key] = value
         self.extra_json = json.dumps(extra)
+
+
+class SupersetModel(Model):
+    """Common base for all Superset models"""

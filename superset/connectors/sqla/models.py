@@ -23,7 +23,7 @@ from superset.connectors.base.models import BaseColumn, BaseDatasource, BaseMetr
 from superset.jinja_context import get_template_processor
 from superset.models.annotations import Annotation
 from superset.models.core import Database
-from superset.models.helpers import QueryResult
+from superset.models.helpers import QueryResult, SupersetModel
 from superset.utils import core as utils, import_datasource
 
 config = app.config
@@ -68,7 +68,7 @@ class AnnotationDatasource(BaseDatasource):
         raise NotImplementedError()
 
 
-class TableColumn(Model, BaseColumn):
+class TableColumn(SupersetModel, BaseColumn):
 
     """ORM object for table columns, each table can have multiple columns"""
 
@@ -207,7 +207,7 @@ class TableColumn(Model, BaseColumn):
         return {m.metric_name: m for m in metrics}
 
 
-class SqlMetric(Model, BaseMetric):
+class SqlMetric(SupersetModel, BaseMetric):
 
     """ORM object for metrics, each table can have multiple metrics"""
 
@@ -259,7 +259,7 @@ sqlatable_user = Table(
 )
 
 
-class SqlaTable(Model, BaseDatasource):
+class SqlaTable(SupersetModel, BaseDatasource):
 
     """An ORM object for SqlAlchemy table references"""
 

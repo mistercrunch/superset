@@ -9,7 +9,6 @@ import logging
 import textwrap
 
 from flask import escape, g, Markup, request
-from flask_appbuilder import Model
 from flask_appbuilder.models.decorators import renders
 from flask_appbuilder.security.sqla.models import User
 import numpy
@@ -31,7 +30,7 @@ import sqlparse
 from superset import app, db, db_engine_specs, security_manager
 from superset.connectors.connector_registry import ConnectorRegistry
 from superset.legacy import update_time_range
-from superset.models.helpers import AuditMixinNullable, ImportMixin
+from superset.models.helpers import AuditMixinNullable, ImportMixin, SupersetModel
 from superset.models.user_attributes import UserAttribute
 from superset.utils import (
     cache as cache_util,
@@ -44,7 +43,7 @@ config = app.config
 custom_password_store = config.get('SQLALCHEMY_CUSTOM_PASSWORD_STORE')
 stats_logger = config.get('STATS_LOGGER')
 log_query = config.get('QUERY_LOGGER')
-metadata = Model.metadata  # pylint: disable=no-member
+metadata = SupersetModel.metadata  # pylint: disable=no-member
 
 PASSWORD_MASK = 'X' * 10
 
@@ -92,7 +91,7 @@ def copy_dashboard(mapper, connection, target):
 sqla.event.listen(User, 'after_insert', copy_dashboard)
 
 
-class Url(Model, AuditMixinNullable):
+class Url(SupersetModel, AuditMixinNullable):
     """Used for the short url feature"""
 
     __tablename__ = 'url'
@@ -100,7 +99,7 @@ class Url(Model, AuditMixinNullable):
     url = Column(Text)
 
 
-class KeyValue(Model):
+class KeyValue(SupersetModel):
 
     """Used for any type of key-value store"""
 
@@ -109,7 +108,7 @@ class KeyValue(Model):
     value = Column(Text, nullable=False)
 
 
-class CssTemplate(Model, AuditMixinNullable):
+class CssTemplate(SupersetModel, AuditMixinNullable):
 
     """CSS templates for dashboards"""
 
@@ -125,7 +124,7 @@ slice_user = Table('slice_user', metadata,
                    Column('slice_id', Integer, ForeignKey('slices.id')))
 
 
-class Slice(Model, AuditMixinNullable, ImportMixin):
+class Slice(SupersetModel, AuditMixinNullable, ImportMixin):
 
     """A slice is essentially a report or a view on data"""
 
@@ -363,7 +362,7 @@ dashboard_user = Table(
 )
 
 
-class Dashboard(Model, AuditMixinNullable, ImportMixin):
+class Dashboard(SupersetModel, AuditMixinNullable, ImportMixin):
 
     """The dashboard object!"""
 
@@ -623,7 +622,7 @@ class Dashboard(Model, AuditMixinNullable, ImportMixin):
         }, cls=utils.DashboardEncoder, indent=4)
 
 
-class Database(Model, AuditMixinNullable, ImportMixin):
+class Database(SupersetModel, AuditMixinNullable, ImportMixin):
 
     """An ORM object that stores Database related information"""
 
@@ -1071,7 +1070,7 @@ sqla.event.listen(Database, 'after_insert', security_manager.set_perm)
 sqla.event.listen(Database, 'after_update', security_manager.set_perm)
 
 
-class Log(Model):
+class Log(SupersetModel):
 
     """ORM object used to log Superset actions to the database"""
 
@@ -1150,7 +1149,7 @@ class Log(Model):
         return wrapper
 
 
-class FavStar(Model):
+class FavStar(SupersetModel):
     __tablename__ = 'favstar'
 
     id = Column(Integer, primary_key=True)
@@ -1160,7 +1159,7 @@ class FavStar(Model):
     dttm = Column(DateTime, default=datetime.utcnow)
 
 
-class DatasourceAccessRequest(Model, AuditMixinNullable):
+class DatasourceAccessRequest(SupersetModel, AuditMixinNullable):
     """ORM model for the access requests for datasources and dbs."""
     __tablename__ = 'access_request'
     id = Column(Integer, primary_key=True)

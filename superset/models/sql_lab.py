@@ -4,7 +4,6 @@ from datetime import datetime
 import re
 
 from flask import Markup
-from flask_appbuilder import Model
 import sqlalchemy as sqla
 from sqlalchemy import (
     Boolean, Column, DateTime, ForeignKey, Integer, Numeric, String, Text,
@@ -12,11 +11,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import backref, relationship
 
 from superset import security_manager
-from superset.models.helpers import AuditMixinNullable, ExtraJSONMixin
+from superset.models.helpers import AuditMixinNullable, ExtraJSONMixin, SupersetModel
 from superset.utils.core import QueryStatus, user_label
 
 
-class Query(Model, ExtraJSONMixin):
+class Query(SupersetModel, ExtraJSONMixin):
     """ORM model for SQL query
 
     Now that SQL Lab support multi-statement execution, an entry in this
@@ -122,7 +121,7 @@ class Query(Model, ExtraJSONMixin):
         return f'sqllab_{tab}_{ts}'
 
 
-class SavedQuery(Model, AuditMixinNullable):
+class SavedQuery(SupersetModel, AuditMixinNullable):
     """ORM model for SQL query"""
 
     __tablename__ = 'saved_query'

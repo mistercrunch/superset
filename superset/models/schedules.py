@@ -3,7 +3,6 @@
 
 import enum
 
-from flask_appbuilder import Model
 from sqlalchemy import (
     Boolean, Column, Enum, ForeignKey, Integer, String, Text,
 )
@@ -11,10 +10,10 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 
 from superset import security_manager
-from superset.models.helpers import AuditMixinNullable, ImportMixin
+from superset.models.helpers import AuditMixinNullable, ImportMixin, SupersetModel
 
 
-metadata = Model.metadata  # pylint: disable=no-member
+metadata = SupersetModel.metadata  # pylint: disable=no-member
 
 
 class ScheduleType(enum.Enum):
@@ -59,7 +58,7 @@ class EmailSchedule():
     delivery_type = Column(Enum(EmailDeliveryType))
 
 
-class DashboardEmailSchedule(Model,
+class DashboardEmailSchedule(SupersetModel,
                              AuditMixinNullable,
                              ImportMixin,
                              EmailSchedule):
@@ -72,7 +71,7 @@ class DashboardEmailSchedule(Model,
     )
 
 
-class SliceEmailSchedule(Model,
+class SliceEmailSchedule(SupersetModel,
                          AuditMixinNullable,
                          ImportMixin,
                          EmailSchedule):

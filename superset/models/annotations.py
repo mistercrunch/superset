@@ -1,15 +1,14 @@
 # pylint: disable=C,R,W
 """a collection of Annotation-related models"""
-from flask_appbuilder import Model
 from sqlalchemy import (
     Column, DateTime, ForeignKey, Index, Integer, String, Text,
 )
 from sqlalchemy.orm import relationship
 
-from superset.models.helpers import AuditMixinNullable
+from superset.models.helpers import AuditMixinNullable, SupersetModel
 
 
-class AnnotationLayer(Model, AuditMixinNullable):
+class AnnotationLayer(SupersetModel, AuditMixinNullable):
 
     """A logical namespace for a set of annotations"""
 
@@ -22,7 +21,7 @@ class AnnotationLayer(Model, AuditMixinNullable):
         return self.name
 
 
-class Annotation(Model, AuditMixinNullable):
+class Annotation(SupersetModel, AuditMixinNullable):
 
     """Time-related annotation"""
 

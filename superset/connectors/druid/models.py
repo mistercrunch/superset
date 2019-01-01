@@ -11,7 +11,6 @@ import re
 
 from dateutil.parser import parse as dparse
 from flask import escape, Markup
-from flask_appbuilder import Model
 from flask_appbuilder.models.decorators import renders
 from flask_babel import lazy_gettext as _
 import pandas
@@ -34,7 +33,7 @@ from superset import conf, db, security_manager
 from superset.connectors.base.models import BaseColumn, BaseDatasource, BaseMetric
 from superset.exceptions import MetricPermException, SupersetException
 from superset.models.helpers import (
-    AuditMixinNullable, ImportMixin, QueryResult,
+    AuditMixinNullable, ImportMixin, QueryResult, SupersetModel,
 )
 from superset.utils import core as utils, import_datasource
 from superset.utils.core import (
@@ -43,7 +42,7 @@ from superset.utils.core import (
 
 DRUID_TZ = conf.get('DRUID_TZ')
 POST_AGG_TYPE = 'postagg'
-metadata = Model.metadata  # pylint: disable=no-member
+metadata = SupersetModel.metadata  # pylint: disable=no-member
 
 
 # Function wrapper because bound methods cannot
@@ -70,7 +69,7 @@ class CustomPostAggregator(Postaggregator):
         self.post_aggregator = post_aggregator
 
 
-class DruidCluster(Model, AuditMixinNullable, ImportMixin):
+class DruidCluster(SupersetModel, AuditMixinNullable, ImportMixin):
 
     """ORM object referencing the Druid clusters"""
 
@@ -246,7 +245,7 @@ class DruidCluster(Model, AuditMixinNullable, ImportMixin):
         return self.verbose_name if self.verbose_name else self.cluster_name
 
 
-class DruidColumn(Model, BaseColumn):
+class DruidColumn(SupersetModel, BaseColumn):
     """ORM model for storing Druid datasource column metadata"""
 
     __tablename__ = 'columns'
@@ -392,7 +391,7 @@ class DruidColumn(Model, BaseColumn):
         return import_datasource.import_simple_obj(db.session, i_column, lookup_obj)
 
 
-class DruidMetric(Model, BaseMetric):
+class DruidMetric(SupersetModel, BaseMetric):
 
     """ORM object referencing Druid metrics for a datasource"""
 
@@ -455,7 +454,7 @@ druiddatasource_user = Table(
 )
 
 
-class DruidDatasource(Model, BaseDatasource):
+class DruidDatasource(SupersetModel, BaseDatasource):
 
     """ORM object referencing Druid datasources (tables)"""
 
