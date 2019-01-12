@@ -179,7 +179,7 @@
     "npm-check-updates": "^2.14.2",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "po2json": "^0.4.5",
-    "prettier": "^1.12.1",
+    "prettier": "^1.15.3",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^15.6.2",
     "redux-mock-store": "^1.2.3",
