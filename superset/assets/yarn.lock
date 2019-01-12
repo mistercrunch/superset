@@ -2541,10 +2541,10 @@ bootstrap-slider@^10.0.0:
   resolved "https://registry.yarnpkg.com/bootstrap-slider/-/bootstrap-slider-10.2.1.tgz#c07d7a7d817ba794ac69b56ae1280974e39b63ff"
   integrity sha512-sajEjunOzQyUqzFPTfXIiCMWaNzktFPze0DdHHYE07aXzNFHNjp+iB5r1DmK6PaRuSEUXnmr2siS9x1Fx8R+Tg==
 
-bootstrap@^3.3.6:
-  version "3.3.7"
-  resolved "http://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
-  integrity sha1-WjiTlFSfIzMIdaOxUGVldPip63E=
+bootstrap@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.0.tgz#f8d77540dd3062283d2ae7687e21c1e691961640"
+  integrity sha512-F1yTDO9OHKH0xjl03DsOe8Nu1OWBIeAugGMhy3UTIYDdbbIPesQIhCEbj+HEr6wqlwweGAlP8F3OBC6kEuhFuw==
 
 bops@0.0.6:
   version "0.0.6"
