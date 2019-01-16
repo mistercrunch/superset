@@ -103,7 +103,7 @@
     "react-color": "^2.13.8",
     "react-datetime": "^2.14.0",
     "react-dnd": "^2.5.4",
-    "react-dnd-html5-backend": "^2.5.4",
+    "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.4.1",
     "react-gravatar": "^2.6.1",
     "react-hot-loader": "^4.3.6",
