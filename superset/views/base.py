@@ -278,6 +278,7 @@ class SupersetFilter(BaseFilter):
     def get_user_roles(self):
         return get_user_roles()
 
+    @memoize
     def get_all_permissions(self):
         """Returns a set of tuples with the perm name and view menu name"""
         perms = set()

@@ -104,8 +104,20 @@ class SliceFilter(SupersetFilter):
     def apply(self, query, func):  # noqa
         if security_manager.all_datasource_access():
             return query
-        perms = self.get_view_menus('datasource_access')
+        datasource_perms = self.get_view_menus('datasource_access')
+        database_perms = self.get_view_menus('database_access')
+        schema_perms = self.get_view_menus('database_access')
         # TODO(bogdan): add `schema_access` support here
+
+        query = (
+            query.leftjoin(Table)
+            .leftjoin(Database)
+            .filter(or_(
+                Database.perm.in_(database_perm),
+                self.model.perm.in_(datasource_perm),
+            )
+        )
+
         return query.filter(self.model.perm.in_(perms))
 
 
