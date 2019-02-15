@@ -250,7 +250,7 @@ const config = {
 if (!isDevMode) {
   config.optimization.minimizer = [
     new TerserPlugin({
-      cache: true,
+      cache: '.terser-plugin-cache/',
       parallel: true,
       extractComments: true,
     }),
