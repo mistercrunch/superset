@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt setup.py
 #
-alembic==1.0.0            # via flask-migrate
+alembic==1.0.8            # via flask-migrate
 amqp==2.3.2               # via kombu
 asn1crypto==0.24.0        # via cryptography
 babel==2.6.0              # via flask-babel, flower
