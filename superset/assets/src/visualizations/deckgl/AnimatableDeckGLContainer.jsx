@@ -67,6 +67,7 @@ export default class AnimatableDeckGLContainer extends React.Component {
       disabled,
       aggregation,
       children,
+      mapStyle,
       getLayers,
       values,
       onValuesChange,
@@ -84,6 +85,7 @@ export default class AnimatableDeckGLContainer extends React.Component {
       <div>
         <DeckGLContainer
           {...this.other}
+          mapStyle={mapStyle}
           viewport={modifiedViewport}
           layers={layers}
           onViewportChange={this.onViewportChange}
