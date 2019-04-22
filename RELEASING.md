@@ -85,8 +85,9 @@ Now let's craft a source release
     # Setting a VERSION var will be useful
     export VERSION=0.31.0rc18
 
-    # Let's create a git tag
+    # Let's create and push a git tag
     git tag -f ${VERSION}
+    git push apache ${VERSION}
 
     # [WARNING!] This command wipes everything in your repo that is
     # gitignored in preparation for the source release.
