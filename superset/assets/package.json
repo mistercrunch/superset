@@ -95,7 +95,7 @@
     "dompurify": "^1.0.3",
     "geolib": "^2.0.24",
     "immutable": "^3.8.2",
-    "jquery": "3.1.1",
+    "jquery": "3.4.0",
     "json-bigint": "^0.3.0",
     "lodash": "^4.17.11",
     "mapbox-gl": "^0.53.0",
