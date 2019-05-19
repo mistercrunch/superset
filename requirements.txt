@@ -42,7 +42,7 @@ humanize==0.5.1
 idna==2.6
 isodate==0.6.0
 itsdangerous==0.24        # via flask
-jinja2==2.10              # via flask, flask-babel
+jinja2==2.10.1              # via flask, flask-babel
 jsonschema==3.0.1         # via flask-appbuilder
 kombu==4.2.1              # via celery
 mako==1.0.7               # via alembic
