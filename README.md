@@ -26,6 +26,7 @@ Superset
 [![Join the chat at https://gitter.im/airbnb/superset](https://badges.gitter.im/apache/incubator-superset.svg)](https://gitter.im/airbnb/superset?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Documentation](https://img.shields.io/badge/docs-apache.org-blue.svg)](https://superset.incubator.apache.org)
 [![dependencies Status](https://david-dm.org/apache/incubator-superset/status.svg?path=superset/assets)](https://david-dm.org/apache/incubator-superset?path=superset/assets)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmistercrunch%2Fsuperset.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmistercrunch%2Fsuperset?ref=badge_shield)
 
 <img
   src="https://cloud.githubusercontent.com/assets/130878/20946612/49a8a25c-bbc0-11e6-8314-10bef902af51.png"
@@ -207,3 +208,6 @@ the world know they are using Superset. Join our growing community!
  1. [Yahoo!](https://yahoo.com/)
  1. [Zaihang](http://www.zaih.com/)
  1. [Zalando](https://www.zalando.com)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmistercrunch%2Fsuperset.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmistercrunch%2Fsuperset?ref=badge_large)
