@@ -40,7 +40,7 @@ gunicorn==19.8.0
 humanize==0.5.1
 idna==2.6
 isodate==0.6.0
-itsdangerous==0.24        # via flask
+itsdangerous==1.1.0        # via flask
 jinja2==2.10.1            # via flask, flask-babel
 jsonschema==3.0.1         # via flask-appbuilder
 kombu==4.6.3              # via celery
