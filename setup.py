@@ -107,7 +107,7 @@ setup(
         "gsheets": ["gsheetsdb>=0.1.9"],
         "hive": ["pyhive[hive]>=0.6.1", "tableschema", "thrift>=0.11.0, <1.0.0"],
         "mysql": ["mysqlclient==1.4.2.post1"],
-        "postgres": ["psycopg2-binary==2.7.5"],
+        "postgres": ["psycopg2-binary==2.8.3"],
         "presto": ["pyhive[presto]>=0.4.0"],
         "druid": ["pydruid==0.5.2", "requests==2.22.0"],
     },
