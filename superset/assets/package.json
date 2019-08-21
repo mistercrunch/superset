@@ -204,7 +204,7 @@
     "transform-loader": "^0.2.3",
     "ts-jest": "^24.0.0",
     "ts-loader": "^5.2.0",
-    "tslint": "^5.11.0",
+    "tslint": "^5.19.0",
     "tslint-react": "^3.6.0",
     "typescript": "^3.5.3",
     "url-loader": "^1.0.1",
