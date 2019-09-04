@@ -33,4 +33,4 @@ pylint==1.9.2
 redis==3.2.1
 requests==2.22.0
 statsd==3.3.0
-tox==3.11.1
+tox==3.14.0
