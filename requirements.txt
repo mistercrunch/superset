@@ -27,7 +27,7 @@ flask-appbuilder==2.1.7
 flask-babel==0.12.2       # via flask-appbuilder
 flask-caching==1.7.2
 flask-compress==1.4.0
-flask-jwt-extended==3.20.0  # via flask-appbuilder
+flask-jwt-extended==3.24.0  # via flask-appbuilder
 flask-login==0.4.1        # via flask-appbuilder
 flask-migrate==2.5.2
 flask-openid==1.2.5       # via flask-appbuilder
