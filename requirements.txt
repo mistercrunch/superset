@@ -11,7 +11,7 @@ attrs==19.3.0             # via jsonschema
 babel==2.8.0              # via flask-babel
 backoff==1.10.0
 billiard==3.6.1.0         # via celery
-bleach==3.1.0
+bleach==3.1.4
 celery==4.4.0
 cffi==1.13.2              # via cryptography
 click==6.7
