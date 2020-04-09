@@ -2445,6 +2445,7 @@ class Superset(BaseSupersetView):
             return json_error_response(
                 f"Query {query_id}: Template rendering failed: {error_msg}"
             )
+        query.executed_sql = rendered_query
 
         # Limit is not applied to the CTA queries if SQLLAB_CTAS_NO_LIMIT flag is set to True.
         if not (config.get("SQLLAB_CTAS_NO_LIMIT") and select_as_cta):

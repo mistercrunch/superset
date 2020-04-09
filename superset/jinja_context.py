@@ -21,6 +21,8 @@ from typing import Any, List, Optional, Tuple
 
 from flask import g, request
 from jinja2.sandbox import SandboxedEnvironment
+from sqlalchemy.sql import column, text
+from sqlalchemy.sql.functions import concat
 
 from superset import jinja_base_context
 from superset.extensions import jinja_context_manager
@@ -187,6 +189,9 @@ class BaseTemplateProcessor:  # pylint: disable=too-few-public-methods
         self.context = {
             "url_param": url_param,
             "current_user_id": current_user_id,
+            "concat": self.concat,
+            "text": text,
+            "column": column,
             "current_username": current_username,
             "cache_key_wrapper": CacheKeyWrapper(extra_cache_keys).cache_key_wrapper,
             "filter_values": filter_values,
@@ -197,6 +202,13 @@ class BaseTemplateProcessor:  # pylint: disable=too-few-public-methods
         if self.engine:
             self.context[self.engine] = self
         self.env = SandboxedEnvironment()
+
+    def concat(self, *args) -> str:
+        return str(
+            concat(*args).compile(
+                self.database.get_sqla_engine(), compile_kwargs={"literal_binds": True},
+            )
+        )
 
     def process_template(self, sql: str, **kwargs) -> str:
         """Processes a sql template

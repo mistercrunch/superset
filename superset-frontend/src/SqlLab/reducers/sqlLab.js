@@ -336,6 +336,7 @@ export default function sqlLabReducer(state = {}, action) {
         state: 'success',
         errorMessage: null,
         cached: false,
+        executedSql: action.results.query.executedSql,
       };
       return alterInObject(state, 'queries', action.query, alts);
     },
