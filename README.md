@@ -35,7 +35,7 @@ Superset
 
 A modern, enterprise-ready business intelligence web application.
 
-[**Why Superset**](#why-superset) | 
+[**Why Superset**](#why-superset) |
 [**Database Support**](#database-support) |
 [**Installation and Configuration**](#installation-and-configuration) |
 [**Get Help**](#get-help) |
@@ -115,12 +115,12 @@ If you decide to join the [Community Slack](https://join.slack.com/t/apache-supe
 
 **1. Treat everyone in the community with respect.**
 
-- We strive to make this community a warm place for people from all industries, use cases, geographies, and backgrounds. Harassment of any kind is not acceptable and won’t be tolerated. 
+- We strive to make this community a warm place for people from all industries, use cases, geographies, and backgrounds. Harassment of any kind is not acceptable and won’t be tolerated.
 - Please follow the guidelines as outlined in the Superset Community [code of conduct here](https://github.com/apache/incubator-superset/blob/master/CODE_OF_CONDUCT.md).
 
-**2. Use the right channel.** 
+**2. Use the right channel.**
 
-- Channels are an effective way to organize and focus discussions while also empowering members to opt-in to the types of content they’re interested in. When questions are posted or discussions are started in the wrong channel, it dilutes the trust of the members in the channel and, more practically, makes it harder for your questions to be answered.  
+- Channels are an effective way to organize and focus discussions while also empowering members to opt-in to the types of content they’re interested in. When questions are posted or discussions are started in the wrong channel, it dilutes the trust of the members in the channel and, more practically, makes it harder for your questions to be answered.
 
 **3. Ask thoughtful questions.**
 
@@ -161,17 +161,18 @@ Interested in contributing? Check out
 * [Docker image](https://hub.docker.com/r/preset/superset/)
 * [Youtube Channel](https://www.youtube.com/channel/UCMuwrvBsg_jjI2gLcm04R0g)
   * [May 15, 2020: Virtual Meetup Recording. Topics: 0.36 Overview, Committers Self-Intro, Roadmap](https://www.youtube.com/watch?v=tXGDmqjmcTs&t=20s)
+* [So, You Want to Build a Superset Viz Plugin...](https://preset.io/blog/2020-07-02-hello-world/)
 
 ## Superset Users
 
 Here's a list of organizations that have taken the time to send a PR to let
 the world know they are using Superset. If you are a user and want to be recognized,
-all you have to do is file a simple PR [like this one](https://github.com/apache/incubator-superset/pull/7576). 
+all you have to do is file a simple PR [like this one](https://github.com/apache/incubator-superset/pull/7576).
 Join our growing community!
 
  1. [6play](https://www.6play.fr) [@CoryChaplin]
  1. [AiHello](https://www.aihello.com) [@ganeshkrishnan1]
- 1. [Airbnb](https://github.com/airbnb) 
+ 1. [Airbnb](https://github.com/airbnb)
  1. [Airboxlab](https://foobot.io) [@antoine-galataud]
  1. [Aktia Bank plc](https://www.aktia.com) [@villebro]
  1. [American Express](https://www.americanexpress.com) [@TheLastSultan]
@@ -180,13 +181,13 @@ Join our growing community!
  1. [Ascendica Development](http://ascendicadevelopment.com) [@davidhassan]
  1. [Astronomer](https://www.astronomer.io) [@ryw]
  1. [bilibili](https://www.bilibili.com) [@Moinheart]
- 1. [Brilliant.org](https://brilliant.org/) 
+ 1. [Brilliant.org](https://brilliant.org/)
  1. [Capital Service S.A.](http://capitalservice.pl) [@pkonarzewski]
- 1. [Clark.de](http://clark.de/) 
+ 1. [Clark.de](http://clark.de/)
  1. [Cloudsmith](https://cloudsmith.io) [@alancarson]
  1. [CnOvit](http://www.cnovit.com/) [@xieshaohu]
  1. [Deepomatic](https://deepomatic.com/) [@Zanoellia]
- 1. [Dial Once](https://www.dial-once.com/en/) 
+ 1. [Dial Once](https://www.dial-once.com/en/)
  1. [Digit Game Studios](https://www.digitgaming.com/)
  1. [Douban](https://www.douban.com/) [@luchuan]
  1. [DouroECI](http://douroeci.com/en/) [@nunohelibeires]
@@ -196,23 +197,23 @@ Join our growing community!
  1. [Endress+Hauser](http://www.endress.com/) [@rumbin]
  1. [Faasos](http://faasos.com/) [@shashanksingh]
  1. [Fanatics](https://www.fanatics.com) [@coderfender]
- 1. [FBK - ICT center](http://ict.fbk.eu) 
+ 1. [FBK - ICT center](http://ict.fbk.eu)
  1. [Fordeal](http://www.fordeal.com) [@Renkai]
  1. [GFG - Global Fashion Group](https://global-fashion-group.com) [@ksaagariconic]
  1. [GfK Data Lab](http://datalab.gfk.com) [@mherr]
- 1. [Grassroot](https://www.grassrootinstitute.org/) 
+ 1. [Grassroot](https://www.grassrootinstitute.org/)
  1. [GrowthSimple](https://growthsimple.ai/)
  1. [Hostnfly](https://www.hostnfly.com/) [@alexisrosuel]
  1. [HuiShouBao](http://www.huishoubao.com/) [@Yukinoshita-Yukino]
  1. [Intercom](https://www.intercom.com/) [@kate-gallo]
- 1. [jampp](https://jampp.com/) 
+ 1. [jampp](https://jampp.com/)
  1. [komoot](https://www.komoot.com/) [@christophlingg]
  1. [Konfío](http://konfio.mx) [@uis-rodriguez]
  1. [Kuaishou](https://www.kuaishou.com/) [@zhaoyu89730105]
- 1. [Let's Roam](https://www.letsroam.com/) 
+ 1. [Let's Roam](https://www.letsroam.com/)
  1. [Lime](https://www.limebike.com/) [@cxmcc]
  1. [Living Goods](https://www.livinggoods.org) [@chelule]
- 1. [Lyft](https://www.lyft.com/) 
+ 1. [Lyft](https://www.lyft.com/)
  1. [Maieutical Labs](https://maieuticallabs.it) [@xrmx]
  1. [Myra Labs](http://www.myralabs.com/) [@viksit]
  1. [Nielsen](http://www.nielsen.com/) [@amitNielsen]
@@ -220,14 +221,14 @@ Join our growing community!
  1. [Ona](https://ona.io) [@pld]
  1. [Peak AI](https://www.peak.ai/) [@azhar22k]
  1. [PeopleDoc](https://www.people-doc.com) [@rodo]
- 1. [Popoko VM Games Studio](https://popoko.live) 
- 1. [Preset, Inc.](https://preset.io) 
+ 1. [Popoko VM Games Studio](https://popoko.live)
+ 1. [Preset, Inc.](https://preset.io)
  1. [Pronto Tools](http://www.prontotools.io) [@zkan]
  1. [PubNub](https://pubnub.com) [@jzucker2]
- 1. [QPID Health](http://www.qpidhealth.com/) 
+ 1. [QPID Health](http://www.qpidhealth.com/)
  1. [Qunar](https://www.qunar.com/) [@flametest]
- 1. [Rakuten Viki](https://www.viki.com) 
- 1. [Reward Gateway](https://www.rewardgateway.com) 
+ 1. [Rakuten Viki](https://www.viki.com)
+ 1. [Reward Gateway](https://www.rewardgateway.com)
  1. [Safaricom](https://www.safaricom.co.ke/) [@mmutiso]
  1. [Scoot](https://scoot.co/) [@haaspt]
  1. [ScopeAI](https://www.getscopeai.com) [@iloveluce]
@@ -235,22 +236,22 @@ Join our growing community!
  1. [Shopkick](https://www.shopkick.com) [@LAlbertalli]
  1. [Showmax](https://tech.showmax.com) [@bobek]
  1. [source{d}](https://www.sourced.tech) [@marnovo]
- 1. [Steamroot](https://streamroot.io/) 
+ 1. [Steamroot](https://streamroot.io/)
  1. [Tails.com](https://tails.com) [@alanmcruickshank]
  1. [Tenable](https://www.tenable.com) [@dflionis]
  1. [THE ICONIC](http://theiconic.com.au/) [@ksaagariconic]
  1. [timbr.ai](https://timbr.ai/) [@semantiDan]
- 1. [TME QQMUSIC/WESING](https://www.tencentmusic.com/) 
+ 1. [TME QQMUSIC/WESING](https://www.tencentmusic.com/)
  1. [Tobii](http://www.tobii.com/) [@dwa]
  1. [Tooploox](https://www.tooploox.com/) [@jakubczaplicki]
  1. [TrustMedis](https://trustmedis.com) [@famasya]
- 1. [Twitter](https://twitter.com/) 
+ 1. [Twitter](https://twitter.com/)
  1. [Udemy](https://www.udemy.com/) [@sungjuly]
  1. [VIPKID](https://www.vipkid.com.cn/) [@illpanda]
  1. [WeSure](https://www.wesure.cn/)
  1. [Whale](http://whale.im)
  1. [Windsor.ai](https://www.windsor.ai/) [@octaviancorlade]
- 1. [Yahoo!](https://yahoo.com/) 
+ 1. [Yahoo!](https://yahoo.com/)
  1. [Zaihang](http://www.zaih.com/)
  1. [Zalando](https://www.zalando.com) [@dmigo]
  1. [Zalora](https://www.zalora.com) [@ksaagariconic]
