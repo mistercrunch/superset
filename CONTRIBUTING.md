@@ -75,7 +75,8 @@ little bit helps, and credit will always be given.
     - [Creating a new language dictionary](#creating-a-new-language-dictionary)
   - [Tips](#tips)
     - [Adding a new datasource](#adding-a-new-datasource)
-    - [Improving visualizations](#improving-visualizations)
+    - [Improving visualization plugins](#improving-visualization-plugins)
+    - [Adding visualization plugins](#adding-visualization-plugins)
     - [Adding a DB migration](#adding-a-db-migration)
     - [Merging DB migrations](#merging-db-migrations)
     - [SQL Lab Async](#sql-lab-async)
@@ -87,7 +88,6 @@ little bit helps, and credit will always be given.
     - [Y Axis 1](#y-axis-1)
     - [Y Axis 2](#y-axis-2)
     - [Query](#query)
-    - [Filters Configuration](#filters-configuration)
     - [Chart Options](#chart-options)
     - [Y Axis](#y-axis)
     - [Other](#other)
@@ -540,7 +540,7 @@ If you want to use the same flag in the client code, also add it to the FeatureF
 
 ```typescript
 export enum FeatureFlag {
-  SCOPED_FILTER = 'SCOPED_FILTER',
+  SCOPED_FILTER = "SCOPED_FILTER",
 }
 ```
 
@@ -724,7 +724,7 @@ In TypeScript/JavaScript, the technique is similar:
 we import `t` (simple translation), `tn` (translation containing a number).
 
 ```javascript
-import { t, tn } from '@superset-ui/translation';
+import { t, tn } from "@superset-ui/translation";
 ```
 
 ### Enabling language selection
@@ -801,9 +801,9 @@ Then, [extract strings for the new language](#extracting-new-strings-for-transla
 
    This means it'll register MyDatasource and MyOtherDatasource in superset.my_models module in the source registry.
 
-### Improving visualizations
+### Improving visualization plugins
 
-Superset is working towards a plugin system where new visualizations can be installed as optional npm packages. To achieve this goal, we are not accepting pull requests for new community-contributed visualization types at the moment. However, bugfixes for current visualizations are welcome. To edit the frontend code for visualizations, you will have to check out a copy of [apache-superset/superset-ui](https://github.com/apache-superset/superset-ui):
+Bugfixes for existing visualizations are welcome. To edit the frontend code for visualizations, you will have to check out a copy of [apache-superset/superset-ui](https://github.com/apache-superset/superset-ui):
 
 ```bash
 git clone https://github.com/apache-superset/superset-ui.git
@@ -829,13 +829,12 @@ When `superset-ui` packages are linked with `npm link`, the dev server will auto
 
 Note that every time you do `npm install`, you will lose the symlink(s) and may have to run `npm link` again.
 
+### Adding visualization plugins
 
-### Visualization Plugins
+Superset is continuing to improve the architecture of visualization plugins so that they can be easily built in, and installed from, external repositories. Until this work is completed, we are reluctant to accept new viz plugins into the official `superset-ui` repository or include them as defaults in `incubator-superset`. That said, if you believe you've built a widely useful plugin that would serve the Superset community, pull requests will be looked at on a case-by-base basis.
 
-The topic of authoring new plugins, whether you'd like to contribute
-it back or not has been well documented in the
-[So, You Want to Build a Superset Viz Plugin...](https://preset.io/blog/2020-07-02-hello-world/) blog post
-
+Whether or not you'd like to contribute a new plugin to `superset-ui`, the process of creating one has been documented in the
+[So, You Want to Build a Superset Viz Plugin...](https://preset.io/blog/2020-07-02-hello-world/) blog post.
 
 ### Adding a DB migration
 
@@ -976,22 +975,22 @@ Note not all fields are correctly catagorized. The fields vary based on visualiz
 
 ### Time
 
-| Field                  | Type            | Notes                                 |
-| ---------------------- | --------------- | ------------------------------------- |
-| `druid_time_origin`    | _string_        | The Druid **Origin** widget           |
-| `granularity`          | _string_        | The Druid **Time Granularity** widget |
-| `granularity_sqla`     | _string_        | The SQLA **Time Column** widget       |
-| `time_grain_sqla`      | _string_        | The SQLA **Time Grain** widget        |
-| `time_range`           | _string_        | The **Time range** widget             |
+| Field               | Type     | Notes                                 |
+| ------------------- | -------- | ------------------------------------- |
+| `druid_time_origin` | _string_ | The Druid **Origin** widget           |
+| `granularity`       | _string_ | The Druid **Time Granularity** widget |
+| `granularity_sqla`  | _string_ | The SQLA **Time Column** widget       |
+| `time_grain_sqla`   | _string_ | The SQLA **Time Grain** widget        |
+| `time_range`        | _string_ | The **Time range** widget             |
 
 ### GROUP BY
 
-| Field                     | Type            | Notes                       |
-| ------------------------- | --------------- | --------------------------- |
-| `metrics`                 | _array(string)_ | See Query section           |
-| `order_asc`               | -               | See Query section           |
-| `row_limit`               | -               | See Query section           |
-| `timeseries_limit_metric` | -               | See Query section           |
+| Field                     | Type            | Notes             |
+| ------------------------- | --------------- | ----------------- |
+| `metrics`                 | _array(string)_ | See Query section |
+| `order_asc`               | -               | See Query section |
+| `row_limit`               | -               | See Query section |
+| `timeseries_limit_metric` | -               | See Query section |
 
 ### NOT GROUPED BY
 
@@ -1009,9 +1008,9 @@ Note not all fields are correctly catagorized. The fields vary based on visualiz
 
 ### Y Axis 2
 
-| Field             | Type     | Notes                                               |
-| ----------------- | -------- | --------------------------------------------------- |
-| `metric_2`        | -        | The **Right Axis Metric** widget. See Query section |
+| Field      | Type | Notes                                               |
+| ---------- | ---- | --------------------------------------------------- |
+| `metric_2` | -    | The **Right Axis Metric** widget. See Query section |
 
 ### Query
 
@@ -1030,68 +1029,68 @@ The `metric` (or equivalent) and `timeseries_limit_metric` fields are all compos
 
 ### Chart Options
 
-| Field                 | Type      | Notes                                            |
-| --------------------- | --------- | ------------------------------------------------ |
-| `color_picker`        | _object_  | The **Fixed Color** widget                       |
-| `label_colors`        | _object_  | The **Color Scheme** widget                      |
-| `normalized`          | _boolean_ | The **Normalized** widget                        |
+| Field          | Type      | Notes                       |
+| -------------- | --------- | --------------------------- |
+| `color_picker` | _object_  | The **Fixed Color** widget  |
+| `label_colors` | _object_  | The **Color Scheme** widget |
+| `normalized`   | _boolean_ | The **Normalized** widget   |
 
 ### Y Axis
 
-| Field               | Type            | Notes                        |
-| ------------------- | --------------- | ---------------------------- |
-| `y_axis_2_label`    | _N/A_           | _Deprecated?_                |
-| `y_axis_format`     | _string_        | The **Y Axis Format** widget |
-| `y_axis_zero`       | _N/A_           | _Deprecated?_                |
+| Field            | Type     | Notes                        |
+| ---------------- | -------- | ---------------------------- |
+| `y_axis_2_label` | _N/A_    | _Deprecated?_                |
+| `y_axis_format`  | _string_ | The **Y Axis Format** widget |
+| `y_axis_zero`    | _N/A_    | _Deprecated?_                |
 
 Note the `y_axis_format` is defined under various section for some charts.
 
 ### Other
 
-| Field          | Type     | Notes        |
-| -------------- | -------- | ------------ |
-| `color_scheme` | _string_ |              |
+| Field          | Type     | Notes |
+| -------------- | -------- | ----- |
+| `color_scheme` | _string_ |       |
 
 ### Unclassified
 
-| Field                           | Type  | Notes |
-| ------------------------------- | ----- | ----- |
-| `add_to_dash`                   | _N/A_ |       |
-| `code`                          | _N/A_ |       |
-| `collapsed_fieldsets`           | _N/A_ |       |
-| `comparison type`               | _N/A_ |       |
-| `country_fieldtype`             | _N/A_ |       |
-| `default_filters`               | _N/A_ |       |
-| `entity`                        | _N/A_ |       |
-| `expanded_slices`               | _N/A_ |       |
-| `extra_filters`                 | _N/A_ |       |
-| `filter_immune_slice_fields`    | _N/A_ |       |
-| `filter_immune_slices`          | _N/A_ |       |
-| `flt_col_0`                     | _N/A_ |       |
-| `flt_col_1`                     | _N/A_ |       |
-| `flt_eq_0`                      | _N/A_ |       |
-| `flt_eq_1`                      | _N/A_ |       |
-| `flt_op_0`                      | _N/A_ |       |
-| `flt_op_1`                      | _N/A_ |       |
-| `goto_dash`                     | _N/A_ |       |
-| `import_time`                   | _N/A_ |       |
-| `label`                         | _N/A_ |       |
-| `linear_color_scheme`           | _N/A_ |       |
-| `new_dashboard_name`            | _N/A_ |       |
-| `new_slice_name`                | _N/A_ |       |
-| `num_period_compare`            | _N/A_ |       |
-| `period_ratio_type`             | _N/A_ |       |
-| `perm`                          | _N/A_ |       |
-| `rdo_save`                      | _N/A_ |       |
-| `refresh_frequency`             | _N/A_ |       |
-| `remote_id`                     | _N/A_ |       |
-| `resample_fillmethod`           | _N/A_ |       |
-| `resample_how`                  | _N/A_ |       |
-| `rose_area_proportion`          | _N/A_ |       |
-| `save_to_dashboard_id`          | _N/A_ |       |
-| `schema`                        | _N/A_ |       |
-| `series`                        | _N/A_ |       |
-| `show_bubbles`                  | _N/A_ |       |
-| `slice_name`                    | _N/A_ |       |
-| `timed_refresh_immune_slices`   | _N/A_ |       |
-| `userid`                        | _N/A_ |       |
+| Field                         | Type  | Notes |
+| ----------------------------- | ----- | ----- |
+| `add_to_dash`                 | _N/A_ |       |
+| `code`                        | _N/A_ |       |
+| `collapsed_fieldsets`         | _N/A_ |       |
+| `comparison type`             | _N/A_ |       |
+| `country_fieldtype`           | _N/A_ |       |
+| `default_filters`             | _N/A_ |       |
+| `entity`                      | _N/A_ |       |
+| `expanded_slices`             | _N/A_ |       |
+| `extra_filters`               | _N/A_ |       |
+| `filter_immune_slice_fields`  | _N/A_ |       |
+| `filter_immune_slices`        | _N/A_ |       |
+| `flt_col_0`                   | _N/A_ |       |
+| `flt_col_1`                   | _N/A_ |       |
+| `flt_eq_0`                    | _N/A_ |       |
+| `flt_eq_1`                    | _N/A_ |       |
+| `flt_op_0`                    | _N/A_ |       |
+| `flt_op_1`                    | _N/A_ |       |
+| `goto_dash`                   | _N/A_ |       |
+| `import_time`                 | _N/A_ |       |
+| `label`                       | _N/A_ |       |
+| `linear_color_scheme`         | _N/A_ |       |
+| `new_dashboard_name`          | _N/A_ |       |
+| `new_slice_name`              | _N/A_ |       |
+| `num_period_compare`          | _N/A_ |       |
+| `period_ratio_type`           | _N/A_ |       |
+| `perm`                        | _N/A_ |       |
+| `rdo_save`                    | _N/A_ |       |
+| `refresh_frequency`           | _N/A_ |       |
+| `remote_id`                   | _N/A_ |       |
+| `resample_fillmethod`         | _N/A_ |       |
+| `resample_how`                | _N/A_ |       |
+| `rose_area_proportion`        | _N/A_ |       |
+| `save_to_dashboard_id`        | _N/A_ |       |
+| `schema`                      | _N/A_ |       |
+| `series`                      | _N/A_ |       |
+| `show_bubbles`                | _N/A_ |       |
+| `slice_name`                  | _N/A_ |       |
+| `timed_refresh_immune_slices` | _N/A_ |       |
+| `userid`                      | _N/A_ |       |
