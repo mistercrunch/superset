@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 black==19.10b0
-coverage==4.5.3
+coverage==5.2.1
 flask-cors==3.0.7
 flask-testing==0.8.0
 ipdb==0.12
