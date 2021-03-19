@@ -46,7 +46,7 @@ idna==2.9                 # via email-validator
 importlib-metadata==1.6.0  # via jsonschema, kombu, markdown
 isodate==0.6.0            # via apache-superset (setup.py)
 itsdangerous==1.1.0       # via flask, flask-wtf
-jinja2==2.11.2            # via flask, flask-babel
+jinja2==2.11.3            # via flask, flask-babel
 jsonschema==3.2.0         # via flask-appbuilder
 kombu==4.6.8              # via celery
 mako==1.1.2               # via alembic
