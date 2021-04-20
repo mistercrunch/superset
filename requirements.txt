@@ -63,7 +63,7 @@ parsedatetime==2.5        # via apache-superset (setup.py)
 pathlib2==2.3.5           # via apache-superset (setup.py)
 polyline==1.4.0           # via apache-superset (setup.py)
 prison==0.1.3             # via flask-appbuilder
-py==1.8.1                 # via retry
+py==1.10.0                 # via retry
 pyarrow==0.17.0           # via apache-superset (setup.py)
 pycparser==2.20           # via cffi
 pyjwt==1.7.1              # via flask-appbuilder, flask-jwt-extended
