@@ -1304,6 +1304,56 @@ The following configuration settings are available for async queries (see config
 
 More information on the async query feature can be found in [SIP-39](https://github.com/apache/superset/issues/9190).
 
+## UI Overrides
+For whatever reason, people may want to customize any area of the
+frontend. Some common use cases:
+
+* Alter the nav (menu) bar, adding or removing items
+* Inject a "well" or info bubble
+* Point to internal, more specific documentation instead of the Superset docs
+* Altering a modal
+* Replace a page
+* ...
+
+How to add an injection point / overridable section in the existing code?
+
+### Before
+```jsx
+<div>
+  <Button>Override Me!</Button>
+</div>
+```
+
+### After
+```jsx
+import UiOverride from 'src/components/UiOverride';
+
+<div>
+  <UiOverride
+    name="navbar.rightSection.leftOf"
+    default={
+      <Button>Override Me!</Button>
+    }
+  />
+</div>
+```
+
+How to define your overrides in your repo/environment?
+
+`superset-frontend/src/setup/setupUiOverrides.ts`
+```js
+import { getUiOverrideRegistry } from '@superset-ui/core';
+import UpgradeButton from './upgradeButton';
+
+const uiOverrideRegistry = getUiOverrideRegistry();
+export default function setupUiOverrides() {
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Call `uiOverrideRegistry.set` to override things in your environment
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  uiOverrideRegistry.set('navbar.rightSection.leftOf', UpgradeButton);
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+}
+```
 ## Chart Parameters
 
 Chart parameters are stored as a JSON encoded string the `slices.params` column and are often referenced throughout the code as form-data. Currently the form-data is neither versioned nor typed as thus is somewhat free-formed. Note in the future there may be merit in using something like [JSON Schema](https://json-schema.org/) to both annotate and validate the JSON object in addition to using a Mypy `TypedDict` (introduced in Python 3.8) for typing the form-data in the backend. This section serves as a potential primer for that work.
