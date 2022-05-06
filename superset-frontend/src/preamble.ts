@@ -27,6 +27,7 @@ import setupColors from './setup/setupColors';
 import setupFormatters from './setup/setupFormatters';
 import setupDashboardComponents from './setup/setupDasboardComponents';
 import { BootstrapUser, User } from './types/bootstrapTypes';
+import setupUiOverrides from 'src/setup/setupUiOverrides';
 
 if (process.env.WEBPACK_MODE === 'development') {
   setHotLoaderConfig({ logLevel: 'debug', trackTailUpdates: false });
@@ -96,3 +97,5 @@ if (bootstrapData.user?.isActive) {
     });
   });
 }
+
+setupUiOverrides();

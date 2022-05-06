@@ -25,10 +25,12 @@ import {
   css,
   SupersetTheme,
   SupersetClient,
+  getUiOverrideRegistry,
 } from '@superset-ui/core';
 import { Tooltip } from 'src/components/Tooltip';
 import { Link } from 'react-router-dom';
 import Icons from 'src/components/Icons';
+import UiOverride from 'src/components/UiOverride';
 import findPermission, { isUserAdmin } from 'src/dashboard/util/findPermission';
 import { useSelector } from 'react-redux';
 import { UserWithPermissionsAndRoles } from 'src/types/bootstrapTypes';
@@ -246,6 +248,7 @@ const RightMenu = ({
 
   return (
     <StyledDiv align={align}>
+      <UiOverride key="navbar.rightSection.leftOf" />
       {canDatabase && (
         <DatabaseModal
           onHide={handleOnHideModal}
