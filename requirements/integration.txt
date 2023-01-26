@@ -5,13 +5,15 @@
 #
 #    pip-compile-multi
 #
-backports.entry-points-selectable==1.1.0
+backports-entry-points-selectable==1.1.0
     # via virtualenv
+build==0.10.0
+    # via pip-tools
 cfgv==3.3.0
     # via pre-commit
 click==8.0.4
     # via
-    #   -r requirements/integration.in
+    #   -r integration.in
     #   pip-compile-multi
     #   pip-tools
 distlib==0.3.2
@@ -25,25 +27,27 @@ identify==2.2.13
 nodeenv==1.6.0
     # via pre-commit
 packaging==21.3
-    # via tox
-pep517==0.11.0
-    # via pip-tools
-pip-compile-multi==2.4.1
-    # via -r requirements/integration.in
-pip-tools==6.2.0
+    # via
+    #   build
+    #   tox
+pip-compile-multi==2.6.1
+    # via -r integration.in
+pip-tools==6.12.1
     # via pip-compile-multi
 platformdirs==2.2.0
     # via virtualenv
 pluggy==0.13.1
     # via tox
 pre-commit==2.14.0
-    # via -r requirements/integration.in
+    # via -r integration.in
 py==1.10.0
     # via
-    #   -r requirements/integration.in
+    #   -r integration.in
     #   tox
 pyparsing==3.0.6
     # via packaging
+pyproject-hooks==1.0.0
+    # via build
 pyyaml==5.4.1
     # via pre-commit
 six==1.16.0
@@ -54,12 +58,10 @@ toml==0.10.2
     # via
     #   pre-commit
     #   tox
-tomli==1.2.1
-    # via pep517
 toposort==1.6
     # via pip-compile-multi
 tox==3.24.1
-    # via -r requirements/integration.in
+    # via -r integration.in
 virtualenv==20.7.2
     # via
     #   pre-commit
