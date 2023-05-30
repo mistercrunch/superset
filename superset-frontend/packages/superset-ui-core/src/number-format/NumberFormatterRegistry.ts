@@ -65,12 +65,19 @@ export default class NumberFormatterRegistry extends RegistryWithDefaultKey<
     if (this.has(targetFormat)) {
       return super.get(targetFormat) as NumberFormatter;
     }
-
-    // Create new formatter if does not exist
-    const formatter = createD3NumberFormatter({
-      formatString: targetFormat,
-      locale: this.d3Format,
-    });
+    let formatter;
+    if (isJSONObject(formatString)) {
+      formatter = createD3NumberFormatter({
+        formatString: targetFormat,
+        locale: this.d3Format,
+      });
+    } else {
+      // Create new formatter if does not exist
+      formatter = createD3NumberFormatter({
+        formatString: targetFormat,
+        locale: this.d3Format,
+      });
+    }
     this.registerValue(targetFormat, formatter);
 
     return formatter;
