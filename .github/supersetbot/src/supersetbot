@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+import getCLI from './cli.js';
+import Context from './context.js';
+
+const envContext = new Context('CLI');
+const cli = getCLI(envContext);
+
+cli.parse();
