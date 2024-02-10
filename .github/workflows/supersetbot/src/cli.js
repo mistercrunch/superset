@@ -50,7 +50,7 @@ if (envContext.source === 'GHA') {
 }
 
 // Function to parse a raw string with Commander
-function parseRawStringWithCommander(rawString) {
+export function runCommandFromAction(rawString) {
   // Split the raw string into arguments and prepend with dummy values for Node and script paths
   const args = rawString.split(/\s+/);
   const simulatedArgv = ['node', 'script.js', ...args];
