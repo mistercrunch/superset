@@ -15,7 +15,6 @@ program
   });
 
 const wrap = (f) => {
-  console.log('WRAP');
   const { verbose } = program.opts();
   return commands.commandWrapper(f, verbose);
 };
@@ -45,7 +44,7 @@ if (envContext.source === 'GHA') {
   program
     .command('unlabel <issueNumber> <label>')
     .action((issueNumber, label) => {
-      wrap(commands.label)(issueNumber, label, envContext);
+      wrap(commands.unlabel)(issueNumber, label, envContext);
     });
   program.parse(process.argv);
 }
