@@ -9,7 +9,8 @@ export async function runCommandFromGithubAction(rawCommand) {
   // Make rawCommand look like argv
   const cmd = rawCommand.trim().replace('@supersetbot', 'supersetbot');
   const args = parseArgsStringToArgv(cmd);
-  const resp = await cli.parseAsync(['node', ...args]);
+  await cli.parseAsync(['node', ...args]);
+  envContext.onDone();
 }
 
 const supersetbot = {

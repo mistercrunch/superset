@@ -7,19 +7,19 @@ function unPackRepo(longRepo) {
 }
 
 function isLabelProtected(label) {
-  return PROTECTED_LABEL_PATTERNS.some(pattern => new RegExp(pattern).test(label));
+  return PROTECTED_LABEL_PATTERNS.some((pattern) => new RegExp(pattern).test(label));
 }
 
 async function checkIfUserInTeam(username, team, context, verbose) {
-  const [org, team_slug] = team.split('/');
+  const [org, teamSlug] = team.split('/');
   const wrapped = context.commandWrapper({
     func: context.github.teams.getMembershipForUserInOrg,
-    errorMsg: "User is not authorized to alter protected labels.",
+    errorMsg: `User "${username}" is not authorized to alter protected labels.`,
     verbose,
   });
   const resp = await wrapped({
     org,
-    team_slug,
+    team_slug: teamSlug,
     username,
   });
   return resp?.data?.state === 'active';
@@ -29,35 +29,41 @@ async function checkIfUserInTeam(username, team, context, verbose) {
 // Individual commands
 // -------------------------------------
 export async function label(longRepo, issueNumber, label, context, actor = null, verbose = false) {
+  let hasPerm = true;
   if (actor && isLabelProtected(label)) {
-    checkIfUserInTeam(actor, COMMITTER_TEAM, context, verbose);
+    hasPerm = await checkIfUserInTeam(actor, COMMITTER_TEAM, context, verbose);
   }
-  const addLabelWrapped = context.commandWrapper({
-    func: context.github.rest.issues.addLabels,
-    successMsg:`SUCCESS: label "${label}" added to issue ${issueNumber}`,
-    verbose,
-  });
-  await addLabelWrapped({
-    ...unPackRepo(longRepo),
-    issue_number: issueNumber,
-    labels: [label],
-  });
+  if (hasPerm) {
+    const addLabelWrapped = context.commandWrapper({
+      func: context.github.rest.issues.addLabels,
+      successMsg: `SUCCESS: label "${label}" added to issue ${issueNumber}`,
+      verbose,
+    });
+    await addLabelWrapped({
+      ...unPackRepo(longRepo),
+      issue_number: issueNumber,
+      labels: [label],
+    });
+  }
 }
 
-export async function unlabel(longRepo, issueNumber, label, context, actor = null, verbose = false) {
+export async function unlabel(repo, issueNumber, label, context, actor = null, verbose = false) {
+  let hasPerm = true;
   if (actor && isLabelProtected(label)) {
-    checkIfUserInTeam(actor, COMMITTER_TEAM, context, verbose);
+    const hasPerm = await checkIfUserInTeam(actor, COMMITTER_TEAM, context, verbose);
   }
-  const addLabelWrapped = context.commandWrapper({
-    func: context.github.rest.issues.removeLabel,
-    successMsg:`SUCCESS: label "${label}" removed from issue ${issueNumber}`,
-    verbose,
-  });
-  await addLabelWrapped({
-    ...unPackRepo(longRepo),
-    issue_number: issueNumber,
-    name: label,
-  });
+  if (hasPerm) {
+    const addLabelWrapped = context.commandWrapper({
+      func: context.github.rest.issues.removeLabel,
+      successMsg: `SUCCESS: label "${label}" removed from issue ${issueNumber}`,
+      verbose,
+    });
+    await addLabelWrapped({
+      ...unPackRepo(repo),
+      issue_number: issueNumber,
+      name: label,
+    });
+  }
 }
 
 export async function assignOrgLabel(repo, issueNumber, context) {
@@ -65,7 +71,6 @@ export async function assignOrgLabel(repo, issueNumber, context) {
     ...unPackRepo(repo),
     issue_number: issueNumber,
   });
-
   const username = issue.data.user.login;
   const orgs = await context.github.orgs.listForUser({ username });
   const orgNames = orgs.data.map((v) => v.login);

@@ -29,10 +29,10 @@ export default function getCLI(envContext) {
   program.command('orglabel')
     .description('Add an org label based on the author')
     .option(...issueOptionParams)
-    .action(async function (commandOptions) {
+    .action(async function () {
       const opts = envContext.processOptions(this, ['issue', 'repo']);
       const wrapped = envContext.commandWrapper({
-        func: commands.unlabel,
+        func: commands.assignOrgLabel,
         successMsg: 'SUCCESS: added the right labels',
         errorMsg: 'FAILED at stuff',
         verbose: opts.verbose,

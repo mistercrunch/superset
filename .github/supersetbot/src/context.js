@@ -2,11 +2,10 @@ import { Octokit } from '@octokit/rest';
 
 class Context {
   constructor(source) {
-
+    this.hasErrors = false;
     if (!process.env.GITHUB_TOKEN) {
       const msg = 'GITHUB_TOKEN is not set. Please set the GITHUB_TOKEN environment variable.';
       this.logError(msg);
-      process.exit(1);
     }
     this.github = new Octokit({ auth: `token ${process.env.GITHUB_TOKEN}` });
 
@@ -15,28 +14,33 @@ class Context {
     this.options = {};
     this.errorLogs = [];
     this.logs = [];
+    this.hasError = false;
   }
+
   requireOption(optionName, options) {
     const optionValue = options[optionName];
     if (optionValue === undefined || optionValue === null) {
       this.logError(`🔴 ERROR: option [${optionName}] is required`);
-      process.exit(1);
+      this.hasError = true;
     }
   }
+
   requireOptions(optionNames, options) {
     optionNames.forEach((optionName) => {
       this.requireOption(optionName, options);
     });
   }
+
   log(msg) {
     console.log(msg);
     this.logs.push(msg);
   }
+
   processOptions(command, requiredOptions) {
     const raw = command.parent?.rawArgs;
     this.command = '???';
     if (raw) {
-      this.command = raw.map(s => s.includes(' ') ? `"${s}"` : s).join(' ').replace('node ', '');
+      this.command = raw.map((s) => (s.includes(' ') ? `"${s}"` : s)).join(' ').replace('node ', '');
     }
     this.options = { ...command.opts(), ...command.parent.opts() };
     this.requireOptions(requiredOptions, this.options);
@@ -49,48 +53,47 @@ class Context {
 
     return this.options;
   }
+
   logError(msg) {
+    this.hasErrors = true;
     console.error(msg);
     this.errorLogs.push(msg);
   }
 
-  preCommand() {
-  }
-
-  commandWrapper({func, successMsg, errorMsg = null, verbose = false, exitOnError = true}) {
+  commandWrapper({
+    func, successMsg, errorMsg = null, verbose = false,
+  }) {
     return async (...args) => {
-      this.preCommand();
       let resp;
       try {
         resp = await func(...args);
+        if (verbose) {
+          console.log(resp);
+        }
       } catch (error) {
         if (errorMsg) {
           this.logError(`🔴 ERROR: ${errorMsg}`);
         } else {
           this.logError(`🔴 ERROR: ${error}`);
         }
-        if (exitOnError) {
-          process.exit(1);
-        }
       }
       if (successMsg) {
         this.log(`🟢 ${successMsg}`);
       }
-      await this.onDone();
       return resp;
     };
   }
-  reconstructCommand() {
-  }
-  async onDone(msg) {
+
+  async onDone() {
     if (this.source === 'GHA') {
-      const [owner, repo] = this.repo.split('/')
       let body = '';
-      body += `> \`${this.command}\`\n\n`
-      body += "```\n"
-      body += this.logs.join('\n')
-      body += this.errorLogs.join('\n')
-      body += "```"
+      body += `> \`${this.command}\`\n\n`;
+      body += '```\n';
+      body += this.logs.join('\n');
+      body += this.errorLogs.join('\n');
+      body += '```';
+
+      const [owner, repo] = this.repo.split('/');
       await this.github.rest.issues.createComment({
         owner,
         repo,
@@ -99,7 +102,6 @@ class Context {
       });
     }
   }
-
 }
 
 export default Context;

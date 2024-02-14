@@ -11,4 +11,4 @@ export const PROTECTED_LABEL_PATTERNS = [
   'protected.*',
   '^v\\d+(\\.\\d+)*$',
 ];
-export const COMMITTER_TEAM = "apache/superset-committers";
+export const COMMITTER_TEAM = 'apache/superset-committers';
