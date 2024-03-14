@@ -5,9 +5,8 @@ updates:
     directory: "/requirements"
     schedule:
       interval: "daily"
-      time: "20:00"
+      time: "00:00"
     labels:
       - pip
       - dependabot
       - testing
-    open-pull-requests-limit: 30
