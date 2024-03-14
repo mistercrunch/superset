@@ -5,6 +5,7 @@ updates:
     directory: "/requirements"
     schedule:
       interval: "daily"
+      time: "20:00"
     labels:
       - pip
       - dependabot
