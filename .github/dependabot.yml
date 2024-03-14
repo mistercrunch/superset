@@ -8,4 +8,5 @@ updates:
     labels:
       - pip
       - dependabot
+      - testing
     open-pull-requests-limit: 30
