@@ -15,6 +15,36 @@
 # specific language governing permissions and limitations
 # under the License.
 # pylint: disable=too-many-lines
+
+"""
+This module contains the base classes and models for all datasets
+
+The ORM model definitions for Dataset / Columns / Metrics are all defined here, as
+well as methods dealing with retriving/syncing this stuff.
+
+When opening the dataset editor in the UI, the backend will use these models to populate
+the editor with the correct metadata.
+
+In many ways, it represents what Superset knows about the dataset, and how it
+can be queried, including things like:
+- secrets/creds to access the database
+- SQL/jinja in case of "virtual" datasets
+- list of columns in the dataset
+- metric-related expressions
+- calculated dimensions
+- pretty labels and long description
+- [as of recently] folder structure to organize metrics/dimensions
+- dataset-specific configuration around caching, permissions, ... (see the settings tab
+  in the dataset editor)
+
+On the method side:
+- hooks to get list-of-values to populate filter boxes
+- a way to run sql and get a dataframe back
+- methods to interogate the database for metadata and update the dataset config, ...
+- ...
+
+"""
+
 from __future__ import annotations
 
 import builtins
