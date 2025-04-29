@@ -20,7 +20,7 @@
 NOTE: this class could encapsulate all of the Malloy-specific stuff
 it requires having a dbapi-copatible connection and SQLAlchemy dialect
 both of which are pretty easy to implement / mock, we've created many for oddball
-databases in the past that don't have limited SQL support...
+databases in the past that have limited SQL support...
 -------
 the base class is in superset/db_engine_specs/base.py, and as it is today, it allows
 all sorts of hooks (methods, class-level props, ...) to be overridden and handle things
@@ -31,15 +31,15 @@ in custom ways, stuff like
 - data fetching, low level cursor handling, ...
 - time-grain aggregate generation (think DATE_TRUNC)
 
-the general assumption is that we're dealing with a SQL-speaking database, but could
-be extended to support other types of engines (e.g. NoSQL, etc.), or just as a general
-placeholder for any routines that are Malloy-specific. This allows compartmentalizing
-all the Malloy-specific stuff in one place, and not having to write `if
-engine.name == "malloy"` everywhere in the codebase.
+the general assumption here is that we're dealing with a SQL-speaking database, but
+could be extended to support other types of engines (e.g. NoSQL, etc.), or just as
+a general placeholder for any routines that are Malloy-specific. This allows
+compartmentalizing all the Malloy-specific stuff in one place, and not having
+to write `if engine.name == "malloy"` everywhere in the codebase.
 
 note that the SQL generation logic lives elsewhere in the codebase (will try and
 give some pointers to that later), and is not part of this class. But we
-could add things in the codebase that would allow us to say something like
+could add branching in the codebase that would allow us to say something like
 ```python
 if not database.db_engine_spec.engine.supports_sql:
     database.db_engine_spec.fetch_data_without_using_sql(dimensional_query_definition)
@@ -53,5 +53,5 @@ from superset.db_engine_specs.base import BaseEngineSpec
 
 
 class MalloyEngineSpec(BaseEngineSpec):
-    engine = "mallow"
+    engine = "malloy"
     engine_name = "Malloy"
