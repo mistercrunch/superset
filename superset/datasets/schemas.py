@@ -276,6 +276,7 @@ class ImportV1DatasetSchema(Schema):
     def fix_extra(self, data: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
         """
         Fix for extra initially being exported as a string.
+        Also normalize examples:// URLs for validation.
         """
         if isinstance(data.get("extra"), str):
             try:
@@ -283,6 +284,12 @@ class ImportV1DatasetSchema(Schema):
                 data["extra"] = json.loads(extra) if extra.strip() else None
             except ValueError:
                 data["extra"] = None
+
+        # Normalize examples:// URLs before validation
+        if data.get("data") and isinstance(data["data"], str):
+            from superset.examples.helpers import normalize_example_data_url
+
+            data["data"] = normalize_example_data_url(data["data"])
 
         return data
 
@@ -305,7 +312,7 @@ class ImportV1DatasetSchema(Schema):
     metrics = fields.List(fields.Nested(ImportV1MetricSchema))
     version = fields.String(required=True)
     database_uuid = fields.UUID(required=True)
-    data = fields.URL()
+    data = fields.URL(allow_none=True)
     is_managed_externally = fields.Boolean(allow_none=True, dump_default=False)
     external_url = fields.String(allow_none=True)
     normalize_columns = fields.Boolean(load_default=False)
