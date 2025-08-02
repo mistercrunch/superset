@@ -120,6 +120,78 @@ python comprehensive_test_runner.py MCP_CHART_TEST_PLAN.md 5  # Run first 5 test
 
 See the [MCP Integration Test README](../../../tests/integration_tests/mcp_service/README.md) for detailed test automation instructions including ngrok setup for Claude API testing.
 
+## 🚀 Running MCP on GitHub Codespaces
+
+GitHub Codespaces provides the fastest way to get a fully-loaded, interactive Superset development environment with MCP service ready to go out of the box. For general Codespaces setup, see the [official Superset Codespaces documentation](https://superset.apache.org/docs/contributing/development/#github-codespaces-cloud-development).
+
+### One-Click Setup
+
+Use this prepopulated link to create a Codespace with MCP preconfigured:
+
+[**🚀 Launch Superset MCP Codespace**](https://github.com/codespaces/new?skip_quickstart=true&machine=standardLinux32gb&repo=1011093596&ref=mcp_service_amin_dev&devcontainer_path=.devcontainer%2Fwith-mcp%2Fdevcontainer.json&geo=UsWest)
+
+<img src="https://github.com/user-attachments/assets/e2c97c10-6432-4741-9d31-475cdbb5cc11" alt="GitHub Codespaces creation form with MCP configuration preselected" width="600" />
+
+This link:
+- Uses the `mcp_service_amin_dev` branch with all MCP features
+- Selects the `with-mcp` devcontainer configuration
+- Chooses a 32GB machine for optimal performance
+- Skips the quickstart to get you coding faster
+
+### What You Get
+
+Once your Codespace launches (takes ~5-10 minutes), you'll have:
+- ✅ Superset running on port 9001
+- ✅ MCP service running on port 5008
+- ✅ PostgreSQL database with sample data
+- ✅ Redis for caching
+- ✅ All Python and Node dependencies installed
+- ✅ Pre-configured environment ready for development
+
+![GitHub Codespace with MCP service running on port 5008](https://github.com/user-attachments/assets/a47c8960-58b9-440a-8897-5dbab3315c09)
+
+### Exposing MCP for External Access
+
+To connect Claude Desktop or ModelContextChat.com to your Codespace MCP service:
+
+1. **Make Port 5008 Public**:
+   - Go to the **PORTS** tab in your Codespace
+   - Find port **5008** (MCP Service)
+   - Right-click and select **Port Visibility** → **Public**
+   - Copy the public URL (e.g., `https://your-codespace-5008.app.github.dev`)
+
+2. **Connect Your Client**:
+
+   **For ModelContextChat.com**:
+   - Follow the [ModelContextChat setup](#-using-modelcontextchatcom-web-based-mcp-client) below
+   - Use your Codespace URL ending with `/mcp/`
+
+   **For Claude Desktop**:
+   - Configure with your public MCP URL
+   - Use appropriate authentication if configured
+
+### Codespace Configuration Options
+
+The repository includes two devcontainer configurations:
+
+1. **Standard Development** (`.devcontainer/default/devcontainer.json`):
+   - Basic Superset development environment
+   - No MCP service by default
+
+2. **With MCP** (`.devcontainer/with-mcp/devcontainer.json`):
+   - Includes MCP service startup
+   - Preconfigured for MCP development
+   - Recommended for MCP-related work
+
+### Tips for Codespaces
+
+- **Performance**: The 32GB machine is recommended for smooth operation
+- **Persistence**: Your Codespace preserves state between sessions
+- **Port Forwarding**: All necessary ports are automatically forwarded
+- **Extensions**: VS Code extensions are preconfigured for Python/TypeScript development
+
+> ⚠️ **Security Reminder**: Only make ports public for development/testing. Never expose production data through public Codespace ports.
+
 ## 🌐 Using ModelContextChat.com (Web-based MCP Client)
 
 ![Screenshot of Interacting with a model + MCP in ModelContextChat.com](https://github.com/user-attachments/assets/19a51bbe-7157-4c70-a9e2-218315c2c1d1)
