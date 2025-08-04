@@ -52,8 +52,11 @@ def _create_auth_provider() -> Optional[BearerAuthProvider]:
     Uses app.config["MCP_AUTH_FACTORY"](app) pattern as suggested by @dpgaspar.
     """
     try:
-        from superset import app as superset_app
+        from superset.app import create_app
         from superset.mcp_service.config import DEFAULT_CONFIG
+
+        # Create Flask app instance to access config
+        superset_app = create_app()
 
         # Apply defaults to app.config if not already set
         for key, value in DEFAULT_CONFIG.items():
@@ -79,53 +82,80 @@ mcp = FastMCP(
     instructions="""
 You are connected to the Apache Superset MCP (Model Context Protocol) service.
 This service provides programmatic access to Superset dashboards, charts, datasets,
-and instance metadata via a set of high-level tools.
+SQL Lab, and instance metadata via a comprehensive set of tools.
 
-Available tools include:
-- list_dashboards: Dashboard listing with advanced filters (use 'filters' for
-  advanced queries, 1-based pagination)
-- get_dashboard_info: Get detailed information about a dashboard by its integer ID
-- get_superset_instance_info: Get high-level statistics and metadata about the
-  Superset instance (no arguments)
-- get_dashboard_available_filters: List all available dashboard filter fields and
-  operators
-- list_datasets: DatasetInfo listing with advanced filters (use 'filters' for
-  advanced queries, 1-based pagination)
-- get_dataset_info: Get detailed information about a dataset by its integer ID
-- get_dataset_available_filters: List all available dataset filter fields and
-  operators
-- list_charts: Chart listing with advanced filters (use 'filters' for advanced
-  queries, 1-based pagination)
-- get_chart_info: Get detailed information about a chart by its integer ID
-- get_chart_preview: Get a visual preview of a chart with image URL for display
-- get_chart_data: Get the underlying data for a chart in text-friendly format
-- get_chart_available_filters: List all available chart filter fields and operators
-- generate_explore_link: Generate a pre-configured explore URL with specified
-  dataset, metrics, dimensions, and filters for direct navigation
+Available tools:
 
+Dashboard Management:
+- list_dashboards: List dashboards with advanced filters (1-based pagination)
+- get_dashboard_info: Get detailed dashboard information by ID
+- get_dashboard_available_filters: List available dashboard filter fields/operators
+- generate_dashboard: Automatically create a dashboard from datasets with AI
+- add_chart_to_existing_dashboard: Add a chart to an existing dashboard
+
+Dataset Management:
+- list_datasets: List datasets with advanced filters (1-based pagination)
+- get_dataset_info: Get detailed dataset information by ID
+- get_dataset_available_filters: List available dataset filter fields/operators
+
+Chart Management:
+- list_charts: List charts with advanced filters (1-based pagination)
+- get_chart_info: Get detailed chart information by ID
+- get_chart_preview: Get a visual preview of a chart with image URL
+- get_chart_data: Get underlying chart data in text-friendly format
+- get_chart_available_filters: List available chart filter fields/operators
+- generate_chart: Create a new chart with AI assistance
+- update_chart: Update existing chart configuration
+- update_chart_preview: Update chart and get preview in one operation
+
+SQL Lab Integration:
+- execute_sql: Execute SQL queries and get results
+- open_sql_lab_with_context: Generate SQL Lab URL with pre-filled query
+
+Explore & Analysis:
+- generate_explore_link: Create pre-configured explore URL with dataset/metrics/filters
+
+System Information:
+- get_superset_instance_info: Get instance-wide statistics and metadata
+
+Available Resources:
+- superset://instance/metadata: Access instance configuration and metadata
+- superset://chart/templates: Access chart configuration templates
+
+Available Prompts:
+- superset_quickstart: Interactive guide for getting started with the MCP service
+- create_chart_guided: Step-by-step chart creation wizard
 
 General usage tips:
-- For listing tools, 'page' is 1-based (first page is 1)
-- Use 'filters' to narrow down results (see get_dashboard_available_filters,
-  get_dataset_available_filters, get_chart_available_filters for supported fields
-  and operators)
-- Use get_dashboard_info, get_dataset_info, get_chart_info with a valid ID from
-  the listing tools
-- For instance-wide stats, call get_superset_instance_info with no arguments
+- All listing tools use 1-based pagination (first page is 1)
+- Use 'filters' parameter for advanced queries (see *_available_filters tools)
+- IDs can be integer or UUID format where supported
 - All tools return structured, Pydantic-typed responses
+- Chart previews are served as PNG images via custom screenshot endpoints
 
-If you are unsure which tool to use, start with list_dashboards or
-get_superset_instance_info for a summary of the Superset instance.
+If you are unsure which tool to use, start with get_superset_instance_info
+or use the superset_quickstart prompt for an interactive guide.
 """,
 )
 
 # Import all tool modules to ensure registration (must be after mcp is defined)
 # These imports register the tools with the mcp instance
+import superset.mcp_service.chart.prompts  # noqa: F401, E402
+import superset.mcp_service.chart.resources  # noqa: F401, E402
 import superset.mcp_service.chart.tool  # noqa: F401, E402
+import superset.mcp_service.dashboard.prompts  # noqa: F401, E402
+import superset.mcp_service.dashboard.resources  # noqa: F401, E402
 import superset.mcp_service.dashboard.tool  # noqa: F401, E402
+import superset.mcp_service.dataset.prompts  # noqa: F401, E402
+import superset.mcp_service.dataset.resources  # noqa: F401, E402
 import superset.mcp_service.dataset.tool  # noqa: F401, E402
 import superset.mcp_service.explore.tool  # noqa: F401, E402
 import superset.mcp_service.sql_lab.tool  # noqa: F401, E402
+
+# Import prompts and resources modules (must be after mcp is defined)
+# These imports register the prompts and resources with the mcp instance
+import superset.mcp_service.system.prompts  # noqa: F401, E402
+import superset.mcp_service.system.resources  # noqa: F401, E402
 import superset.mcp_service.system.tool  # noqa: F401, E402
 
 
@@ -155,112 +185,109 @@ async def serve_chart_screenshot(chart_id: str) -> Any:  # noqa: C901
             )
 
     try:
-        from flask import g
+        from flask import current_app, g
 
-        from superset import app as superset_app
         from superset.daos.chart import ChartDAO
         from superset.mcp_service.pooled_screenshot import PooledChartScreenshot
         from superset.utils.urls import get_url_path
 
-        # Set up Flask app context for database access
-        with superset_app.app_context():
-            # Create a mock user context - you might need to adjust this
-            from flask_appbuilder.security.sqla.models import User
+        # Use current Flask app context for database access
+        # Note: This assumes we're already in a Flask app context
+        superset_app = current_app
 
-            from superset.extensions import db
+        # Create a mock user context - you might need to adjust this
+        from flask_appbuilder.security.sqla.models import User
 
-            # Get username from config, fallback to "admin"
-            username = superset_app.config.get("MCP_ADMIN_USERNAME", "admin")
-            mock_user = db.session.query(User).filter_by(username=username).first()
-            if mock_user:
-                g.user = mock_user
+        from superset.extensions import db
+
+        # Get username from config, fallback to "admin"
+        username = superset_app.config.get("MCP_ADMIN_USERNAME", "admin")
+        mock_user = db.session.query(User).filter_by(username=username).first()
+        if mock_user:
+            g.user = mock_user
+        else:
+            logger.warning(f"User '{username}' not found, screenshot may fail")
+
+        # Find the chart
+        chart = None
+        try:
+            if chart_id.isdigit():
+                chart = ChartDAO.find_by_id(int(chart_id))
             else:
-                logger.warning(f"User '{username}' not found, screenshot may fail")
+                # Try UUID lookup using DAO flexible method
+                chart = ChartDAO.find_by_id(chart_id, id_column="uuid")
+        except Exception as e:
+            logger.error(f"Error looking up chart {chart_id}: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail=(f"Database error while looking up chart {chart_id}: {str(e)}"),
+            ) from e
 
-            # Find the chart
-            chart = None
-            try:
-                if chart_id.isdigit():
-                    chart = ChartDAO.find_by_id(int(chart_id))
-                else:
-                    # Try UUID lookup using DAO flexible method
-                    chart = ChartDAO.find_by_id(chart_id, id_column="uuid")
-            except Exception as e:
-                logger.error(f"Error looking up chart {chart_id}: {e}")
-                raise HTTPException(
-                    status_code=500,
-                    detail=(
-                        f"Database error while looking up chart {chart_id}: {str(e)}"
-                    ),
-                ) from e
+        if not chart:
+            logger.warning(f"Chart {chart_id} not found in database")
+            raise HTTPException(
+                status_code=404,
+                detail=(
+                    f"Chart with ID '{chart_id}' not found. "
+                    f"Please verify the chart ID exists."
+                ),
+            )
 
-            if not chart:
-                logger.warning(f"Chart {chart_id} not found in database")
-                raise HTTPException(
-                    status_code=404,
-                    detail=(
-                        f"Chart with ID '{chart_id}' not found. "
-                        f"Please verify the chart ID exists."
-                    ),
-                )
+        logger.info(f"Serving screenshot for chart {chart.id}: {chart.slice_name}")
 
-            logger.info(f"Serving screenshot for chart {chart.id}: {chart.slice_name}")
+        # Create chart URL for screenshot
+        chart_url = get_url_path("Superset.slice", slice_id=chart.id)
 
-            # Create chart URL for screenshot
-            chart_url = get_url_path("Superset.slice", slice_id=chart.id)
+        # Create screenshot object
+        screenshot = PooledChartScreenshot(chart_url, chart.digest)
 
-            # Create screenshot object
-            screenshot = PooledChartScreenshot(chart_url, chart.digest)
+        # Generate screenshot (800x600 default)
+        window_size = (800, 600)
+        try:
+            image_data = screenshot.get_screenshot(user=g.user, window_size=window_size)
+        except Exception as e:
+            logger.error(f"Screenshot generation failed for chart {chart_id}: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail=(
+                    f"Failed to generate screenshot for chart {chart_id}. "
+                    f"Error: {str(e)}"
+                ),
+            ) from e
 
-            # Generate screenshot (800x600 default)
-            window_size = (800, 600)
-            try:
-                image_data = screenshot.get_screenshot(
-                    user=g.user, window_size=window_size
-                )
-            except Exception as e:
-                logger.error(f"Screenshot generation failed for chart {chart_id}: {e}")
-                raise HTTPException(
-                    status_code=500,
-                    detail=(
-                        f"Failed to generate screenshot for chart {chart_id}. "
-                        f"Error: {str(e)}"
-                    ),
-                ) from e
+        if image_data:
+            # Cache the screenshot
+            _screenshot_cache[cache_key] = (current_time, image_data)
 
-            if image_data:
-                # Cache the screenshot
-                _screenshot_cache[cache_key] = (current_time, image_data)
+            # Clean up old cache entries (simple cleanup)
+            keys_to_remove = []
+            for key, (ts, _) in _screenshot_cache.items():
+                if current_time - ts > SCREENSHOT_CACHE_TTL:
+                    keys_to_remove.append(key)
+            for key in keys_to_remove:
+                del _screenshot_cache[key]
 
-                # Clean up old cache entries (simple cleanup)
-                keys_to_remove = []
-                for key, (ts, _) in _screenshot_cache.items():
-                    if current_time - ts > SCREENSHOT_CACHE_TTL:
-                        keys_to_remove.append(key)
-                for key in keys_to_remove:
-                    del _screenshot_cache[key]
+            logger.info(f"Generated and cached screenshot for chart {chart_id}")
 
-                logger.info(f"Generated and cached screenshot for chart {chart_id}")
-
-                # Return the PNG image directly
-                return Response(
-                    content=image_data,
-                    media_type="image/png",
-                    headers={
-                        "Cache-Control": "public, max-age=300",  # 5 min cache
-                        "Content-Disposition": f"inline; filename=chart_{chart.id}.png",
-                        "X-Cache": "MISS",
-                    },
-                )
-            else:
-                logger.error(f"Screenshot returned None for chart {chart_id}")
-                raise HTTPException(
-                    status_code=500,
-                    detail=(
-                        f"Screenshot generation returned empty result for "
-                        f"chart {chart_id}. The chart may have rendering issues."
-                    ),
-                )
+            # Return the PNG image directly
+            return Response(
+                content=image_data,
+                media_type="image/png",
+                headers={
+                    "Cache-Control": "public, max-age=300",  # 5 min cache
+                    "Content-Disposition": f"inline; filename=chart_{chart.id}.png",
+                    "X-Cache": "MISS",
+                },
+            )
+        else:
+            logger.error(f"Screenshot returned None for chart {chart_id}")
+            raise HTTPException(
+                status_code=500,
+                detail=(
+                    f"Screenshot generation returned empty result for "
+                    f"chart {chart_id}. The chart may have rendering issues."
+                ),
+            )
 
     except HTTPException:
         raise
@@ -331,10 +358,11 @@ async def serve_explore_screenshot(form_data_key: str) -> Any:
     try:
         from flask import g
 
-        from superset import app as superset_app
+        from superset.app import create_app
         from superset.utils.urls import get_url_path
 
-        # Set up Flask app context for entire screenshot process
+        # Create Flask app instance and set up context
+        superset_app = create_app()
         with superset_app.app_context():
             # Create a mock user context - you might need to adjust this
             from flask_appbuilder.security.sqla.models import User
@@ -496,5 +524,7 @@ def init_fastmcp_server(enable_auth_configuration: bool = True) -> FastMCP:
     mcp.add_middleware(LoggingMiddleware())
     mcp.add_middleware(PrivateToolMiddleware())
 
-    logger.info("MCP Server initialized with modular tools structure")
+    logger.info(
+        "MCP Server initialized with modular tools structure, prompts, and resources"
+    )
     return mcp
