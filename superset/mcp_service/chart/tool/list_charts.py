@@ -22,14 +22,15 @@ MCP tool: list_charts (advanced filtering with metadata cache control)
 import logging
 
 from superset.mcp_service.auth import mcp_auth_hook
-from superset.mcp_service.generic_tools import ModelListTool
-from superset.mcp_service.mcp_app import mcp
-from superset.mcp_service.schemas import ChartInfo, ChartList
-from superset.mcp_service.schemas.chart_schemas import (
+from superset.mcp_service.chart.schemas import (
     ChartFilter,
+    ChartInfo,
+    ChartList,
     ListChartsRequest,
     serialize_chart_object,
 )
+from superset.mcp_service.mcp_app import mcp
+from superset.mcp_service.mcp_core import ModelListCore
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,7 @@ def list_charts(request: ListChartsRequest) -> ChartList:
 
     from superset.daos.chart import ChartDAO
 
-    tool = ModelListTool(
+    tool = ModelListCore(
         dao_class=ChartDAO,  # type: ignore[arg-type]
         output_schema=ChartInfo,
         item_serializer=lambda obj, cols: serialize_chart_object(obj) if obj else None,  # type: ignore[arg-type]
@@ -99,7 +100,7 @@ def list_charts(request: ListChartsRequest) -> ChartList:
         output_list_schema=ChartList,
         logger=logger,
     )
-    return tool.run(
+    return tool.run_tool(
         filters=request.filters,
         search=request.search,
         select_columns=request.select_columns,

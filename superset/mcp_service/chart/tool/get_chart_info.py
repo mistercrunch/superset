@@ -22,13 +22,14 @@ MCP tool: get_chart_info
 import logging
 
 from superset.mcp_service.auth import mcp_auth_hook
-from superset.mcp_service.generic_tools import ModelGetInfoTool
-from superset.mcp_service.mcp_app import mcp
-from superset.mcp_service.schemas import ChartError, ChartInfo
-from superset.mcp_service.schemas.chart_schemas import (
+from superset.mcp_service.chart.schemas import (
+    ChartError,
+    ChartInfo,
     GetChartInfoRequest,
     serialize_chart_object,
 )
+from superset.mcp_service.mcp_app import mcp
+from superset.mcp_service.mcp_core import ModelGetInfoCore
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ def get_chart_info(request: GetChartInfoRequest) -> ChartInfo | ChartError:
     """
     from superset.daos.chart import ChartDAO
 
-    tool = ModelGetInfoTool(
+    tool = ModelGetInfoCore(
         dao_class=ChartDAO,  # type: ignore[arg-type]
         output_schema=ChartInfo,
         error_schema=ChartError,
@@ -63,4 +64,4 @@ def get_chart_info(request: GetChartInfoRequest) -> ChartInfo | ChartError:
         supports_slug=False,  # Charts don't have slugs
         logger=logger,
     )
-    return tool.run(request.identifier)
+    return tool.run_tool(request.identifier)

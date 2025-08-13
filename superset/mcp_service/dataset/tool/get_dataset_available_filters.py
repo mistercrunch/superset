@@ -21,12 +21,12 @@ Get available dataset filters FastMCP tool
 import logging
 
 from superset.mcp_service.auth import mcp_auth_hook
-from superset.mcp_service.generic_tools import ModelGetAvailableFiltersTool
-from superset.mcp_service.mcp_app import mcp
-from superset.mcp_service.schemas.dataset_schemas import (
+from superset.mcp_service.dataset.schemas import (
     DatasetAvailableFilters,
     GetDatasetAvailableFiltersRequest,
 )
+from superset.mcp_service.mcp_app import mcp
+from superset.mcp_service.mcp_core import ModelGetAvailableFiltersCore
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +43,9 @@ def get_dataset_available_filters(
     """
     from superset.daos.dataset import DatasetDAO
 
-    tool = ModelGetAvailableFiltersTool(
+    tool = ModelGetAvailableFiltersCore(
         dao_class=DatasetDAO,  # type: ignore[arg-type]
         output_schema=DatasetAvailableFilters,
         logger=logger,
     )
-    return tool.run()
+    return tool.run_tool()

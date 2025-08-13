@@ -25,13 +25,14 @@ about a specific dataset.
 import logging
 
 from superset.mcp_service.auth import mcp_auth_hook
-from superset.mcp_service.generic_tools import ModelGetInfoTool
-from superset.mcp_service.mcp_app import mcp
-from superset.mcp_service.schemas import DatasetError, DatasetInfo
-from superset.mcp_service.schemas.dataset_schemas import (
+from superset.mcp_service.dataset.schemas import (
+    DatasetError,
+    DatasetInfo,
     GetDatasetInfoRequest,
     serialize_dataset_object,
 )
+from superset.mcp_service.mcp_app import mcp
+from superset.mcp_service.mcp_core import ModelGetInfoCore
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ def get_dataset_info(request: GetDatasetInfoRequest) -> DatasetInfo | DatasetErr
 
     from superset.daos.dataset import DatasetDAO
 
-    tool = ModelGetInfoTool(
+    tool = ModelGetInfoCore(
         dao_class=DatasetDAO,  # type: ignore[arg-type]
         output_schema=DatasetInfo,
         error_schema=DatasetError,
@@ -66,4 +67,4 @@ def get_dataset_info(request: GetDatasetInfoRequest) -> DatasetInfo | DatasetErr
         supports_slug=False,  # Datasets don't have slugs
         logger=logger,
     )
-    return tool.run(request.identifier)
+    return tool.run_tool(request.identifier)
