@@ -287,8 +287,8 @@ class GetDashboardInfoRequest(MetadataCacheControl):
 
 
 class DashboardInfo(BaseModel):
-    id: int | None = Field(None, description="Dashboard ID")
-    dashboard_title: str | None = Field(None, description="Dashboard title")
+    id: int = Field(..., description="Dashboard ID")
+    dashboard_title: str = Field(..., description="Dashboard title")
     slug: str | None = Field(None, description="Dashboard slug")
     description: str | None = Field(None, description="Dashboard description")
     css: str | None = Field(None, description="Custom CSS for the dashboard")
@@ -333,20 +333,27 @@ class DashboardInfo(BaseModel):
     def _filter_fields_by_context(self, serializer: Any, info: Any) -> Dict[str, Any]:
         """Filter fields based on serialization context.
 
-        If context contains 'select_columns', only include those fields.
+        If context contains 'select_columns', only include those fields (plus 'id').
         Otherwise, include all fields (default behavior).
-        """
-        # Get full serialization
-        data = serializer(self)
 
+        Special handling for nested models: When serializing nested charts,
+        increment depth to prevent filtering nested ChartInfo objects.
+        """
         # Check if we have a context with select_columns
         if info.context and isinstance(info.context, dict):
             select_columns = info.context.get("select_columns")
             if select_columns:
-                # Filter to only requested fields
-                return {k: v for k, v in data.items() if k in select_columns}
+                # Increment depth for nested models to prevent filtering
+                nested_context = {**info.context, "_depth": info.context.get("_depth", 0) + 1}
+                data = serializer(self, context=nested_context)
 
-        # No filtering - return all fields
+                # Always include 'id' field for entity correlation
+                fields_to_include = set(select_columns) | {"id"}
+                # Filter to only requested fields
+                return {k: v for k, v in data.items() if k in fields_to_include}
+
+        # No filtering - get full serialization
+        data = serializer(self)
         return data
 
 

@@ -139,13 +139,14 @@ async def list_charts(request: ListChartsRequest, ctx: Context) -> ChartList:
                 "Applying field filtering via serialization context: select_columns=%s"
                 % (request.select_columns,)
             )
-            # Return dict with context - FastMCP will serialize it
-            return result.model_dump(
+            # Create new model from filtered dict to maintain type safety
+            filtered_data = result.model_dump(
                 mode="json", context={"select_columns": request.select_columns}
             )
+            return ChartList.model_validate(filtered_data)
 
-        # No filtering - return full result as dict
-        return result.model_dump(mode="json")
+        # No filtering - return full result
+        return result
     except Exception as e:
         await ctx.error("Failed to list charts: %s" % (str(e),))
         raise

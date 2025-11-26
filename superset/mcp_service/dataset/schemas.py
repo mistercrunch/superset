@@ -167,7 +167,7 @@ class DatasetInfo(BaseModel):
     def _filter_fields_by_context(self, serializer: Any, info: Any) -> Dict[str, Any]:
         """Filter fields based on serialization context.
 
-        If context contains 'select_columns', only include those fields.
+        If context contains 'select_columns', only include those fields (plus 'id').
         Otherwise, include all fields (default behavior).
         """
         # Get full serialization
@@ -178,7 +178,7 @@ class DatasetInfo(BaseModel):
             select_columns = info.context.get("select_columns")
             if select_columns:
                 # Handle alias: 'schema' -> 'schema_name'
-                requested_fields = set(select_columns)
+                requested_fields = set(select_columns) | {"id"}  # Always include id
                 if "schema" in requested_fields:
                     requested_fields.add("schema_name")
 

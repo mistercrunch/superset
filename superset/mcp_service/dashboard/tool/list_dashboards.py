@@ -67,58 +67,87 @@ SORTABLE_DASHBOARD_COLUMNS = [
 @parse_request(ListDashboardsRequest)
 async def list_dashboards(
     request: ListDashboardsRequest, ctx: Context
-) -> dict[str, Any]:
+) -> DashboardList:
     """List dashboards with filtering and search. Returns dashboard metadata
     including title, slug, and charts.
 
     Sortable columns for order_column: id, dashboard_title, slug, published,
     changed_on, created_on
     """
-    from superset.daos.dashboard import DashboardDAO
-
-    def _serialize_dashboard(
-        obj: "Dashboard | None", cols: list[str] | None
-    ) -> DashboardInfo | None:
-        """Serialize dashboard object (field filtering handled by model_serializer)."""
-        return serialize_dashboard_object(obj)
-
-    tool = ModelListCore(
-        dao_class=DashboardDAO,
-        output_schema=DashboardInfo,
-        item_serializer=_serialize_dashboard,
-        filter_type=DashboardFilter,
-        default_columns=DEFAULT_DASHBOARD_COLUMNS,
-        search_columns=[
-            "dashboard_title",
-            "slug",
-            "uuid",
-        ],
-        list_field_name="dashboards",
-        output_list_schema=DashboardList,
-        logger=logger,
+    await ctx.info(
+        "Listing dashboards: page=%s, page_size=%s, search=%s"
+        % (
+            request.page,
+            request.page_size,
+            request.search,
+        )
+    )
+    await ctx.debug(
+        "Dashboard listing filters: filters=%s, order_column=%s, order_direction=%s"
+        % (
+            len(request.filters),
+            request.order_column,
+            request.order_direction,
+        )
     )
 
-    result = tool.run_tool(
-        filters=request.filters,
-        search=request.search,
-        select_columns=request.select_columns,
-        order_column=request.order_column,
-        order_direction=request.order_direction,
-        page=max(request.page - 1, 0),
-        page_size=request.page_size,
-    )
+    try:
+        from superset.daos.dashboard import DashboardDAO
 
-    # Apply field filtering via serialization context if select_columns specified
-    # This triggers DashboardInfo._filter_fields_by_context for each dashboard
-    if request.select_columns:
-        await ctx.debug(
-            "Applying field filtering via serialization context: select_columns=%s"
-            % (request.select_columns,)
-        )
-        # Return dict with context - FastMCP will serialize it
-        return result.model_dump(
-            mode="json", context={"select_columns": request.select_columns}
+        def _serialize_dashboard(
+            obj: "Dashboard | None", cols: list[str] | None
+        ) -> DashboardInfo | None:
+            """Serialize dashboard object (field filtering handled by model_serializer)."""
+            return serialize_dashboard_object(obj)
+
+        tool = ModelListCore(
+            dao_class=DashboardDAO,
+            output_schema=DashboardInfo,
+            item_serializer=_serialize_dashboard,
+            filter_type=DashboardFilter,
+            default_columns=DEFAULT_DASHBOARD_COLUMNS,
+            search_columns=[
+                "dashboard_title",
+                "slug",
+                "uuid",
+            ],
+            list_field_name="dashboards",
+            output_list_schema=DashboardList,
+            logger=logger,
         )
 
-    # No filtering - return full result as dict
-    return result.model_dump(mode="json")
+        result = tool.run_tool(
+            filters=request.filters,
+            search=request.search,
+            select_columns=request.select_columns,
+            order_column=request.order_column,
+            order_direction=request.order_direction,
+            page=max(request.page - 1, 0),
+            page_size=request.page_size,
+        )
+
+        count = len(result.dashboards) if hasattr(result, "dashboards") else 0
+        total_pages = getattr(result, "total_pages", None)
+        await ctx.info(
+            "Dashboards listed successfully: count=%s, total_pages=%s"
+            % (count, total_pages)
+        )
+
+        # Apply field filtering via serialization context if select_columns specified
+        # This triggers DashboardInfo._filter_fields_by_context for each dashboard
+        if request.select_columns:
+            await ctx.debug(
+                "Applying field filtering via serialization context: select_columns=%s"
+                % (request.select_columns,)
+            )
+            # Create new model from filtered dict to maintain type safety
+            filtered_data = result.model_dump(
+                mode="json", context={"select_columns": request.select_columns}
+            )
+            return DashboardList.model_validate(filtered_data)
+
+        # No filtering - return full result
+        return result
+    except Exception as e:
+        await ctx.error("Failed to list dashboards: %s" % (str(e),))
+        raise

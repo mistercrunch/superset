@@ -114,18 +114,29 @@ class ChartInfo(BaseModel):
     def _filter_fields_by_context(self, serializer: Any, info: Any) -> Dict[str, Any]:
         """Filter fields based on serialization context.
 
-        If context contains 'select_columns', only include those fields.
+        If context contains 'select_columns', only include those fields (plus 'id').
         Otherwise, include all fields (default behavior).
+
+        Note: Only applies filtering at the top level (when _depth=0 or absent).
+        Nested models are serialized fully to avoid breaking parent-child relationships.
         """
         # Get full serialization
         data = serializer(self)
 
         # Check if we have a context with select_columns
         if info.context and isinstance(info.context, dict):
+            # Only filter at top level - skip filtering for nested charts
+            depth = info.context.get("_depth", 0)
+            if depth > 0:
+                # Nested model - return all fields
+                return data
+
             select_columns = info.context.get("select_columns")
             if select_columns:
+                # Always include 'id' field for entity correlation
+                fields_to_include = set(select_columns) | {"id"}
                 # Filter to only requested fields
-                return {k: v for k, v in data.items() if k in select_columns}
+                return {k: v for k, v in data.items() if k in fields_to_include}
 
         # No filtering - return all fields
         return data
